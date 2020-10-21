@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update cup mtm algorithm">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="ProjectId" id="1j6EwA7e34kzlw6sNvklQYKirBa" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager" selected="Python.xq_backup_lite">
+    <configuration name="Research" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Research.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="xq_backup_lite" type="PythonConfigurationType" factoryName="Python">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xq_backup_lite.py" />
+      <option name="PARAMETERS" value="hk 0" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.xq_backup_lite" />
+      <item itemvalue="Python.Research" />
+      <item itemvalue="Python.test" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.Research" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="" />
+      <created>1602652973173</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602652973173</updated>
+    </task>
+    <task id="LOCAL-00001" summary="fix xq_backup_lite">
+      <created>1603170952501</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1603170952501</updated>
+    </task>
+    <task id="LOCAL-00002" summary="update xq_backup_lite">
+      <created>1603202600472</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1603202600473</updated>
+    </task>
+    <task id="LOCAL-00003" summary="update cup mtm algorithm">
+      <created>1603215188879</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1603215188879</updated>
+    </task>
+    <task id="LOCAL-00004" summary="update cup mtm algorithm">
+      <created>1603215196537</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1603215196537</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update cup mtm algorithm">
+      <created>1603298298596</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1603298298596</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.ini" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/html" />
+      <path value="$PROJECT_DIR$/upknow" />
+    </ignored-roots>
+    <MESSAGE value="fix xq_backup_lite" />
+    <MESSAGE value="update xq_backup_lite" />
+    <MESSAGE value="update cup mtm algorithm" />
+    <option name="LAST_COMMIT_MESSAGE" value="update cup mtm algorithm" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="140" y="0" key="#Notifications" timestamp="1603116596849">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="140" y="0" key="#Notifications/0.0.1280.800@0.0.1280.800" timestamp="1603116596849" />
+    <state x="104" y="59" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603298598475">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="104" y="59" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.800@0.0.1280.800" timestamp="1603298598475" />
+    <state x="344" y="196" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1603116742578">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="344" y="196" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.800@0.0.1280.800" timestamp="1603116742578" />
+    <state x="225" y="0" key="CommitChangelistDialog2" timestamp="1603298862702">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="225" y="0" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1603298862702" />
+    <state width="1255" height="200" key="GridCell.Tab.0.bottom" timestamp="1603298874505">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1255" height="200" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1603298874505" />
+    <state width="1255" height="201" key="GridCell.Tab.0.bottom/0.23.1280.777@0.23.1280.777" timestamp="1603215989203" />
+    <state width="1255" height="200" key="GridCell.Tab.0.center" timestamp="1603298874504">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1255" height="200" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1603298874504" />
+    <state width="1255" height="201" key="GridCell.Tab.0.center/0.23.1280.777@0.23.1280.777" timestamp="1603215989201" />
+    <state width="1255" height="200" key="GridCell.Tab.0.left" timestamp="1603298874503">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1255" height="200" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1603298874503" />
+    <state width="1255" height="201" key="GridCell.Tab.0.left/0.23.1280.777@0.23.1280.777" timestamp="1603215989200" />
+    <state width="1255" height="200" key="GridCell.Tab.0.right" timestamp="1603298874504">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1255" height="200" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1603298874504" />
+    <state width="1255" height="201" key="GridCell.Tab.0.right/0.23.1280.777@0.23.1280.777" timestamp="1603215989202" />
+    <state x="290" y="58" key="MultipleFileMergeDialog" timestamp="1603287036567">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="290" y="58" key="MultipleFileMergeDialog/0.0.1280.800@0.0.1280.800" timestamp="1603287036567" />
+    <state x="33" y="0" key="SettingsEditor" timestamp="1603287059187">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="33" y="0" key="SettingsEditor/0.0.1280.800@0.0.1280.800" timestamp="1603287059187" />
+    <state x="140" y="79" key="Vcs.Push.Dialog.v2" timestamp="1603298300623">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="140" y="79" key="Vcs.Push.Dialog.v2/0.0.1280.800@0.0.1280.800" timestamp="1603298300623" />
+    <state x="407" y="306" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603287025862">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="407" y="306" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.800@0.0.1280.800" timestamp="1603287025862" />
+  </component>
+</project>

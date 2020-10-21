@@ -1,0 +1,62 @@
+{
+  "us": {
+    "url": "https://xueqiu.com/S/.IXIC",
+    "AM": 5,
+    "PM": 5,
+    "baseIdx": ".IXIC",
+    "paramSet": {
+      "etf": {
+        "TQQQ": ["signal off", 15, 4, 7, 4]
+      }
+    },
+    "xueqiu": {
+      "etf":""
+    },
+    "hedge":{
+      "UVXY": 0.1,
+      "VXX": 0
+    },
+    "wgt":0.4,
+    "num": 3,
+    "lastTradeDate":"2020-01-01"
+  },
+  "cn": {
+    "url": "https://xueqiu.com/S/SH000001",
+    "AM": 11,
+    "PM": 17,
+    "baseIdx": "sh000001",
+    "paramSet": {
+      "idx": {
+                "sh000300":["signal on",15,4,7,4],
+                "sz399101":["signal on",15,4,7,4],
+                "sz399102":["signal on",15,4,7,4]
+        }
+      },
+    "xueqiu": {
+      "idx":"ZH1353951"
+    },
+    "wgt":0.3,
+    "num": 3,
+    "lastTradeDate":"2020-01-01"
+  },
+  "hk": {
+    "url": "https://xueqiu.com/S/HKHSI",
+    "AM": 12,
+    "PM": 16,
+    "baseIdx": "hkhsi",
+    "paramSet": {
+      "idx": {
+                "hsi": ["signal on", 15, 4, 7, 4],
+                "hstech":["signal on",15,4,7,4]
+        }
+
+    },
+    "xueqiu": {
+      "idx": "",
+      "etf": ""
+    },
+    "wgt":0.3,
+    "num": 3,
+    "lastTradeDate":"2020-01-01"
+  }
+}
