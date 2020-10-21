@@ -137,7 +137,7 @@ def cauculate(dfk):
     mtm_1 = [closes[i]/min(closes[-gap],closes[-1]) - 1 for i in range(-gap-5,0)]
     mtm_2 = [closes[i]/min(closes[-gap-5],closes[-1]*(1+dfk['percent'].median())) - 1 for i in range(-gap-10,0)]
     cal = sum(mtm_1)
-    cal2 = sum(mtm_2)+sum(closes[i]/min(closes[-10],closes[-1]) - 1 for i in range(-10,0))
+    cal2 = sum(mtm_2)+sum(closes[i]/closes[-1] - 1 for i in range(-10,0))
     return {'_J':round(cal,12),'_U':round(cal2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,bak=False):
