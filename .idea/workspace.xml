@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update cup mtm algorithm">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/md/updateConcepts.py" beforeDir="false" />
+    </list>
+    <list id="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" name="Revert &quot;Removed history, due to large data&quot;" comment="Revert &quot;Removed history, due to large data&quot;&#10;&#10;This reverts commit d3601c0b">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,6 +17,34 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="MERGE" />
   </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/.idea/workspace.xml">
+      <ranges>
+        <range start1="5" end1="5" start2="5" end2="9" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="15" end1="15" start2="19" end2="47" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="23" end1="23" start2="55" end2="56" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="69" end1="70" start2="102" end2="103" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="82" end1="83" start2="115" end2="116" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="91" end1="92" start2="124" end2="124" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="94" end1="94" start2="126" end2="127" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="148" end1="149" start2="181" end2="189" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="154" end1="154" start2="194" end2="207" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="170" end1="171" start2="223" end2="224" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="173" end1="174" start2="226" end2="227" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="178" end1="179" start2="231" end2="236" changelist="99f832de-b0c6-4b06-a05a-96a826e1d877" />
+        <range start1="181" end1="183" start2="238" end2="240" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="185" end1="186" start2="242" end2="243" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="187" end1="188" start2="244" end2="245" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="190" end1="191" start2="247" end2="248" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="192" end1="193" start2="249" end2="250" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="195" end1="196" start2="252" end2="253" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="197" end1="198" start2="254" end2="255" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="200" end1="201" start2="257" end2="258" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="202" end1="203" start2="259" end2="260" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+        <range start1="205" end1="206" start2="262" end2="263" changelist="47be23a7-ac4c-4b45-8cd3-ead344bad1ba" />
+      </ranges>
+    </file>
+  </component>
   <component name="ProjectId" id="1j6EwA7e34kzlw6sNvklQYKirBa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -21,6 +53,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -67,7 +100,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="xq_backup_lite" type="PythonConfigurationType" factoryName="Python">
+    <configuration name="xq_backup_lite" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -80,7 +113,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xq_backup_lite.py" />
-      <option name="PARAMETERS" value="hk 0" />
+      <option name="PARAMETERS" value="cn 1" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -89,9 +122,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.Research" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Python.xq_backup_lite" />
     </list>
     <recent_temporary>
       <list>
@@ -146,12 +179,32 @@
       <option name="project" value="LOCAL" />
       <updated>1603298298596</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update cup mtm algorithm">
+      <created>1603299071203</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1603299071203</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.ini" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -168,15 +221,19 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="140" y="0" key="#Notifications/0.0.1280.800@0.0.1280.800" timestamp="1603116596849" />
-    <state x="104" y="59" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603298598475">
+    <state x="104" y="59" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603299283059">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="104" y="59" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.800@0.0.1280.800" timestamp="1603298598475" />
+    <state x="104" y="59" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.800@0.0.1280.800" timestamp="1603299283059" />
     <state x="344" y="196" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1603116742578">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="344" y="196" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.800@0.0.1280.800" timestamp="1603116742578" />
-    <state x="225" y="0" key="CommitChangelistDialog2" timestamp="1603298862702">
+    <state x="315" y="0" key="#xq_backup_lite" timestamp="1603299593396">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="315" y="0" key="#xq_backup_lite/0.0.1280.800@0.0.1280.800" timestamp="1603299593396" />
+    <state x="225" y="0" key="CommitChangelistDialog2" timestamp="1603299505968">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="225" y="0" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1603298862702" />
