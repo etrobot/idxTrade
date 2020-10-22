@@ -131,13 +131,12 @@ def draw(symbol,info,boardDates=[]):
 def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
-    gap=20
     # ma =dfk['close'].rolling(window=3).mean()
     closes = dfk['close'].values
-    mtm_1 = [closes[i]/min(closes[-gap],closes[-1]) - 1 for i in range(-gap-5,0)]
-    mtm_2 = [closes[i]/min(closes[-gap],closes[-1]*(1+dfk['percent'].median())) - 1 for i in range(-gap-5,0)]
+    mtm_1 = [closes[i]/min(closes[-20],closes[-1]) - 1 for i in range(-25,0)]
+    mtm_2 = [closes[i]/min(closes[-20],closes[-1]*(1+max(dfk['percent'][-30:]))) - 1 for i in range(-30,0)]
     cal = sum(mtm_1)
-    cal2 = sum(mtm_2)+sum(closes[-10]/min(closes[i],closes[-1]) - 1 for i in range(-10,0))
+    cal2 = sum(mtm_2)
     return {'_J':round(cal,12),'_U':round(cal2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,bak=False):
@@ -327,7 +326,7 @@ class params:
         #     dateArg = [int(x) for x in sys.argv[2].split('/')]
         #     pdate = datetime.(dateArg[0], dateArg[1], dateArg[2])
         #     df = pd.read_csv('md/' + mkt + pdate.strftime('%Y%m%d') + 'mtm.csv', encoding='UTF-8', dtype=str)
-        #     df.set_index(['雪球代码'], inplace=True)
+        #     df.set_index(['雪球代码'], inplace=True)cal
         #     for k in {'_J': [], '_U': []}.keys():
         #          mdcontent=df2md(mkt, k, df.copy(), pdate)
         #         # send_email(mkt+k+pdate.strftime('%Y%m%d'),mdcontent)
