@@ -323,17 +323,6 @@ class params:
         self.boardlist={}
 
     def go(self):
-        # if self.test:
-        #     print(sys.argv)
-        #     mkt = sys.argv[1]
-        #     dateArg = [int(x) for x in sys.argv[2].split('/')]
-        #     pdate = datetime.(dateArg[0], dateArg[1], dateArg[2])
-        #     df = pd.read_csv('md/' + mkt + pdate.strftime('%Y%m%d') + 'mtm.csv', encoding='UTF-8', dtype=str)
-        #     df.set_index(['雪球代码'], inplace=True)cal
-        #     for k in {'_J': [], '_U': []}.keys():
-        #          mdcontent=df2md(mkt, k, df.copy(), pdate)
-        #         # send_email(mkt+k+pdate.strftime('%Y%m%d'),mdcontent)
-        #     exit()
         dailyCheck()
 
     def testMode(self):

@@ -26,25 +26,29 @@ class idxTrade:#保存参数的类
                     print(self.mkt,stock['stock_symbol'])
                     cls=cmsK(stock['stock_symbol'])['close']
                     if cls[-1]/cls[-2]<iCls[-1]/iCls[-2] and cls[-1]/cls[-5]<iCls[-1]/iCls[-5]:
-                        position['weight']=0
+                        stock['weight']=0
+                        stock["proactive"] = True
                         sell.append(stock['stock_symbol'])
-                    else:
-                        position['weight'] = 25
+
                 avalableNum=3-(len(position)-len(sell))
                 #检查买入
                 if ik['k'][ik['idx'] + '_sig'][-1]==1 and avalableNum>0:
-                    existStocks=pd.read_csv('md/'+self.mkt+ik['k'].index[-5].strftime("%Y%m%d")+'.csv').iloc[:10].copy()
+                    # existStocks=pd.read_csv('md/'+self.mkt+ik['k'].index[-5].strftime("%Y%m%d")+'.csv').iloc[:10].copy()
                     factor=[]
-                    for stock in existStocks['雪球代码']:
-                        stockK=cmsK(stock)
-                        factor.append(factor_2(stockK))
-                    existStocks['f']=factor
-                    existStocks.sort_values(by='f', ascending=True,inplace=True)
+                    # for stock in existStocks['雪球代码']:
+                    #     stockK=cmsK(stock)
+                    #     factor.append(factor_2(stockK))
+                    # existStocks['f']=factor
+                    # existStocks.sort_values(by='f', ascending=True,inplace=True)
+                    existStocks = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.csv').copy()
+                    existStocks.sort_values(by='_U', ascending=True,inplace=True).copy()
                     toBuy=existStocks.loc[~existStocks['雪球代码'].isin(sell)].copy()
-                    for stock in toBuy['雪球代码'][:avalableNum]:
-                        position.append(self.xueqiu.newPostition(market, stock, 25))
-                    # print(sell,toBuy,position)
-                    self.xueqiu.trade(market,mode,position)
+                    if toBuy['雪球代码'][0] not in [x['stock_symbol'] for x in position]:
+                        # for stock in toBuy['雪球代码'][:avalableNum]:
+                        #     position.append(self.xueqiu.newPostition(market, stock, 25))
+                        position.append(self.xueqiu.newPostition(market, toBuy['雪球代码'][0], 25))
+                        # print(sell,toBuy,position)
+                        self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
                 # self.cfg['paramSet'][mode]=usETF()
                 # ik = idxCompare(self.mkt, self.cfg, mode, self.backtest)
