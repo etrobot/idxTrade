@@ -292,7 +292,10 @@ def df2md(mkt,calKey,df,pdate,num=36):
         .replace('TTMnan','亏损')
     css='<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
-    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet"></head>\
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet"> \
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>\
+<script>(adsbygoogle = window.adsbygoogle || []).push({google_ad_client: \
+"ca-pub-7398757278741889",enable_page_level_ads: true});</script></head>\
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title)
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:

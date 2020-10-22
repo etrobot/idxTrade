@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update cup mtm algorithm">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bash/daily.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Bash/daily.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Bash/push.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Bash/push.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,14 +26,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="137" column="20" lean-forward="true" selection-start-line="137" selection-start-column="20" selection-end-line="137" selection-end-column="20" />
+            <state relative-caret-position="274">
+              <caret line="290" column="40" selection-start-line="290" selection-start-column="40" selection-end-line="290" selection-end-column="40" />
               <folding>
                 <element signature="e#24#40#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Bash/push.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="60" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Bash/daily.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="69" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
             </state>
           </provider>
         </entry>
@@ -59,6 +79,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>cal</find>
+      <find>max</find>
+      <find>head</find>
     </findStrings>
     <replaceStrings>
       <replace>_M</replace>
@@ -72,6 +94,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/xq_backup_lite.py" />
+        <option value="$PROJECT_DIR$/Bash/push.sh" />
+        <option value="$PROJECT_DIR$/Bash/daily.sh" />
       </list>
     </option>
   </component>
@@ -89,6 +113,11 @@
             <path>
               <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
               <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
+              <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
+              <item name="Bash" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
@@ -273,24 +302,37 @@
       <option name="project" value="LOCAL" />
       <updated>1603341101420</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="update cup mtm algorithm">
+      <created>1603343280265</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1603343280265</updated>
+    </task>
+    <task id="LOCAL-00011" summary="update cup mtm algorithm">
+      <created>1603345484123</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1603345484123</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="2560" height="1440" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16738874" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.85230404" visible="true" weight="0.3240876" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.85230404" weight="0.3240876" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49940923" weight="0.329927" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="7" sideWeight="0.49940923" visible="true" weight="0.329927" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49940923" weight="0.329927" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.14769594" side_tool="true" weight="0.32937685" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49901536" weight="0.329927" />
@@ -417,5 +459,31 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="407" y="306" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.800@0.0.1280.800" timestamp="1603287025862" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="290" column="40" selection-start-line="290" selection-start-column="40" selection-end-line="290" selection-end-column="40" />
+          <folding>
+            <element signature="e#24#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bash/push.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="60" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bash/daily.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="69" selection-start-line="10" selection-start-column="69" selection-end-line="10" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
