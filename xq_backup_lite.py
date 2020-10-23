@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import lxml.html
 import mplfinance as mpf
 import matplotlib as mpl  # 用于设置曲线参数
@@ -13,6 +12,8 @@ import sys
 import markdown
 from QuotaUtilities import *
 from idxTrade import *
+
+ENCODE_IN_USE='GBK'
 
 def loadMd(filename,update=False):
     indDf = pd.read_csv('concepts10jqka.csv', encoding='gb18030', dtype=str)
@@ -35,7 +36,7 @@ def loadMd(filename,update=False):
         indDf.to_csv('concepts10jqka'+datetime.now().strftime('%Y%m%d')+'.csv',encoding='gb18030')
 
 def draw(symbol,info,boardDates=[]):
-    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding='utf-8')
+    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding=ENCODE_IN_USE)
     df.index=pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
@@ -187,7 +188,7 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,bak=False):
         if len(df)==0:
             continue
         df.drop_duplicates(subset='symbol', keep='first', inplace=True)
-        df.to_csv('Industry/'+mkt+hrefname[i]+indCode+'.csv',encoding='UTF-8')
+        df.to_csv('Industry/'+mkt+hrefname[i]+indCode+'.csv',encoding=ENCODE_IN_USE)
         # writeIndustry(df[['symbol','name']].copy(), market, hrefname[i], indCode)
         bakDf=df[['symbol','current','percent','current_year_percent', "volume","amount",'turnover_rate','pe_ttm','dividend_yield','float_market_capital','market_capital']].copy()
         bakDf.dropna(subset=['volume'],inplace=True)
@@ -195,7 +196,7 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,bak=False):
         if not bak:
             mktDf=mktDf.append(bakDf)
     mktDf=mktDf.loc[mktDf['current'] >= 1.0]
-    mktDf.set_index(['symbol']).to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'_Bak.csv',encoding='UTF-8')
+    mktDf.set_index(['symbol']).to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'_Bak.csv',encoding=ENCODE_IN_USE)
     return mktDf
 
 def dailyCheck(mkt=None,pdate=None):
@@ -204,7 +205,7 @@ def dailyCheck(mkt=None,pdate=None):
         if not pdate:
             return
     if os.path.isfile('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
-        df = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='UTF-8', dtype={'symbol': str})
+        df = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE, dtype={'symbol': str})
     else:
         df = xueqiuBackupByIndustry(mkt, pdate)
     df.set_index(['symbol'], inplace=True)
@@ -244,19 +245,21 @@ def dailyCheck(mkt=None,pdate=None):
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
             cal[mk].append(mv)
-
     for k,v in cal.items():
         indDf[k]= v
         df2md(mkt,k,indDf.copy(),pdate)
-    indDf.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'mtm.csv',encoding='UTF-8')
+
+    mtmDfBAK=indDf[list(cal.keys())].copy()
+    mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.csv',encoding=ENCODE_IN_USE)
+
     if mkt=='cn' and len(sys.argv)==0:
         idxtrade=idxTrade('cn',0)
         idxtrade.run()
 
 def df2md(mkt,calKey,df,pdate,num=36):
     df.dropna(subset=[calKey],inplace=True)
-    df.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding='UTF-8')
     df=df.sort_values(by=[calKey], ascending=True)[:num]#指标排序前100
+    # indDf.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
     images=[]
@@ -270,10 +273,10 @@ def df2md(mkt,calKey,df,pdate,num=36):
         draw(k,'_'.join([v['市场'], v['雪球行业'], k, v['股票简称']]) + '.png',vlines)
         deb=debts[debts.index==k]
         with open("plotimage/"+v['filename'], "rb") as image_file:
-            # image_base64 = '[%s]:data:image/png;base64,%s'%(v['雪球代码'],base64.b64encode(image_file.read()).decode('utf-8'))
+            # image_base64 = '[%s]:data:image/png;base64,%s'%(v['雪球代码'],base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
             # images.append(image_base64)
             # artxt=['**'+v['股票简称']+'**'+v['雪球行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['雪球代码'])]
-            image_base64 = 'data:image/png;base64,%s'%(base64.b64encode(image_file.read()).decode('utf-8'))
+            image_base64 = 'data:image/png;base64,%s'%(base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
             rowtitle='[%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])
             if len(deb)!=0:
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])

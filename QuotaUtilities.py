@@ -305,10 +305,11 @@ def tencentK(mkt:str = '',symbol: str = "QQQ",KAll=False) -> pd.DataFrame:
     temp_df = temp_df.astype("float")
     temp_df.drop_duplicates(inplace=True)
     temp_df.rename(columns={'amount':'volume'}, inplace = True)
-    temp_df.to_csv('Quotation/'+symbol+'.csv',encoding='GB18030')
+    temp_df.to_csv('Quotation/'+symbol+'.csv',encoding='utf-8',index_label='date')
     return temp_df
 
 def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
+    quoFile = 'Quotation/' + code + '.csv'
     """
     东方财富A股行情数据
     :param code:
@@ -342,6 +343,7 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
             df.set_index('date',inplace=True)
             df.index=pd.to_datetime(df.index).date
             df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
+            df.to_csv(quoFile,encoding='utf-8',index_label='date')
             return df
         except Exception as e:
             print(e)
