@@ -154,7 +154,7 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
     mktDf=pd.DataFrame()
     tqdmRange = tqdm(range(len(hrefList)))
     for i in tqdmRange:
-        tqdmRange.set_description(mkt+hrefname[i])
+        tqdmRange.set_description((mkt+hrefname[i]).ljust(25))
         if '#exchange=' + mkt.upper() not in hrefList[i] or 'code=' not in hrefList[i]:
             continue
         indCode = hrefList[i].split('=')[-1]
@@ -229,7 +229,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     indDf['filename'],indDf['percent'],indDf['current_year_percent'],indDf['market_capital'],indDf['pe_ttm']=None,None,None,None,np.nan
     tqdmRange=tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
-        tqdmRange.set_description("%s %s %s %s"%(v['市场'], v['雪球行业'], k, v['股票简称']))
+        tqdmRange.set_description(("%s %s %s %s"%(v['市场'], v['雪球行业'], k, v['股票简称'])).ljust(25))
         indDf.at[k, 'percent'] = df.loc[k,'percent']
         indDf.at[k, 'current_year_percent'] = df.loc[k, 'current_year_percent']
         indDf.at[k, 'market_capital'] = round(df.loc[k, 'market_capital']/100000000.0,1)
