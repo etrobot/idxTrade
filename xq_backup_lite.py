@@ -140,7 +140,7 @@ def cauculate(dfk):
     cal2 = sum(mtm_2)-sum(closes[i]/max(closes[-10],closes[-30]) - 1 for i in range(-30,-20))
     return {'_J':round(cal,12),'_U':round(cal2,12)}
 
-def xueqiuBackupByIndustry(mkt=None,pdate=None,bak=False):
+def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
     # if market == 'cn':
     #     getLimit(pdate.strftime("%Y%m%d"))
     url = "https://xueqiu.com/hq#"
@@ -193,22 +193,22 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,bak=False):
         bakDf=df[['symbol','current','percent','current_year_percent', "volume","amount",'turnover_rate','pe_ttm','dividend_yield','float_market_capital','market_capital']].copy()
         bakDf.dropna(subset=['volume'],inplace=True)
         mktDf = mktDf.append(bakDf)
-        if not bak:
-            mktDf=mktDf.append(bakDf)
+
     mktDf=mktDf.loc[mktDf['current'] >= 1.0]
-    mktDf.set_index(['symbol']).to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'_Bak.csv',encoding=ENCODE_IN_USE)
+    mktDf.set_index('symbol',inplace=True)
+    mktDf.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'_Bak.csv',encoding=ENCODE_IN_USE)
     return mktDf
 
-def dailyCheck(mkt=None,pdate=None):
+def dailyCheck(mkt=None,pdate=None,test=0):
     if mkt is None or pdate is None:
         mkt, pdate = g.paramSet['mkt'], g.paramSet['pdate']
         if not pdate:
             return
     if os.path.isfile('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
-        df = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE, dtype={'symbol': str})
+        df = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE, dtype={'symbol': str})#防止港股数字
+        df.set_index('symbol', inplace=True)
     else:
-        df = xueqiuBackupByIndustry(mkt, pdate)
-    df.set_index(['symbol'], inplace=True)
+        df = xueqiuBackupByIndustry(mkt, pdate,test)
     if mkt=='cn' and g.boardlist:
         df=df.loc[df.index.isin(g.boardlist.keys())].copy()
     else:
@@ -225,15 +225,15 @@ def dailyCheck(mkt=None,pdate=None):
     # indDf = indDf.loc[indDf['雪球行业代码'].isin(top25Ind.split(','))].copy()
     mlog(len(indDf))
     cal={'_J':[],'_U':[]}
-    indDf.set_index(['雪球代码'], inplace=True)
+    indDf.set_index('雪球代码', inplace=True)
     indDf['filename'],indDf['percent'],indDf['current_year_percent'],indDf['market_capital'],indDf['pe_ttm']=None,None,None,None,np.nan
     tqdmRange=tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description("%s %s %s %s"%(v['市场'], v['雪球行业'], k, v['股票简称']))
-        indDf.at[k, 'percent'] = df.loc[k,'percent'].values[0]
-        indDf.at[k, 'current_year_percent'] = df.loc[k, 'current_year_percent'].values[0]
-        indDf.at[k, 'market_capital'] = round(df.loc[k, 'market_capital'].values[0]/100000000.0,1)
-        indDf.at[k, 'pe_ttm'] = round(df.loc[k, 'pe_ttm'].values[0],1)#round(np.nan,1)==nan
+        indDf.at[k, 'percent'] = df.loc[k,'percent']
+        indDf.at[k, 'current_year_percent'] = df.loc[k, 'current_year_percent']
+        indDf.at[k, 'market_capital'] = round(df.loc[k, 'market_capital']/100000000.0,1)
+        indDf.at[k, 'pe_ttm'] = round(df.loc[k, 'pe_ttm'],1)#round(np.nan,1)==nan
         if g.testMode() and os.path.isfile('Quotation/'+k+'.csv'):
             qdf= pd.read_csv('Quotation/'+k+'.csv',index_col=0, parse_dates=True)
         elif mkt=='cn':
@@ -250,7 +250,7 @@ def dailyCheck(mkt=None,pdate=None):
         df2md(mkt,k,indDf.copy(),pdate)
 
     mtmDfBAK=indDf[list(cal.keys())].copy()
-    mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.csv',encoding=ENCODE_IN_USE)
+    mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
 
     if mkt=='cn' and len(sys.argv)==0:
         idxtrade=idxTrade('cn',0)
@@ -326,7 +326,7 @@ class params:
         self.boardlist={}
 
     def go(self):
-        dailyCheck()
+        dailyCheck(test=self.test)
 
     def testMode(self):
         return self.test

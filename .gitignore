@@ -130,8 +130,6 @@ dmypy.json
 
 #self defined
 *.csv
-*.hd5
-*.md
 *.html
 *.png
 *.ini

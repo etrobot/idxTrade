@@ -40,9 +40,9 @@ class idxTrade:#保存参数的类
                     #     factor.append(factor_2(stockK))
                     # existStocks['f']=factor
                     # existStocks.sort_values(by='f', ascending=True,inplace=True)
-                    existStocks = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.csv').copy()
+                    existStocks = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt').copy()
                     existStocks.sort_values(by='_U', ascending=True,inplace=True).copy()
-                    toBuy=existStocks.loc[~existStocks['雪球代码'].isin(sell)].copy()
+                    toBuy=existStocks.loc[~existStocks['symbol'].isin(sell)].copy()
                     if toBuy['雪球代码'][0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
