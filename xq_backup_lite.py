@@ -154,7 +154,7 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
     mktDf=pd.DataFrame()
     tqdmRange = tqdm(range(len(hrefList)))
     for i in tqdmRange:
-        tqdmRange.set_description((mkt+hrefname[i]).ljust(25))
+        tqdmRange.set_description((mkt+hrefname[i]).ljust(15))
         if '#exchange=' + mkt.upper() not in hrefList[i] or 'code=' not in hrefList[i]:
             continue
         indCode = hrefList[i].split('=')[-1]
