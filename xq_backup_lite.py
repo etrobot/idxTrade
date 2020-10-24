@@ -256,9 +256,9 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         idxtrade=idxTrade('cn',0)
         idxtrade.run()
 
-def df2md(mkt,calKey,df,pdate,num=36):
+def df2md(mkt,calKey,df,pdate,num=10):
     df.dropna(subset=[calKey],inplace=True)
-    df=df.sort_values(by=[calKey], ascending=True)[:num]#指标排序前100
+    df=df.sort_values(by=[calKey], ascending=True)[:num]#指标排序前x
     # indDf.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
