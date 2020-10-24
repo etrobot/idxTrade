@@ -134,10 +134,10 @@ def cauculate(dfk):
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
     closes = dfk['close'].values
-    mtm_1 = [closes[i]/min(closes[-20],closes[-1]) - 1 for i in range(-25,0)]
-    mtm_2 = [closes[i]/min(closes[-15],closes[-1]*(1+max(dfk['percent'][-30:]))) - 1 for i in range(-15,0)]
+    mtm_1 = [closes[i]/min(closes[-16],closes[-1]) - 1 for i in range(-16,0)]
+    mtm_2 = [closes[i]/min(closes[-16],closes[-1]*(1+max(dfk['percent'][-30:]))) - 1 for i in range(-16,0)]
     cal = sum(mtm_1)
-    cal2 = sum(mtm_2)-sum(closes[i]/max(closes[-30],closes[-15]*(1+max(dfk['percent'][-30:]))) - 1 for i in range(-30,-15))
+    cal2 = sum(mtm_2)-sum(closes[i]/max(closes[-30],closes[-16]*(1+max(dfk['percent'][-30:]))) - 1 for i in range(-30,-15))
     return {'_J':round(cal,12),'_U':round(cal2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
