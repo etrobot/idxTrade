@@ -105,10 +105,10 @@ def draw(symbol,info,boardDates=[]):
         type='candle',
         volume=True,
         mav=(5,10,20),
-        title=info+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(df['percent'][-1]*100)+'% '+str(round(df['amount'][-1]/100000000,3))+'亿',
+        title=info[:-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(df['percent'][-1]*100)+'% '+str(round(df['amount'][-1]/100000000,3))+'亿',
         # ylabel='OHLCV Candles',
         # ylabel_lower='Shares\nTraded Volume',
-        savefig = 'plotimage/%s'% (info) ,
+        savefig = info,
         figratio=(8, 5),
         figscale=1,
         tight_layout=True,
@@ -133,12 +133,11 @@ def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    closes = dfk['close'].values[:-3]
-    mtm_1 = [closes[i]/min(closes[-16],closes[-1]) - 1 for i in range(-16,0)]
-    mtm_2 = [closes[i]/min(closes[-16],closes[-1]*(1+max(dfk['percent'][-30:]))) - 1 for i in range(-16,0)]
-    mtm3= [closes[i] / max(closes[-30], closes[-16] * (1 + max(dfk['percent'][-30:]))) - 1 for i in range(-30, -15)]
-    cal = sum(mtm_1)-sum(mtm3)
-    cal2 = sum(mtm_2)-sum(mtm3)
+    closes = dfk['close'].values
+    mtm_1 = [closes[i]/min(closes[-20],closes[-1]) - 1 for i in range(-30,0)]
+    mtm_2 = [closes[i]/min(closes[-20],closes[-1]*max(dfk['percent'])+closes[-1]) - 1 for i in range(-30,0)]
+    cal = sum(mtm_1)-sum(mtm_1[:20])
+    cal2 = sum(mtm_2)-sum(mtm_2[:closes[-30:].argmax()])
     return {'_J':round(cal,12),'_U':round(cal2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
@@ -242,7 +241,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         else:
             qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
         info = [v['市场'], v['雪球行业'], k, v['股票简称']]
-        indDf.at[k, 'filename']='_'.join(info)+'.png'
+        indDf.at[k, 'filename']='plotimage/'+'_'.join(info)+'.png'
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
             cal[mk].append(mv)
@@ -269,11 +268,12 @@ def df2md(mkt,calKey,df,pdate,num=10):
         vlines=[]
         if g.boardlist:
             vlines=g.boardlist.get(k)
-        else:
+        elif not g.testMode():
             vlines=dragonTigerBoard(k,g.xq_a_token)
-        draw(k,'_'.join([v['市场'], v['雪球行业'], k, v['股票简称']]) + '.png',vlines)
+        if not g.testMode() or not os.path.isfile(v['filename']):
+            draw(k,v['filename'],vlines)
         deb=debts[debts.index==k]
-        with open("plotimage/"+v['filename'], "rb") as image_file:
+        with open(v['filename'], "rb") as image_file:
             # image_base64 = '[%s]:data:image/png;base64,%s'%(v['雪球代码'],base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
             # images.append(image_base64)
             # artxt=['**'+v['股票简称']+'**'+v['雪球行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['雪球代码'])]
