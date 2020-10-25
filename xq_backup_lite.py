@@ -133,7 +133,7 @@ def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    closes = dfk['close'].values[:-2]
+    closes = dfk['close'].values
     mtm_1 = [closes[i]/min(closes[-16],closes[-1]) - 1 for i in range(-25,0)]
     mtm_2 = [closes[i]/min(closes[-20],closes[-1]*max(dfk['percent'][-30:])+closes[-1]) - 1 for i in range(-30,0)]
     cal = sum(mtm_1)+abs(sum(mtm_1[:10]))
