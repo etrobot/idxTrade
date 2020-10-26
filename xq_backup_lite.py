@@ -105,7 +105,7 @@ def draw(symbol,info,boardDates=[]):
         type='candle',
         volume=True,
         mav=(5,10,20),
-        title=info[:-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(df['percent'][-1]*100)+'% '+str(round(df['amount'][-1]/100000000,3))+'亿',
+        title=info[10:-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(df['percent'][-1]*100)+'% '+str(round(df['amount'][-1]/100000000,3))+'亿',
         # ylabel='OHLCV Candles',
         # ylabel_lower='Shares\nTraded Volume',
         savefig = info,
@@ -133,14 +133,12 @@ def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    # dfk=dfk.iloc[:-4]
+    dfk=dfk.iloc[-15:]
     closes = dfk['close']
-    pct=dfk['percent']
-    mtm_1 = [(closes[i]/closes[-1] - 1)*int(pct[i]<pct[-1]) for i in range(-25,0)]
-    mtm_2 = [closes[i]/min(closes[-16],closes[-1]) - 1 for i in range(-25,0)]
-    cal = sum(mtm_1)-sum(mtm_1[:10])
-    cal2 = sum(mtm_2)-sum(mtm_2[:10])
-    return {'_J':round(cal,12),'_U':round(cal2,12)}
+    pct=dfk['percent'].round(2)
+    mtm_1 = sum(closes[i]/closes[-1] - 1 for i in range(len(pct)))*int(pct[-1]>max(pct[-len(pct):-1]))
+    mtm_2 = sum(closes[i]/min(closes[-len(pct)]*(1+pct[-1]),closes[-1]) - 1 for i in range(-len(pct),0))*int(pct[-1]>max(pct[-len(pct):-1]))
+    return {'_J':round(mtm_1,12),'_U':round(mtm_2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
     # if market == 'cn':
