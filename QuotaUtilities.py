@@ -373,4 +373,5 @@ def cmsK(code:str):
     df.index=pd.to_datetime(df.index,format='%Y%m%d').date
     df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
     df.to_csv(quoFile,encoding='utf-8',index_label='date')
+    df['percent']=df['percent'].round(4)
     return df
