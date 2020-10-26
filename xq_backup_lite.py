@@ -133,11 +133,13 @@ def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    closes = dfk['close'].values
-    mtm_1 = [closes[i]/min(closes[-16],closes[-1]) - 1 for i in range(-25,0)]
-    mtm_2 = [closes[i]/min(closes[-20],closes[-1]*max(dfk['percent'][-30:])+closes[-1]) - 1 for i in range(-30,0)]
-    cal = sum(mtm_1)+abs(sum(mtm_1[:10]))
-    cal2 = sum(mtm_2)+abs(sum(mtm_2[:10]))
+    # dfk=dfk.iloc[:-4]
+    closes = dfk['close']
+    pct=dfk['percent']
+    mtm_1 = [(closes[i]/closes[-1] - 1)*int(pct[i]<pct[-1]) for i in range(-25,0)]
+    mtm_2 = [closes[i]/min(closes[-16],closes[-1]) - 1 for i in range(-25,0)]
+    cal = sum(mtm_1)-sum(mtm_1[:10])
+    cal2 = sum(mtm_2)-sum(mtm_2[:10])
     return {'_J':round(cal,12),'_U':round(cal2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
@@ -270,8 +272,10 @@ def df2md(mkt,calKey,df,pdate,num=10):
             vlines=g.boardlist.get(k)
         elif not g.testMode():
             vlines=dragonTigerBoard(k,g.xq_a_token)
-        if not g.testMode() or not os.path.isfile(v['filename']):
+        if not g.testMode():
             draw(k,v['filename'],vlines)
+        elif not os.path.isfile(v['filename']):
+            draw(k, v['filename'], vlines)
         deb=debts[debts.index==k]
         with open(v['filename'], "rb") as image_file:
             # image_base64 = '[%s]:data:image/png;base64,%s'%(v['雪球代码'],base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
