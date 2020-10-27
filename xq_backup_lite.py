@@ -136,7 +136,7 @@ def cauculate(dfk):
     dfk=dfk.iloc[-15:]
     closes = dfk['close']
     pct=dfk['percent'].round(2)
-    mtm_1 = sum(closes[i]/closes[-1] - 1 for i in range(len(pct)))*int(pct[-1]>max(pct[-len(pct):-1]))
+    mtm_1 = sum(closes[i]/(1+pct[-1])/closes[-1] - 1 for i in range(len(pct)))
     mtm_2 = sum(closes[i]/min(closes[-len(pct)]*(1+pct[-1]),closes[-1]) - 1 for i in range(-len(pct),0))
     return {'_J':round(mtm_1,12),'_U':round(mtm_2,12)}
 
