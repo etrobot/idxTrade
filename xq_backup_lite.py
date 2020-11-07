@@ -133,12 +133,12 @@ def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    dfk=dfk.iloc[-21:]
+    dfk=dfk.iloc[-30:]
     closes = dfk['close']
     vol = dfk['volume']
-    pct=dfk['percent'].round(2)
-    mtm_1 = -pct[-1]/max(pct[:-1])*vol[-1]/max(vol[:-1])
-    mtm_2 = sum(closes[i]/(1+pct[-1])/min(closes[-len(dfk)],closes[-1]) - 1 for i in range(-len(dfk),0))
+    # pct=dfk['percent'].round(2)
+    mtm_1 = sum(closes[-20:].mean()/closes[i] for i in range(-len(vol),0))*(1-vol[-5:].mean()/vol.mean())
+    mtm_2 = sum(closes[-20:].mean()/closes[i] for i in range(20))*(1-vol[:-5].mean()/vol[-5])
     return {'_J':round(mtm_1,12),'_U':round(mtm_2,12)}
 
 def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
@@ -216,18 +216,19 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         avgAmount=df['amount'].mean()
         df=df[df['amount']>avgAmount]
         midMktCap=df['market_capital'].median()
-        df=df[df['market_capital']<midMktCap]
+        # df=df[df['market_capital']<midMktCap]
     df = df.fillna(value=np.nan)
     indDf=pd.read_csv('concepts10jqka.csv',encoding='GBK',dtype=str)
     indDf=indDf.loc[indDf['雪球代码'].isin(df.index)].copy()
     indDf.dropna(subset=['雪球行业'],inplace=True)
     indDf=indDf[~indDf['股票简称'].str.contains("N|\*ST", na=False)]
+    # indDf['current_year_percent']=indDf['current_year_percent'].div(100).round(4)
     # top25Ind='S1107,S2701,S1104,S3602,S2702,S1106,S2202,S3403,S1108,S2102,S2705,S2703,S4302,S6103,S7101,S6504,S7102,S4201,S6403,S3705,S4602,S2203,S3502,S3701,S6204,2820,3030,2520,2530,3045,z60,z20,2810,0520,7020,2050,z30,7030,z40,7010,0530,1010,0010,5030,z70,0020,6020,0510,2510,z10,52020,02030,02020,303020,201020,401020,255020,502030,351030,203030,452010,402020,202020,253010,551050,252010,255040,352010,151050,203010,451020,302020,452020,151040,453010'
     # indDf = indDf.loc[indDf['雪球行业代码'].isin(top25Ind.split(','))].copy()
     mlog(len(indDf))
     cal={'_J':[],'_U':[]}
     indDf.set_index('雪球代码', inplace=True)
-    indDf['filename'],indDf['percent'],indDf['current_year_percent'],indDf['market_capital'],indDf['pe_ttm']=None,None,None,None,np.nan
+    indDf['filename'],indDf['percent'],indDf['current_year_percent'],indDf['market_capital'],indDf['pe_ttm'],indDf['past60Days']=None,None,None,None,np.nan,-999.0
     tqdmRange=tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s"%(v['市场'], v['雪球行业'], k, v['股票简称'])).ljust(25))
@@ -241,6 +242,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
             qdf=cmsK(k)
         else:
             qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
+        indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
         info = [v['市场'], v['雪球行业'], k, v['股票简称']]
         indDf.at[k, 'filename']='plotimage/'+'_'.join(info)+'.png'
         mtm = cauculate(qdf)
@@ -257,15 +259,16 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         idxtrade=idxTrade('cn',0)
         idxtrade.run()
 
-def df2md(mkt,calKey,df,pdate,num=10):
-    df.dropna(subset=[calKey],inplace=True)
-    df=df.sort_values(by=[calKey], ascending=True)[:num]#指标排序前x
+def df2md(mkt,calKey,indDf,pdate,num=10):
+    df=indDf.sort_values(by=[calKey], ascending=True).copy().iloc[:num]#指标排序前x
+    df.dropna(subset=[calKey], inplace=True)
     # indDf.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
     images=[]
     debts=debt()
     for k,v in df.iterrows():
+        dfmax=indDf[indDf['雪球行业']==v['雪球行业']].sort_values(by=['past60Days'], ascending=False)
         vlines=[]
         if g.boardlist:
             vlines=g.boardlist.get(k)
@@ -281,10 +284,11 @@ def df2md(mkt,calKey,df,pdate,num=10):
             # images.append(image_base64)
             # artxt=['**'+v['股票简称']+'**'+v['雪球行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['雪球代码'])]
             image_base64 = 'data:image/png;base64,%s'%(base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
-            rowtitle='[%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])
+            rowtitle='[%s(%s)](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,k,v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])
             if len(deb)!=0:
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])
-            artxt=[rowtitle,k,str(v['要点']),'![](%s)'%(image_base64)]
+            maxtxt=v['雪球行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['股票简称'][0],dfmax.index[0],dfmax['market_capital'][0],dfmax['pe_ttm'][0],dfmax['past60Days'][0]*100,dfmax['current_year_percent'][0])
+            artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
             article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
     txt = '\n***'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
