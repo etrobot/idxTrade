@@ -133,12 +133,12 @@ def cauculate(dfk):
     if len(dfk['close'].values)<44:
         return {'_J':np.nan,'_U':np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    dfk=dfk.iloc[-21:]
+    dfk=dfk.iloc[-25:]
     closes = dfk['close']
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
-    mtm_1 = sum(1-closes.mean()/closes[i] for i in range(-10,0))*vol[-5:].mean()/vol[:-5].mean()
-    mtm_2 = (closes[-10:].mean()-closes.mean())/(closes[-5:].mean()-closes[-10:].mean()-0.0001)*vol[-5:].mean()/vol.mean()
+    mtm_1 = sum(closes[i]/min(closes[-2],closes[0])-1 for i in range(len(vol)))*vol[-1]/vol[-2]
+    mtm_2 = (closes[-10:].mean()-closes[-20:].mean())/(closes[-5:].mean()-closes[-10:].mean()-0.0001)*vol[-5:].mean()/vol.mean()
 
     return {'_J':round(mtm_1,12),'_U':round(mtm_2,12)}
 
@@ -216,8 +216,6 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     else:
         avgAmount=df['amount'].mean()
         df=df[df['amount']>avgAmount]
-        midMktCap=df['market_capital'].median()
-        # df=df[df['market_capital']<midMktCap]
     df = df.fillna(value=np.nan)
     indDf=pd.read_csv('concepts10jqka.csv',encoding='GBK',dtype=str)
     indDf=indDf.loc[indDf['雪球代码'].isin(df.index)].copy()
@@ -261,7 +259,8 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         idxtrade.run()
 
 def df2md(mkt,calKey,indDf,pdate,num=10):
-    df=indDf.sort_values(by=[calKey], ascending=True).copy().iloc[:num]#指标排序前x
+    midMktCap = indDf['market_capital'].median()
+    df=indDf[indDf['market_capital']<midMktCap].sort_values(by=[calKey], ascending=True).copy().iloc[:num]
     df.dropna(subset=[calKey], inplace=True)
     # indDf.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=False))
