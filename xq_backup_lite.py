@@ -346,6 +346,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
 
 def df2md(mkt,calKey,indDf,pdate,num=10):
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
+    capTpye={'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
     df=indDf[indDf[mCap]<midMktCap].sort_values(by=[calKey], ascending=True).copy().iloc[:num]
     df[mCap]=df[mCap].apply(str) + '亿'
@@ -382,10 +383,10 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
                     for i in range(-min(datetime.now().month,len(mK)),0):
                         yr=yr*(1+mK['percent'][i])
                     cur_year_perc[cnstock]=round(yr*100-100,2)
-            rowtitle='[%s(%s)](https://xueqiu.com/S/%s) 流通市值%s TTM%s 今年%s%%  %s%s'%(v['name'],k,k,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
+            rowtitle='[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s%s'%(v['name'],k,k,capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             if len(deb)!=0:
-                rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) 流通市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
-            maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) 流通市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'][0],dfmax.index[0],dfmax[mCap][0],dfmax['pe_ttm'][0],dfmax['past60Days'][0]*100,cur_year_perc[dfmax.index[0]])
+                rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
+            maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'][0],dfmax.index[0],capTpye,dfmax[mCap][0],dfmax['pe_ttm'][0],dfmax['past60Days'][0]*100,cur_year_perc[dfmax.index[0]])
             artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
             article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
     txt = '\n***'.join(article)
@@ -400,8 +401,6 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         .replace('<hr />','<br/><br/>')\
         .replace('TTMnan','亏损')\
         .replace('.0亿','亿')
-    if mkt=='us':
-        html=html.replace('流通','总')
 
     gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'''
 
