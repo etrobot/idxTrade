@@ -93,8 +93,8 @@ if __name__=='__main__':
 
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
-    # print(eastmoneyK('sh000001'))
-    print(cmsK('sz300141')['percent'].round(2))
+    print(cmsK('sh000001','annual'))
+    # print(cmsK('sz300141')['percent'].round(2))
     # print(pd.read_csv('md/us20201022.txt',index_col=0))
     # NB. Original query string below. It seems impossible to parse and
     # reproduce query strings 100% accurately so the one below is given

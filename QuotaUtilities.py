@@ -350,18 +350,19 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
             print(e)
             return h
 
-def cmsK(code:str):
+def cmsK(code:str,type:str='daily'):
     """招商证券A股行情数据"""
+    typeNum={'daily':1,'annual':3}
     code=code.upper()
     quoFile = 'Quotation/' + code + '.csv'
     if len(code)==8:
         code = code[:2] + ':'+code[2:]
     params = (
-        ('funcno', '20050'),
+        ('funcno', 20050),
         ('version', '1'),
         ('stock_list', code),
         ('count', '10000'),
-        ('type', '1'),
+        ('type', typeNum[type]),
         ('field', '1:2:3:4:5:6:7:8:9:10:11:12:13:14:15:16:18:19'),
         ('date', datetime.now().strftime("%Y%m%d")),
         ('FQType', '2'),#不复权1，前复权2，后复权3

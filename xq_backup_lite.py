@@ -3,6 +3,7 @@ import mplfinance as mpf
 import matplotlib as mpl  # 用于设置曲线参数
 from cycler import cycler  # 用于定制线条颜色
 import numpy as np
+from lxml import etree
 
 import matplotlib.pyplot as plt
 import base64
@@ -18,16 +19,16 @@ ENCODE_IN_USE='GBK'
 def loadMd(filename,update=False):
     indDf = pd.read_csv('concepts10jqka.csv', encoding='gb18030', dtype=str)
     # indDf.drop(indDf.columns[:1], axis=1,inplace=True)
-    # indDf['雪球行业'] = indDf['雪球行业'].str.replace(r"[A-Za-z0-9\!\%\[\]\,\。]", '')
-    # indDf.dropna(subset=['雪球代码'],inplace=True)
+    # indDf['行业'] = indDf['行业'].str.replace(r"[A-Za-z0-9\!\%\[\]\,\。]", '')
+    # indDf.dropna(subset=['symbl'],inplace=True)
     # indDf['所属概念'] = indDf['所属概念'].str.replace(r"[A-Za-z0-9\!\%\[\]\。]", '')
     # indDf['要点'] = indDf['要点'].str.replace("要点", '')
-    indDf.set_index('雪球代码',inplace=True)
+    indDf.set_index('symbl',inplace=True)
     with open (filename,'r') as f:
         line=f.read().split('---')[0].split('***')#f.read().split('---')[1]是图片base64
         mlog('入选数量：',len(line))
         for l in line:
-            #0:'',1:'股票简称',2:'雪球代码',3:'要点',4:'本地图片链接'
+            #0:'',1:'name',2:'symbl',3:'要点',4:'本地图片链接'
             stock=l.split('\n<br>')
             mlog(stock)
             indDf.at[stock[2], 'BAK'] = indDf.loc[stock[2],'要点'].values[0]
@@ -105,7 +106,7 @@ def draw(symbol,info,boardDates=[]):
         type='candle',
         volume=True,
         mav=(5,10,20),
-        title=info[10:-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(df['percent'][-1]*100)+'% '+str(round(df['amount'][-1]/100000000,3))+'亿',
+        title=info[10:-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(round(df['percent'][-1]*100,2))+'% '+str(round(df['amount'][-1]/100000000,2))+'亿',
         # ylabel='OHLCV Candles',
         # ylabel_lower='Shares\nTraded Volume',
         savefig = info,
@@ -148,7 +149,7 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
     url = "https://xueqiu.com/hq#"
     mlog(url)
     response = requests.get(url=url,headers={"user-agent": "Mozilla","cookie":g.xq_a_token})
-    html = lxml.html.etree.HTML(response.text)
+    html = etree.HTML(response.text)
     hrefname = html.xpath('//li/a/@title')
     hrefList = html.xpath('//li/a/@href')[2:]
     # mlog(len(hrefname),hrefname,'\n',len(hrefList),hrefList)
@@ -192,14 +193,117 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
         df.drop_duplicates(subset='symbol', keep='first', inplace=True)
         df.to_csv('Industry/'+mkt+hrefname[i]+indCode+'.csv',encoding=ENCODE_IN_USE)
         # writeIndustry(df[['symbol','name']].copy(), market, hrefname[i], indCode)
-        bakDf=df[['symbol','current','percent','current_year_percent', "volume","amount",'turnover_rate','pe_ttm','dividend_yield','float_market_capital','market_capital']].copy()
-        bakDf.dropna(subset=['volume'],inplace=True)
-        mktDf = mktDf.append(bakDf)
+        df.dropna(subset=['volume'],inplace=True)
+        df['行业']=hrefname[i]
+        mktDf = mktDf.append(df)
 
     mktDf=mktDf.loc[mktDf['current'] >= 1.0]
     mktDf.set_index('symbol',inplace=True)
+    mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
     mktDf.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'_Bak.csv',encoding=ENCODE_IN_USE)
     return mktDf
+
+def thsIndustry(mkt='cn',pdate=None):
+    p_url = 'http://q.10jqka.com.cn/thshy'
+    proxies = {}
+    # 爬取板块名称以及代码并且存在文件
+    headers = {
+        'Connection': 'keep-alive',
+        'Accept': 'text/html, */*; q=0.01',
+        'X-Requested-With': 'XMLHttpRequest',
+        'hexin-v': 'As9gGJ-FzGAE3MgcfO1_6HmTWGja9CJ5vUonveHeaU1E3eEe6cSzZs0Yt17y',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
+        # 'Referer': 'http://q.10jqka.com.cn/thshy/detail/code/881148/',
+        'Accept-Language': 'zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6,ja;q=0.5',
+    }
+    while True:
+        try:
+            print(p_url)
+            response = requests.get('http://q.10jqka.com.cn/thshy', headers=headers, verify=False,proxies = proxies)
+            html = etree.HTML(response.text)
+            if 'forbidden.' in response.text:
+                if len(proxies)!=0:
+                    proxies = {"http": "http://127.0.0.1:7890"}
+                else:
+                    proxies={}
+                    t.sleep(150)
+                continue
+            break
+        except Exception as e:
+            mlog(e.args)
+            print('retrying...')
+            t.sleep(150)
+            continue
+
+    gnbk = html.xpath('/html/body/div[2]/div[1]/div//div//div//a')
+    thsgnbk = []
+    for i in range(len(gnbk)):
+        thsgnbk.append((gnbk[i].text))
+
+    # 板块代码
+    bkcode = html.xpath('/html/body/div[2]/div[1]/div//div//div//a/@href')
+    bkcode = list(map(lambda x: x.split('/')[-2], bkcode))
+    bkcode = sorted([int(x) for x in bkcode], reverse=True)
+    data = {'Name': thsgnbk}
+
+    # 存储
+    gnbk = pd.DataFrame(data, index=bkcode)
+    #symbol,net_profit_cagr,ps,type,percent,has_follow,tick_size,pb_ttm,float_shares,current,amplitude,pcf,current_year_percent,float_float_market_capital,float_market_capital,dividend_yield,lot_size,roe_ttm,total_percent,percent5m,income_cagr,amount,chg,issue_date_ts,main_net_inflows,volume,volume_ratio,pb,followers,turnover_rate,first_percent,name,pe_ttm,total_shares
+    #序号	代码	名称	现价 	涨跌幅(%) 	涨跌 	涨速(%) 	换手(%) 	量比 	振幅(%) 	成交额 	流通股 	流通市值 	市盈率
+    cols=['symbol','name','current','percent','chg','speed','turnover_rate','qrr','amplitude','amount','float_shares','float_market_capital','pe_ttm','行业']
+    indDf=pd.DataFrame(columns=cols)
+
+    start = t.time()
+    tqdmRange = tqdm(gnbk.iterrows(),total=gnbk.shape[0])
+    for k, v in tqdmRange:
+        tqdmRange.set_description(v['Name'])
+        bk_code = str(k)
+        url = p_url + '/detail/code/' + bk_code + '/'
+        # print(v['Name'],url)
+        headers['Referer']=url
+        resp = requests.get(url, headers=headers, verify=False,proxies = proxies)
+
+        # 得出板块成分股有多少页
+        html = etree.HTML(resp.text)
+        result = html.xpath('//*[@id="m-page"]/span/text()')
+        count = 0
+        page = 1
+        if len(result) > 0:
+            page = int(result[0].split('/')[-1])
+        rows = []
+        while count < page:
+            count += 1
+            curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
+            resp = requests.get(curl, headers=headers, verify=False,proxies = proxies)
+            #             print(driver.page_source)
+            if 'forbidden.' in resp.text:
+                t.sleep(150)
+                continue
+            html = etree.HTML(resp.text)
+            tr=html.xpath('/html/body/table/tbody/tr/td//text()')
+            for i in range(14,len(tr),14):
+                if str(tr[i-13]).startswith('6'):
+                    row=['SH'+tr[i-13]]
+                else:
+                    row=['SZ'+tr[i-13]]
+                row.extend(tr[i-12:i])
+                row.append(v['Name'])
+                rows.append(row)
+        pageDf=pd.DataFrame(data=rows,columns=cols)
+        pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
+        indDf=indDf.append(pageDf)
+        # 成分股代码
+        # t.sleep(2)
+
+    end = t.time()
+    print(p_url + '爬取结束！！\n开始时间：%s\n结束时间：%s\n' % (t.ctime(start), t.ctime(end)))
+    indDf.set_index('symbol', inplace=True)
+    indDf=indDf.replace('--',np.nan)
+    indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
+    indDf['amount'] = indDf['amount'].str.rstrip('亿').astype('float')
+    indDf['current_year_percent']=np.nan
+    indDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
+    return indDf
 
 def dailyCheck(mkt=None,pdate=None,test=0):
     if mkt is None or pdate is None:
@@ -207,34 +311,22 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         if not pdate:
             return
     if os.path.isfile('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
-        df = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE, dtype={'symbol': str})#防止港股数字
-        df.set_index('symbol', inplace=True)
+        indDf = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE, dtype={'symbol': str})#防止港股数字
+        indDf.set_index('symbol', inplace=True)
+    elif mkt=='cn':
+        indDf = thsIndustry(mkt, pdate)
     else:
-        df = xueqiuBackupByIndustry(mkt, pdate,test)
-    if mkt=='cn' and g.boardlist:
-        df=df.loc[df.index.isin(g.boardlist.keys())].copy()
-    else:
-        avgAmount=df['amount'].mean()
-        df=df[df['amount']>avgAmount]
-    df = df.fillna(value=np.nan)
-    indDf=pd.read_csv('concepts10jqka.csv',encoding='GBK',dtype=str)
-    indDf=indDf.loc[indDf['雪球代码'].isin(df.index)].copy()
-    indDf.dropna(subset=['雪球行业'],inplace=True)
-    indDf=indDf[~indDf['股票简称'].str.contains("N|\*ST", na=False)]
-    # indDf['current_year_percent']=indDf['current_year_percent'].div(100).round(4)
-    # top25Ind='S1107,S2701,S1104,S3602,S2702,S1106,S2202,S3403,S1108,S2102,S2705,S2703,S4302,S6103,S7101,S6504,S7102,S4201,S6403,S3705,S4602,S2203,S3502,S3701,S6204,2820,3030,2520,2530,3045,z60,z20,2810,0520,7020,2050,z30,7030,z40,7010,0530,1010,0010,5030,z70,0020,6020,0510,2510,z10,52020,02030,02020,303020,201020,401020,255020,502030,351030,203030,452010,402020,202020,253010,551050,252010,255040,352010,151050,203010,451020,302020,452020,151040,453010'
-    # indDf = indDf.loc[indDf['雪球行业代码'].isin(top25Ind.split(','))].copy()
-    mlog(len(indDf))
+        indDf = xueqiuBackupByIndustry(mkt, pdate, test)
+    avgAmount=indDf['amount'].mean()
+    indDf=indDf[indDf['amount']>avgAmount]
+    indDf = indDf.fillna(value=np.nan)
+    indDf=indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
     cal={'_J':[],'_U':[]}
-    indDf.set_index('雪球代码', inplace=True)
-    indDf['filename'],indDf['percent'],indDf['current_year_percent'],indDf['market_capital'],indDf['pe_ttm'],indDf['past60Days']=None,None,None,None,np.nan,-999.0
+    indDf['filename']=None
+    indDf['past60Days']=-999.0
     tqdmRange=tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
-        tqdmRange.set_description(("%s %s %s %s"%(v['市场'], v['雪球行业'], k, v['股票简称'])).ljust(25))
-        indDf.at[k, 'percent'] = df.loc[k,'percent']
-        indDf.at[k, 'current_year_percent'] = df.loc[k, 'current_year_percent']
-        indDf.at[k, 'market_capital'] = round(df.loc[k, 'market_capital']/100000000.0,1)
-        indDf.at[k, 'pe_ttm'] = round(df.loc[k, 'pe_ttm'],1)#round(np.nan,1)==nan
+        tqdmRange.set_description(("%s %s %s %s"%(mkt, v['行业'], k, v['name'])).ljust(25))
         if g.testMode() and os.path.isfile('Quotation/'+k+'.csv'):
             qdf= pd.read_csv('Quotation/'+k+'.csv',index_col=0, parse_dates=True)
         elif mkt=='cn':
@@ -242,7 +334,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         else:
             qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
         indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
-        info = [v['市场'], v['雪球行业'], k, v['股票简称']]
+        info = [mkt, v['行业'], k, v['name']]
         indDf.at[k, 'filename']='plotimage/'+'_'.join(info)+'.png'
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
@@ -259,16 +351,19 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         idxtrade.run()
 
 def df2md(mkt,calKey,indDf,pdate,num=10):
-    midMktCap = indDf['market_capital'].median()
-    df=indDf[indDf['market_capital']<midMktCap].sort_values(by=[calKey], ascending=True).copy().iloc[:num]
+    midMktCap = indDf['float_market_capital'].median()
+    df=indDf[indDf['float_market_capital']<midMktCap].sort_values(by=[calKey], ascending=True).copy().iloc[:num]
+    df['float_market_capital']=df['float_market_capital'].apply(str) + '亿'
     df.dropna(subset=[calKey], inplace=True)
-    # indDf.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
-    # df = df.groupby('雪球行业').apply(lambda x: x.sort_values(calKey, ascending=False))
+    # indDf.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
+    # df = df.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
     images=[]
     debts=debt()
-    for k,v in df.iterrows():
-        dfmax=indDf[indDf['雪球行业']==v['雪球行业']].sort_values(by=['past60Days'], ascending=False)
+    tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
+    for k,v in tqdmRange:
+        tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
+        dfmax=indDf[indDf['行业']==v['行业']].sort_values(by=['past60Days'], ascending=False)
         vlines=[]
         if g.boardlist:
             vlines=g.boardlist.get(k)
@@ -280,14 +375,19 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             draw(k, v['filename'], vlines)
         deb=debts[debts.index==k]
         with open(v['filename'], "rb") as image_file:
-            # image_base64 = '[%s]:data:image/png;base64,%s'%(v['雪球代码'],base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
+            # image_base64 = '[%s]:data:image/png;base64,%s'%(v['symbl'],base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
             # images.append(image_base64)
-            # artxt=['**'+v['股票简称']+'**'+v['雪球行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['雪球代码'])]
+            # artxt=['**'+v['name']+'**'+v['行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['symbl'])]
             image_base64 = 'data:image/png;base64,%s'%(base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
-            rowtitle='[%s(%s)](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,k,v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])
+            cur_year_perc={k:v['current_year_percent'],dfmax.index[0]:dfmax['current_year_percent'][0]}
+            if mkt == 'cn':
+                for cnstock in cur_year_perc.keys():
+                    yr = cmsK(cnstock, 'annual')['close']
+                    cur_year_perc[cnstock]=round(yr[-1]/yr[-min(datetime.now().month+1,len(yr))]*100-100,2)
+            rowtitle='[%s(%s)](https://xueqiu.com/S/%s) 流通市值%s TTM%s 今年%s%%  %s%s'%(v['name'],k,k,v['float_market_capital'],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             if len(deb)!=0:
-                rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 今年%s%%  %s%s'%(v['股票简称'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],v['market_capital'],v['pe_ttm'],v['current_year_percent'],calKey,v[calKey])
-            maxtxt=v['雪球行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) 总市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['股票简称'][0],dfmax.index[0],dfmax['market_capital'][0],dfmax['pe_ttm'][0],dfmax['past60Days'][0]*100,dfmax['current_year_percent'][0])
+                rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) 流通市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],v['float_market_capital'],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
+            maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) 流通市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'][0],dfmax.index[0],dfmax['float_market_capital'][0],dfmax['pe_ttm'][0],dfmax['past60Days'][0]*100,cur_year_perc[dfmax.index[0]])
             artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
             article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
     txt = '\n***'.join(article)
@@ -300,7 +400,8 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         .replace('/a>','/a><br/>')\
         .replace('a><br/> <a','a><a')\
         .replace('<hr />','<br/><br/>')\
-        .replace('TTMnan','亏损')
+        .replace('TTMnan','亏损')\
+        .replace('.0亿','亿')
 
     gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'''
 
