@@ -243,7 +243,6 @@ def thsIndustry(mkt='cn',pdate=None):
     # 板块代码
     bkcode = html.xpath('/html/body/div[2]/div[1]/div//div//div//a/@href')
     bkcode = list(map(lambda x: x.split('/')[-2], bkcode))
-    bkcode = sorted([int(x) for x in bkcode], reverse=True)
     data = {'Name': thsgnbk}
 
     # 存储
@@ -252,8 +251,6 @@ def thsIndustry(mkt='cn',pdate=None):
     #序号	代码	名称	现价 	涨跌幅(%) 	涨跌 	涨速(%) 	换手(%) 	量比 	振幅(%) 	成交额 	流通股 	流通市值 	市盈率
     cols=['symbol','name','current','percent','chg','speed','turnover_rate','qrr','amplitude','amount','float_shares','float_market_capital','pe_ttm','行业']
     indDf=pd.DataFrame(columns=cols)
-
-    start = t.time()
     tqdmRange = tqdm(gnbk.iterrows(),total=gnbk.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(v['Name'])
@@ -292,11 +289,7 @@ def thsIndustry(mkt='cn',pdate=None):
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
-        # 成分股代码
-        # t.sleep(2)
 
-    end = t.time()
-    print(p_url + '爬取结束！！\n开始时间：%s\n结束时间：%s\n' % (t.ctime(start), t.ctime(end)))
     indDf.set_index('symbol', inplace=True)
     indDf=indDf.replace('--',np.nan)
     indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
