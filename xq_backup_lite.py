@@ -377,7 +377,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
                 for cnstock in cur_year_perc.keys():
                     mK = cmsK(cnstock, 'monthly')
                     yr=1
-                    for i in range(len(mK)):
+                    for i in range(-min(datetime.now().month+1,len(mK)),0):
                         yr=yr*(1+mK['percent'][i])
                     cur_year_perc[cnstock]=round(yr*100-100,2)
 
