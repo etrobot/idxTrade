@@ -352,7 +352,7 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
 
 def cmsK(code:str,type:str='daily'):
     """招商证券A股行情数据"""
-    typeNum={'daily':1,'annual':3}
+    typeNum={'daily':1,'monthly':3}
     code=code.upper()
     quoFile = 'Quotation/' + code + '.csv'
     if len(code)==8:
