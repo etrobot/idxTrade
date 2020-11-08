@@ -359,7 +359,8 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
     for k,v in tqdmRange:
         tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
-        dfmax=indDf[indDf['行业']==v['行业']].sort_values(by=['past60Days'], ascending=False)
+        dfmax=indDf[indDf['行业']==v['行业']].sort_values(by=['past60Days'], ascending=False).iloc[0]
+        print(dfmax)
         vlines=[]
         if g.boardlist:
             vlines=g.boardlist.get(k)
@@ -375,7 +376,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             # images.append(image_base64)
             # artxt=['**'+v['name']+'**'+v['行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['symbl'])]
             image_base64 = 'data:image/png;base64,%s'%(base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
-            cur_year_perc={k:v['current_year_percent'],dfmax.index[0]:dfmax['current_year_percent'][0]}
+            cur_year_perc={k:v['current_year_percent'],dfmax.name:dfmax['current_year_percent']}
             if mkt == 'cn':
                 for cnstock in cur_year_perc.keys():
                     mK = cmsK(cnstock, 'monthly')
@@ -386,7 +387,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             rowtitle='[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s%s'%(v['name'],k,k,capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             if len(deb)!=0:
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
-            maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'][0],dfmax.index[0],capTpye,dfmax[mCap][0],dfmax['pe_ttm'][0],dfmax['past60Days'][0]*100,cur_year_perc[dfmax.index[0]])
+            maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
             artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
             article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
     txt = '\n***'.join(article)
