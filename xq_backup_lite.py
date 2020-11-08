@@ -360,7 +360,6 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     for k,v in tqdmRange:
         tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
         dfmax=indDf[indDf['行业']==v['行业']].sort_values(by=['past60Days'], ascending=False).iloc[0]
-        print(dfmax)
         vlines=[]
         if g.boardlist:
             vlines=g.boardlist.get(k)
