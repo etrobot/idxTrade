@@ -93,10 +93,10 @@ if __name__=='__main__':
 
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
-    mthk=cmsK('sh605358','monthly')
+    mthk=cmsK('SZ002993','monthly')
     mth=mthk['close']
-    print(mthk,-min(datetime.now().month+1,len(mth)),round(mth[-1]/mth[-min(datetime.now().month+1,len(mth))]*100-100,2))
-    # print(cmsK('sz300141')['percent'].round(2))
+    print(mthk['percent'],-min(datetime.now().month+1,len(mth)),round(mth[-1]/mthk['open'][0]*100-100,2))
+    # print(eastmoneyK('sz300141',quota_type='yk'))
     # print(pd.read_csv('md/us20201022.txt',index_col=0))
     # NB. Original query string below. It seems impossible to parse and
     # reproduce query strings 100% accurately so the one below is given
