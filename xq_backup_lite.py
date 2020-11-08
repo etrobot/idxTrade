@@ -376,13 +376,11 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             if mkt == 'cn':
                 for cnstock in cur_year_perc.keys():
                     mK = cmsK(cnstock, 'monthly')
-                    if datetime.now().month+1>=len(mK):
-                        yr=1
-                        for i in range(len(mK)):
-                            yr=yr*(1+mK['percent'][i])
-                        cur_year_perc[cnstock]=round(yr*100-100,2)
-                    else:
-                        cur_year_perc[cnstock]=round(mK['close'][-1]/mK['close'][-datetime.now().month-1]*100-100,2)
+                    yr=1
+                    for i in range(len(mK)):
+                        yr=yr*(1+mK['percent'][i])
+                    cur_year_perc[cnstock]=round(yr*100-100,2)
+
             rowtitle='[%s(%s)](https://xueqiu.com/S/%s) 流通市值%s TTM%s 今年%s%%  %s%s'%(v['name'],k,k,v['float_market_capital'],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             if len(deb)!=0:
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) 流通市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],v['float_market_capital'],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
