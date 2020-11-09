@@ -280,7 +280,9 @@ def thsIndustry(mkt='cn',pdate=None):
             html = etree.HTML(resp.text)
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
             for i in range(14,len(tr),14):
-                if str(tr[i-13]).startswith('6'):
+                if str(tr[i-13]).startswith('688'):
+                    continue
+                elif str(tr[i-13]).startswith('6'):
                     row=['SH'+tr[i-13]]
                 else:
                     row=['SZ'+tr[i-13]]
