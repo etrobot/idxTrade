@@ -1,6 +1,5 @@
-from QuotaUtilities import *
-import random,hashlib,re,demjson
-import configparser
+import random,hashlib
+from idxTrade import *
 
 def _create_random_tmp(salt_count, seed):
     """
@@ -93,8 +92,8 @@ if __name__=='__main__':
 
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
-    mthk=cmsK('SZ300638')
-    print(mthk['close'][-1],min(mthk['close'][-60:]),mthk.index[-60],round(mthk['close'][-1]/min(mthk['close'][-60:])-1,4))
+    # mthk=cmsK('SZ300638')
+    # print(mthk['close'][-1],min(mthk['close'][-60:]),mthk.index[-60],round(mthk['close'][-1]/min(mthk['close'][-60:])-1,4))
     # print(eastmoneyK('sz300141',quota_type='yk'))
     # print(pd.read_csv('md/us20201022.txt',index_col=0))
     # NB. Original query string below. It seems impossible to parse and
@@ -102,3 +101,5 @@ if __name__=='__main__':
     # in case the reproduced version is not "correct".
     # response = requests.get('https://hq.cmschina.com/market/json?funcno=20050&version=1&stock_list=SZ%3A300419&count=10000&type=1&field=1%3A2%3A3%3A4%3A5%3A6%3A7%3A8%3A9%3A10%3A11%3A12%3A13%3A14%3A15%3A16%3A18%3A19&date=20201020&FQType=1', headers=headers)
 
+    dxtrade = idxTrade('cn', 0)
+    idxtrade.run()
