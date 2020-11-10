@@ -398,7 +398,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
     #     f.write(txt)
     html = markdown.markdown('#'+title+'#'+txt)\
-        .replace('<a','<a class="button is-rounded is-dark"')\
+        .replace('<a href="https://xueqiu','<a class="button is-rounded is-dark" href="https://xueqiu')\
         .replace('/a>','/a><br/>')\
         .replace('a><br/> <a','a><a')\
         .replace('<hr />','<br/><br/>')\
