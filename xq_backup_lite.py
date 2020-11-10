@@ -351,6 +351,14 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     article = []
     images=[]
     debts=debt()
+    gAdUnit='''<amp-ad width="100vw" height="320"
+         type="adsense"
+         data-ad-client="ca-pub-7398757278741889"
+         data-ad-slot="7456114770"
+         data-auto-format="rspv"
+         data-full-width="">
+      <div overflow=""></div>
+    </amp-ad>'''
     tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
     for k,v in tqdmRange:
         tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
@@ -382,7 +390,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             if len(deb)!=0:
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
-            artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
+            artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt,gAdUnit]
             article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
     txt = '\n***'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
@@ -398,18 +406,6 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         .replace('.0亿','亿')
 
     gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'''
-    gAdUnit='''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- toufu -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7398757278741889"
-         data-ad-slot="7456114770"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>'''
-
     css='<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
