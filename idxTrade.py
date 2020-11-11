@@ -24,7 +24,10 @@ class idxTrade:#保存参数的类
                 #检查卖出
                 for stock in position:
                     print(self.mkt,stock['stock_symbol'])
-                    cls=cmsK(stock['stock_symbol'])['close']
+                    if market=='cn':
+                        cls=cmsK(stock['stock_symbol'])['close']
+                    else:
+                        cls=xueqiuK(stock['stock_symbol'],(self.cfg['date']-timedelta(days=250)).strftime('%Y%m%d'),self.xq_a_token)['close']
                     if cls[-1]/cls[-2]<iCls[-1]/iCls[-2] and cls[-1]/cls[-5]<iCls[-1]/iCls[-5]:
                         stock['weight']=0
                         stock["proactive"] = True

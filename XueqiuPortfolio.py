@@ -57,20 +57,11 @@ class xueqiuPortfolio():
     def __init__(self,mkt,config):
         self.holdnum = 5
         self.session = requests.Session()
-        self.session.cookies = self.getXueqiuCookie()
+        self.session.cookies.update(self.getXueqiuCookie())
         self.p_url = 'https://xueqiu.com/P/'
         self.headers = {
-            'Connection': 'close',
-            'Cache-Control': 'max-age=0',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.142 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-User': '?1',
-            'Sec-Fetch-Dest': 'document',
-            'Referer': 'https://xueqiu.com/',
-            'Accept-Language': 'en-US,en;q=0.9',
+            "Connection": "close",
+             "user-agent": "Mozilla",
         }
         self.mkt=mkt
         self.cfg=config
@@ -91,8 +82,10 @@ class xueqiuPortfolio():
         for record in sbCookie.split(";"):
             key, value = record.strip().split("=", 1)
             cookie_dict[key] = value
-        return requests.utils.cookiejar_from_dict(cookie_dict)
-
+        for item in cookie_dict:
+            if 'expiry' in item:
+                del item['expiry']
+        return cookie_dict
     def trade(self,mkt,mode,position_list=None):  # 调仓雪球组合
         portfolio_code = self.cfg['xueqiu'][mode]
         if position_list is None:

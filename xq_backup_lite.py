@@ -336,7 +336,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
 
     if len(sys.argv)==0:
-        idxtrade=idxTrade('cn',0)
+        idxtrade=idxTrade(mkt,0)
         idxtrade.run()
 
 def df2md(mkt,calKey,indDf,pdate,num=10):
@@ -351,7 +351,6 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     article = []
     images=[]
     debts=debt()
-    gAdUnit='<amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-7398757278741889" data-ad-slot="7456114770" data-auto-format="rspv" data-full-width=""><div overflow=""></div></amp-ad>'
     tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
     for k,v in tqdmRange:
         tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
@@ -385,7 +384,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
             artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
             article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
-    txt = gAdUnit.join(article)
+    txt = '\n<br>'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
     # with open('md/'+title+'.md','w') as f:
     #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
