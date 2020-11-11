@@ -406,13 +406,24 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         .replace('.0亿','亿')
 
     gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'''
+    gAdBtm='''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- toufu -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7398757278741889"
+             data-ad-slot="7456114770"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>'''
     css='<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        finalhtml=css+html+gAdUnit+'<p><br/>© Frank Lin 2020</p></ariticle></div></div></div></body></html>'
+        finalhtml=css+html+gAdUnit+'<p><br/>© Frank Lin 2020</p></ariticle></div></div></div>'+gAdBtm+'</body></html>'
         f.write(finalhtml)
         mlog('complete ' + title)
         if g.testMode():
