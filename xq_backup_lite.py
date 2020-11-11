@@ -392,7 +392,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
             artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt,gAdUnit]
             article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
-    txt = '\n***'.join(article)
+    txt = '***'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
     # with open('md/'+title+'.md','w') as f:
     #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
