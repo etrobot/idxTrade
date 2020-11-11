@@ -390,15 +390,15 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
             if len(deb)!=0:
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
-            artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt,gAdUnit]
-            article.append('\n<br>'+'\n<br>'.join([str(x) for x in artxt]))
-    txt = '***'.join(article)
+            artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
+            article.append('<br>'+'<br>'.join([str(x) for x in artxt]))
+    txt = gAdUnit.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
     # with open('md/'+title+'.md','w') as f:
     #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
     #     f.write(txt)
     html = markdown.markdown('#'+title+'#'+txt)\
-        .replace('<a href="https://xueqiu','<a class="button is-rounded is-dark" href="https://xueqiu')\
+        .replace('<a href="https://xueqiu','<a class="button is-dark" href="https://xueqiu')\
         .replace('/a>','/a><br/>')\
         .replace('a><br/> <a','a><a')\
         .replace('<hr />','<br/><br/>')\
