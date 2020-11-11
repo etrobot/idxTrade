@@ -416,7 +416,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        finalhtml=css+html+gAdUnit+'<p><br>© Frank Lin 2020</p></ariticle></div></div></div>'+gAdBtm+'</body></html>'
+        finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
         f.write(finalhtml)
         mlog('complete ' + title)
         if g.testMode():
