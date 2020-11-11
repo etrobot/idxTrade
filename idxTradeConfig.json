@@ -5,6 +5,10 @@
     "PM": 5,
     "baseIdx": ".IXIC",
     "paramSet": {
+      "idx": {
+                ".IXIC": ["signal on", 15, 4, 7, 4],
+                ".DJI":["signal on",15,4,7,4]
+        },
       "etf": {
         "TQQQ": ["signal off", 15, 4, 7, 4]
       }
@@ -46,8 +50,8 @@
     "baseIdx": "hkhsi",
     "paramSet": {
       "idx": {
-                "hsi": ["signal on", 15, 4, 7, 4],
-                "hstech":["signal on",15,4,7,4]
+                "HKHSI": ["signal on", 15, 4, 7, 4],
+                "HKHSTECH":["signal on",15,4,7,4]
         }
 
     },

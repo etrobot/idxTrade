@@ -351,14 +351,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     article = []
     images=[]
     debts=debt()
-    gAdUnit='''<amp-ad width="100vw" height="320"
-         type="adsense"
-         data-ad-client="ca-pub-7398757278741889"
-         data-ad-slot="7456114770"
-         data-auto-format="rspv"
-         data-full-width="">
-      <div overflow=""></div>
-    </amp-ad>'''
+    gAdUnit='<amp-ad width="100vw" height="320" type="adsense" data-ad-client="ca-pub-7398757278741889" data-ad-slot="7456114770" data-auto-format="rspv" data-full-width=""><div overflow=""></div></amp-ad>'
     tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
     for k,v in tqdmRange:
         tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
@@ -391,7 +384,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
                 rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
             maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
             artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
-            article.append('<br>'+'<br>'.join([str(x) for x in artxt]))
+            article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
     txt = gAdUnit.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
     # with open('md/'+title+'.md','w') as f:
@@ -399,14 +392,14 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     #     f.write(txt)
     html = markdown.markdown('#'+title+'#'+txt)\
         .replace('<a href="https://xueqiu','<a class="button is-dark" href="https://xueqiu')\
-        .replace('/a>','/a><br/>')\
-        .replace('a><br/> <a','a><a')\
-        .replace('<hr />','<br/><br/>')\
+        .replace('/a>','/a><br>')\
+        .replace('a><br> <a','a><a')\
         .replace('TTMnan','亏损')\
         .replace('.0亿','亿')
 
-    gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'''
-    gAdBtm='''<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>'''
+    gAdBtm='''
         <!-- toufu -->
         <ins class="adsbygoogle"
              style="display:block"
@@ -423,7 +416,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        finalhtml=css+html+gAdUnit+'<p><br/>© Frank Lin 2020</p></ariticle></div></div></div>'+gAdBtm+'</body></html>'
+        finalhtml=css+html+gAdUnit+'<p><br>© Frank Lin 2020</p></ariticle></div></div></div>'+gAdBtm+'</body></html>'
         f.write(finalhtml)
         mlog('complete ' + title)
         if g.testMode():
