@@ -2,6 +2,7 @@
 cd /Users/admin/Documents/DEV/PY/idxTrade && /usr/local/bin/python3.7 -u xq_backup_lite.py $1 $2;
 
 cd /Users/admin/Documents/DEV/PY/upknow
+rm -f *.png
 git checkout --orphan newBranch
 git add -A  # Add all files and commit them
 git commit -m "Removed history, due to large data"

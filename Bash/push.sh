@@ -1,5 +1,6 @@
 #!/bin/bash
 cd /Users/admin/Documents/DEV/PY/upknow
+rm -f *.png
 git checkout --orphan newBranch
 git add -A  # Add all files and commit them
 git commit -m "Removed history, due to large data"
