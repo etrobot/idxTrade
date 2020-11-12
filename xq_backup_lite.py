@@ -8,6 +8,7 @@ from matplotlib.font_manager import _rebuild
 from idxTrade import *
 
 ENCODE_IN_USE='GBK'
+IMG_FOLDER='../upknow/'
 
 def loadMd(filename,update=False):
     indDf = pd.read_csv('concepts10jqka.csv', encoding='gb18030', dtype=str)
@@ -324,7 +325,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
             qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
         indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
         info = [mkt, v['行业'], k, v['name']]
-        indDf.at[k, 'filename']='../upknow/'+'_'.join(info)+'.png'
+        indDf.at[k, 'filename']=IMG_FOLDER+'_'.join(info)+'.png'
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
             cal[mk].append(mv)
@@ -377,7 +378,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         if len(deb)!=0:
             rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
         maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
-        artxt=[rowtitle,'![](%s)'%('.'+v['filename'][9:]),maxtxt]
+        artxt=[rowtitle,'![](%s)'%('https://upknow.gitee.io/'+v['filename'][len(IMG_FOLDER):]),maxtxt]
         article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
     txt = '\n<br>'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
@@ -408,13 +409,8 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
-    with open('../upknow/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
-        f.write(finalhtml)
-        mlog('complete github ' + title)
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
         finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
-        finalhtml=finalhtml.replace('./','https://upknow.gitee.io/')
         f.write(finalhtml)
         mlog('complete gitee' + title)
         # if g.testMode():
