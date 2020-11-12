@@ -335,7 +335,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     mtmDfBAK=indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
 
-    if len(sys.argv)==0:
+    if len(sys.argv)==1:
         idxtrade=idxTrade(mkt,0)
         idxtrade.run()
 
