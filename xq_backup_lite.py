@@ -409,17 +409,17 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
-    with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
+    with open('../upknow/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
         finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
         f.write(finalhtml)
         mlog('complete github ' + title)
-    with open('../upknow/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
+    with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
         finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
         finalhtml=finalhtml.replace('./','https://upknow.gitee.io/')
         f.write(finalhtml)
         mlog('complete gitee' + title)
-        if g.testMode():
-            return finalhtml
+        # if g.testMode():
+        #     return finalhtml
 
 def preparePlot():
     mlog(mpl.matplotlib_fname())
