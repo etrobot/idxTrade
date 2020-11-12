@@ -396,8 +396,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         .replace('TTMnan','亏损')\
         .replace('.0亿','亿')
 
-    gAds='''<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>'''
+    gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm='''
         <!-- toufu -->
         <ins class="adsbygoogle"
