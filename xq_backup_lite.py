@@ -324,7 +324,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
             qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
         indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
         info = [mkt, v['行业'], k, v['name']]
-        indDf.at[k, 'filename']='plotimage/'+'_'.join(info)+'.png'
+        indDf.at[k, 'filename']='../upknow/'+'_'.join(info)+'.png'
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
             cal[mk].append(mv)
@@ -365,25 +365,20 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         elif not os.path.isfile(v['filename']):
             draw(k, v['filename'], vlines)
         deb=debts[debts.index==k]
-        with open(v['filename'], "rb") as image_file:
-            # image_base64 = '[%s]:data:image/png;base64,%s'%(v['symbl'],base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
-            # images.append(image_base64)
-            # artxt=['**'+v['name']+'**'+v['行业'],k[-1],str(v['所属概念'])+'~'+str(v['要点']),'![][%s]'%(v['symbl'])]
-            image_base64 = 'data:image/png;base64,%s'%(base64.b64encode(image_file.read()).decode(ENCODE_IN_USE))
-            cur_year_perc={k:v['current_year_percent'],dfmax.name:dfmax['current_year_percent']}
-            if mkt == 'cn':
-                for cnstock in cur_year_perc.keys():
-                    mK = cmsK(cnstock, 'monthly')
-                    yr=1
-                    for i in range(-min(datetime.now().month,len(mK)),0):
-                        yr=yr*(1+mK['percent'][i])
-                    cur_year_perc[cnstock]=round(yr*100-100,2)
-            rowtitle='[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s'%(v['name'],k,k,capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey)
-            if len(deb)!=0:
-                rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
-            maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
-            artxt=[rowtitle,'![](%s)'%(image_base64),maxtxt]
-            article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
+        cur_year_perc={k:v['current_year_percent'],dfmax.name:dfmax['current_year_percent']}
+        if mkt == 'cn':
+            for cnstock in cur_year_perc.keys():
+                mK = cmsK(cnstock, 'monthly')
+                yr=1
+                for i in range(-min(datetime.now().month,len(mK)),0):
+                    yr=yr*(1+mK['percent'][i])
+                cur_year_perc[cnstock]=round(yr*100-100,2)
+        rowtitle='[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s'%(v['name'],k,k,capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey)
+        if len(deb)!=0:
+            rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
+        maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
+        artxt=[rowtitle,'![](%s)'%('.'+v['filename'][9:]),maxtxt]
+        article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
     txt = '\n<br>'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
     # with open('md/'+title+'.md','w') as f:
@@ -417,10 +412,14 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
         finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
         f.write(finalhtml)
-        mlog('complete ' + title)
+        mlog('complete github ' + title)
+    with open('../upknow/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
+        finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
+        finalhtml=finalhtml.replace('./','https://upknow.gitee.io/')
+        f.write(finalhtml)
+        mlog('complete gitee' + title)
         if g.testMode():
             return finalhtml
-
 
 def preparePlot():
     mlog(mpl.matplotlib_fname())
