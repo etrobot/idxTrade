@@ -170,7 +170,7 @@ def idxCompare(mkt,cfg,mode='idx',backtest=0):
             if nav20 > navForCompare:
                 navForCompare = nav20
                 gIdx = iCode
-                print(iCode,navForCompare)
+                # print(iCode,navForCompare)
         ctype = gIdx + '_'+mixType
         mix.extend([mix[-1] * iK[gIdx][ctype][r] / iK[gIdx][ctype][i] for r in range(i, i+days)])
     iK[cfg['baseIdx']]['mix'] = mix
