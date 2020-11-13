@@ -268,18 +268,16 @@ def thsIndustry(mkt='cn',pdate=None):
         page = 1
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
-        print(result,page,count)
         headers = {"user-agent": "Mozilla","Referer": "http://q.10jqka.com.cn/thshy/detail","Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
             resp=requests.get(curl,headers=headers)
             html=etree.HTML(resp.text)
-            tr=html.xpath('/html/body/table/tbody/tr/td//text()')
-            if 'forbidden.' in resp.text:
-                t.sleep(60)
+            if '暂无成份股数据' in resp.text:
                 continue
-            for i in range(14,len(tr),14):
+            tr=html.xpath('/html/body/table/tbody/tr/td//text()')
+            for i in range(14,len(tr)+14,14):
                 if str(tr[i-13]).startswith('688'):
                     continue
                 elif str(tr[i-13]).startswith('6'):
@@ -294,7 +292,6 @@ def thsIndustry(mkt='cn',pdate=None):
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
-        driver.delete_all_cookies()
         t.sleep(2)
     driver.quit()
     indDf.set_index('symbol', inplace=True)
