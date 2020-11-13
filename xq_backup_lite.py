@@ -202,6 +202,7 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
 
 def thsIndustry(mkt='cn',pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
+    start = t.time()
     proxies = {}
     # 爬取板块名称以及代码并且存在文件
     session = requests.session()
@@ -271,10 +272,10 @@ def thsIndustry(mkt='cn',pdate=None):
             if len(tr)==0:
                 driver.get(curl)
                 html=etree.HTML(driver.page_source)
-                headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
                 if 'forbidden.' in driver.page_source:
-                    t.sleep(60)
+                    t.sleep(30)
                     continue
+                headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
                 tr = html.xpath('/html/body/table/tbody/tr/td//text()')
             for i in range(14,len(tr)+14,14):
                 if str(tr[i-13]).startswith('688'):
@@ -290,8 +291,9 @@ def thsIndustry(mkt='cn',pdate=None):
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
-        t.sleep(2)
     driver.quit()
+    end = t.time()
+    print(p_url + '爬取结束！！\n开始时间：%s\n结束时间：%s\n' % (t.ctime(start), t.ctime(end)))
     indDf.set_index('symbol', inplace=True)
     indDf=indDf.replace('--',np.nan)
     indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
