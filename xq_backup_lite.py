@@ -6,6 +6,8 @@ from lxml import etree
 import base64
 from matplotlib.font_manager import _rebuild
 from idxTrade import *
+from selenium import webdriver
+
 
 ENCODE_IN_USE='GBK'
 IMG_FOLDER='../upknow/'
@@ -31,7 +33,7 @@ def loadMd(filename,update=False):
         indDf.to_csv('concepts10jqka'+datetime.now().strftime('%Y%m%d')+'.csv',encoding='gb18030')
 
 def draw(symbol,info,boardDates=[]):
-    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding=ENCODE_IN_USE)
+    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding=ENCODE_IN_USE).iloc[:-1]
     df.index=pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
@@ -203,21 +205,23 @@ def thsIndustry(mkt='cn',pdate=None):
     proxies = {}
     # 爬取板块名称以及代码并且存在文件
     headers = {
-        'Connection': 'keep-alive',
+        'Connection': 'close',
         'Accept': 'text/html, */*; q=0.01',
         'X-Requested-With': 'XMLHttpRequest',
-        'hexin-v': 'As9gGJ-FzGAE3MgcfO1_6HmTWGja9CJ5vUonveHeaU1E3eEe6cSzZs0Yt17y',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
+        'Host': 'q.10jqka.com.cn',
         # 'Referer': 'http://q.10jqka.com.cn/thshy/detail/code/881148/',
         'Accept-Language': 'zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6,ja;q=0.5',
     }
+
+    session = requests.session()
     while True:
         try:
             print(p_url)
-            response = requests.get('http://q.10jqka.com.cn/thshy', headers=headers, verify=False,proxies = proxies)
+            response = session.get('http://q.10jqka.com.cn/thshy', headers=headers,proxies = proxies)
             html = etree.HTML(response.text)
             if 'forbidden.' in response.text:
-                if len(proxies)!=0:
+                if len(proxies)==0:
                     proxies = {"http": "http://127.0.0.1:7890"}
                 else:
                     proxies={}
@@ -254,31 +258,41 @@ def thsIndustry(mkt='cn',pdate=None):
         bk_code = str(k)
         url = p_url + '/detail/code/' + bk_code + '/'
         # print(v['Name'],url)
-        headers['Referer']=url
-        resp = requests.get(url, headers=headers, verify=False,proxies = proxies)
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
 
+        # driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(executable_path='./chromedriver', options=options)
+        resp = session.get(url, headers=headers, verify=False,proxies = proxies)
         # 得出板块成分股有多少页
         html = etree.HTML(resp.text)
         result = html.xpath('//*[@id="m-page"]/span/text()')
-        count = 0
+        count = 1
         page = 1
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
         print(result,page,count)
         rows = []
-        while count < page:
-            t.sleep(2)
+        while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
-            resp = requests.get(curl, headers=headers, verify=False,proxies = proxies)
-            html = etree.HTML(resp.text)
+            print(curl)
+            resp = driver.get(curl, headers=headers, verify=False,proxies = proxies,allow_redirects=True)
+            resp = driver.get(curl, headers=headers, verify=False, proxies=proxies, allow_redirects=True)
+            html = etree.HTML(resp.page_source)
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
             if len(tr)==0:
-                if len(proxies) != 0:
+                print(resp.page_source)
+            if 'forbidden.' in resp.text or len(tr)==0:
+                if len(proxies) == 0:
                     proxies = {"http": "http://127.0.0.1:7890"}
                 else:
                     proxies = {}
                     t.sleep(150)
                 continue
+            print(tr)
             for i in range(14,len(tr),14):
                 if str(tr[i-13]).startswith('688'):
                     continue
@@ -288,12 +302,14 @@ def thsIndustry(mkt='cn',pdate=None):
                     row=['SZ'+tr[i-13]]
                 row.extend(tr[i-12:i])
                 row.append(v['Name'])
+                # print(row)
                 rows.append(row)
             count += 1
 
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
+        t.sleep(10)
 
     indDf.set_index('symbol', inplace=True)
     indDf=indDf.replace('--',np.nan)

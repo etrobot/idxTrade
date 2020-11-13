@@ -103,8 +103,8 @@ if __name__=='__main__':
 
     # idxtrade = idxTrade('us', 0)
     # idxtrade.run()
-    df=pd.read_csv('md/hk20201112.txt', dtype=str)
-    df.sort_values(by='_U', ascending=True, inplace=True)
+    df=pd.read_csv('md/cn20201112.txt', dtype=str)
+    df.sort_values(by='_J', ascending=True, inplace=True)
     for symbol in df['symbol'][:10]:
         print(symbol)
-        draw(symbol,'../upknow/4/hk/'+symbol+'.png')
+        draw(symbol,'../upknow/4/cn/'+symbol+'.png')
