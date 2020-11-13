@@ -100,7 +100,7 @@ def draw(symbol,info,boardDates=[]):
         type='candle',
         volume=True,
         mav=(5,10,20),
-        title=info[10:-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(round(df['percent'][-1]*100,2))+'% '+str(round(df['amount'][-1]/100000000,2))+'亿',
+        title=info[len(IMG_FOLDER+'1/cn/'):-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(round(df['percent'][-1]*100,2))+'% '+str(round(df['amount'][-1]/100000000,2))+'亿',
         # ylabel='OHLCV Candles',
         # ylabel_lower='Shares\nTraded Volume',
         savefig = info,
@@ -235,6 +235,8 @@ def thsIndustry(mkt='cn',pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
 
+
+
     # 板块代码
     bkcode = html.xpath('/html/body/div[2]/div[1]/div//div//div//a/@href')
     bkcode = list(map(lambda x: x.split('/')[-2], bkcode))
@@ -262,17 +264,21 @@ def thsIndustry(mkt='cn',pdate=None):
         page = 1
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
+        print(result,page,count)
         rows = []
         while count < page:
-            count += 1
+            t.sleep(2)
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
             resp = requests.get(curl, headers=headers, verify=False,proxies = proxies)
-            #             print(driver.page_source)
-            if 'forbidden.' in resp.text:
-                t.sleep(150)
-                continue
             html = etree.HTML(resp.text)
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
+            if len(tr)==0:
+                if len(proxies) != 0:
+                    proxies = {"http": "http://127.0.0.1:7890"}
+                else:
+                    proxies = {}
+                    t.sleep(150)
+                continue
             for i in range(14,len(tr),14):
                 if str(tr[i-13]).startswith('688'):
                     continue
@@ -283,6 +289,8 @@ def thsIndustry(mkt='cn',pdate=None):
                 row.extend(tr[i-12:i])
                 row.append(v['Name'])
                 rows.append(row)
+            count += 1
+
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)

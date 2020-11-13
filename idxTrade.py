@@ -43,12 +43,12 @@ class idxTrade:#保存参数的类
                     #     factor.append(factor_2(stockK))
                     # toBuy['f']=factor
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
-                    toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',index_col=0)
+                    toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
                     toBuy.sort_values(by='_U', ascending=True,inplace=True)
-                    if toBuy.index[0] not in [x['stock_symbol'] for x in position]:
+                    if toBuy['symbol'][0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
-                        position.append(self.xueqiu.newPostition(market, toBuy.index[0], 25))
+                        position.append(self.xueqiu.newPostition(market, toBuy['symbol'][0], 25))
                         # print(sell,toBuy,position)
                         self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
