@@ -325,7 +325,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
             qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
         indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
         info = [mkt, v['行业'], k, v['name']]
-        indDf.at[k, 'filename']=IMG_FOLDER+'_'.join(info)+'.png'
+        indDf.at[k, 'filename']=IMG_FOLDER+str(pdate.weekday()+1)+'/'+mkt+'/'+'_'.join(info)+'.png'
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
             cal[mk].append(mv)
@@ -444,7 +444,7 @@ if __name__=='__main__':
         filename='daily.log',
         level=logging.DEBUG
     )
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         g = params(market=sys.argv[1],test=int(sys.argv[2]))
     else:
         g=params()

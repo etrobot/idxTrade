@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -f /Users/admin/Documents/DEV/PY/upknow/*.png
+rm -f /Users/admin/Documents/DEV/PY/upknow/`date +%w`/$1/*.png
 
 cd /Users/admin/Documents/DEV/PY/idxTrade && /usr/local/bin/python3.7 -u xq_backup_lite.py $1 $2;
 
