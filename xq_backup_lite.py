@@ -259,22 +259,24 @@ def thsIndustry(mkt='cn',pdate=None):
         tqdmRange.set_description(v['Name'])
         bk_code = str(k)
         url = p_url + '/detail/code/' + bk_code + '/'
+        driver.get(url)
         # print(v['Name'],url)
         # 得出板块成分股有多少页
-        html = etree.HTML(requests.get(url,headers={"user-agent": "Mozilla"}).text)
+        html = etree.HTML(driver.page_source)
         result = html.xpath('//*[@id="m-page"]/span/text()')
         count = 1
         page = 1
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
         print(result,page,count)
+        headers = {"user-agent": "Mozilla","Referer": "http://q.10jqka.com.cn/thshy/detail","Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
-            driver.get(curl)
-            html=etree.HTML(driver.page_source)
+            resp=requests.get(curl,headers=headers)
+            html=etree.HTML(resp.text)
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
-            if 'forbidden.' in driver.page_source:
+            if 'forbidden.' in resp.text:
                 t.sleep(60)
                 continue
             for i in range(14,len(tr),14):
@@ -286,7 +288,6 @@ def thsIndustry(mkt='cn',pdate=None):
                     row=['SZ'+tr[i-13]]
                 row.extend(tr[i-12:i])
                 row.append(v['Name'])
-                print(row)
                 rows.append(row)
             count += 1
 
