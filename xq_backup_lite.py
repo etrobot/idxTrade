@@ -258,7 +258,7 @@ def thsIndustry(mkt='cn',pdate=None):
         page = 1
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
-        headers = {"user-agent": "Mozilla","Referer": "http://q.10jqka.com.cn/thshy/detail","Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
+        headers = {"user-agent": "Mozilla","Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
@@ -269,8 +269,9 @@ def thsIndustry(mkt='cn',pdate=None):
                 continue
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
             if len(tr)==0:
-                t.sleep(10)
-                continue
+                driver.get(curl)
+                html=etree.HTML(driver.page_source)
+                tr = html.xpath('/html/body/table/tbody/tr/td//text()')
             for i in range(14,len(tr)+14,14):
                 if str(tr[i-13]).startswith('688'):
                     continue
