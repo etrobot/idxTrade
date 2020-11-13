@@ -267,10 +267,10 @@ def thsIndustry(mkt='cn',pdate=None):
             if '暂无成份股数据' in resp.text:
                 count+=1
                 continue
+            tr=html.xpath('/html/body/table/tbody/tr/td//text()')
             if len(tr)==0:
                 t.sleep(10)
                 continue
-            tr=html.xpath('/html/body/table/tbody/tr/td//text()')
             for i in range(14,len(tr)+14,14):
                 if str(tr[i-13]).startswith('688'):
                     continue
