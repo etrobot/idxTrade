@@ -271,6 +271,10 @@ def thsIndustry(mkt='cn',pdate=None):
             if len(tr)==0:
                 driver.get(curl)
                 html=etree.HTML(driver.page_source)
+                headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
+                if 'forbidden.' in driver.page_source:
+                    t.sleep(60)
+                    continue
                 tr = html.xpath('/html/body/table/tbody/tr/td//text()')
             for i in range(14,len(tr)+14,14):
                 if str(tr[i-13]).startswith('688'):
