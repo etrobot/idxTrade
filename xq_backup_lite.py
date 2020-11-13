@@ -204,21 +204,11 @@ def thsIndustry(mkt='cn',pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
     proxies = {}
     # 爬取板块名称以及代码并且存在文件
-    headers = {
-        'Connection': 'close',
-        'Accept': 'text/html, */*; q=0.01',
-        'X-Requested-With': 'XMLHttpRequest',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
-        'Host': 'q.10jqka.com.cn',
-        # 'Referer': 'http://q.10jqka.com.cn/thshy/detail/code/881148/',
-        'Accept-Language': 'zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6,ja;q=0.5',
-    }
 
     session = requests.session()
     while True:
         try:
-            print(p_url)
-            response = session.get('http://q.10jqka.com.cn/thshy', headers=headers,proxies = proxies)
+            response=requests.get(p_url,headers={"user-agent": "Mozilla"})
             html = etree.HTML(response.text)
             if 'forbidden.' in response.text:
                 if len(proxies)==0:
@@ -239,7 +229,19 @@ def thsIndustry(mkt='cn',pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
 
-
+    options = webdriver.ChromeOptions()
+    # options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(executable_path='./chromedriver', options=options)
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": """
+            Object.defineProperty(navigator, 'webdriver', {
+              get: () => undefined
+            })
+          """
+    })
 
     # 板块代码
     bkcode = html.xpath('/html/body/div[2]/div[1]/div//div//div//a/@href')
@@ -258,17 +260,8 @@ def thsIndustry(mkt='cn',pdate=None):
         bk_code = str(k)
         url = p_url + '/detail/code/' + bk_code + '/'
         # print(v['Name'],url)
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-
-        # driver = webdriver.Chrome(options=options)
-        driver = webdriver.Chrome(executable_path='./chromedriver', options=options)
-        resp = session.get(url, headers=headers, verify=False,proxies = proxies)
         # 得出板块成分股有多少页
-        html = etree.HTML(resp.text)
+        html = etree.HTML(requests.get(url,headers={"user-agent": "Mozilla"}).text)
         result = html.xpath('//*[@id="m-page"]/span/text()')
         count = 1
         page = 1
@@ -278,20 +271,12 @@ def thsIndustry(mkt='cn',pdate=None):
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
-            print(curl)
-            resp = driver.get(curl, headers=headers, verify=False, proxies=proxies, allow_redirects=True)
-            html = etree.HTML(resp.page_source)
+            driver.get(curl)
+            html=etree.HTML(driver.page_source)
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
-            if len(tr)==0:
-                print(resp.page_source)
-            if 'forbidden.' in resp.text or len(tr)==0:
-                if len(proxies) == 0:
-                    proxies = {"http": "http://127.0.0.1:7890"}
-                else:
-                    proxies = {}
-                    t.sleep(150)
+            if 'forbidden.' in driver.page_source:
+                t.sleep(60)
                 continue
-            print(tr)
             for i in range(14,len(tr),14):
                 if str(tr[i-13]).startswith('688'):
                     continue
@@ -301,15 +286,16 @@ def thsIndustry(mkt='cn',pdate=None):
                     row=['SZ'+tr[i-13]]
                 row.extend(tr[i-12:i])
                 row.append(v['Name'])
-                # print(row)
+                print(row)
                 rows.append(row)
             count += 1
 
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
-        t.sleep(10)
-
+        driver.delete_all_cookies()
+        t.sleep(2)
+    driver.quit()
     indDf.set_index('symbol', inplace=True)
     indDf=indDf.replace('--',np.nan)
     indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
