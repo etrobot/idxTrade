@@ -204,19 +204,11 @@ def thsIndustry(mkt='cn',pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
     proxies = {}
     # 爬取板块名称以及代码并且存在文件
-
     session = requests.session()
     while True:
         try:
             response=requests.get(p_url,headers={"user-agent": "Mozilla"})
             html = etree.HTML(response.text)
-            if 'forbidden.' in response.text:
-                if len(proxies)==0:
-                    proxies = {"http": "http://127.0.0.1:7890"}
-                else:
-                    proxies={}
-                    t.sleep(150)
-                continue
             break
         except Exception as e:
             mlog(e.args)
@@ -242,12 +234,10 @@ def thsIndustry(mkt='cn',pdate=None):
             })
           """
     })
-
     # 板块代码
     bkcode = html.xpath('/html/body/div[2]/div[1]/div//div//div//a/@href')
     bkcode = list(map(lambda x: x.split('/')[-2], bkcode))
     data = {'Name': thsgnbk}
-
     # 存储
     gnbk = pd.DataFrame(data, index=bkcode)
     #symbol,net_profit_cagr,ps,type,percent,has_follow,tick_size,pb_ttm,float_shares,current,amplitude,pcf,current_year_percent,float_float_market_capital,float_market_capital,dividend_yield,lot_size,roe_ttm,total_percent,percent5m,income_cagr,amount,chg,issue_date_ts,main_net_inflows,volume,volume_ratio,pb,followers,turnover_rate,first_percent,name,pe_ttm,total_shares
@@ -288,7 +278,6 @@ def thsIndustry(mkt='cn',pdate=None):
                 row.append(v['Name'])
                 rows.append(row)
             count += 1
-
         pageDf=pd.DataFrame(data=rows,columns=cols)
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
