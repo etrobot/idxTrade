@@ -279,7 +279,6 @@ def thsIndustry(mkt='cn',pdate=None):
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
             print(curl)
-            resp = driver.get(curl, headers=headers, verify=False,proxies = proxies,allow_redirects=True)
             resp = driver.get(curl, headers=headers, verify=False, proxies=proxies, allow_redirects=True)
             html = etree.HTML(resp.page_source)
             tr=html.xpath('/html/body/table/tbody/tr/td//text()')
