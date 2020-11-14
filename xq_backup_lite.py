@@ -341,7 +341,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
             cal[mk].append(mv)
     for k,v in cal.items():
         indDf[k]= v
-        df2md(mkt,k,indDf.copy(),pdate)
+        df2md(mkt,k,indDf.copy(),pdate,test)
 
     mtmDfBAK=indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
@@ -350,7 +350,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         idxtrade=idxTrade(mkt,0)
         idxtrade.run()
 
-def df2md(mkt,calKey,indDf,pdate,num=10):
+def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
     capTpye={'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
@@ -388,7 +388,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         if len(deb)!=0:
             rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
         maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
-        artxt=[rowtitle,'![](%s)'%('https://upknow.gitee.io/'+v['filename'][len(IMG_FOLDER):]),maxtxt]
+        artxt=[rowtitle,'![](%s)'%(v['filename']),maxtxt]
         article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
     txt = '\n<br>'.join(article)
     title=mkt+calKey+pdate.strftime('%Y%m%d')
@@ -401,6 +401,8 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
         .replace('a><br> <a','a><a')\
         .replace('TTMnan','亏损')\
         .replace('.0亿','亿')
+    if test==0:
+        html=html.replace(IMG_FOLDER,'https://upknow.gitee.io/')
 
     gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm='''
@@ -422,7 +424,7 @@ def df2md(mkt,calKey,indDf,pdate,num=10):
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
         finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
         f.write(finalhtml)
-        mlog('complete gitee' + title)
+        mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
 
