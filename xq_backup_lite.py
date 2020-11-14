@@ -360,7 +360,7 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
         elif not g.testMode():
             vlines=dragonTigerBoard(k,g.xq_a_token)
         if not g.testMode() and k not in drawedSymbolList:
-            qdf=getK(mkt,k,pdate,0)
+            qdf=getK(mkt,k,pdate,1)
             draw(qdf,v['filename'],vlines)
             drawedSymbolList.append(k)
         elif not os.path.isfile(v['filename']):
