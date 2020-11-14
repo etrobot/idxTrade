@@ -12,6 +12,7 @@ IMG_FOLDER='../upknow/'
 
 def updateAllImg(mkt,pdate):
     tqdmRange = tqdm(range(1,5))
+    drawedSymbolList = []
     for i in tqdmRange:
         if pdate.weekday()+1!=i:
             imgfolder=IMG_FOLDER+str(i)+'/'+mkt+'/'
@@ -20,8 +21,9 @@ def updateAllImg(mkt,pdate):
                 if filename[-4:]=='.png':
                     tqdmRange.set_description('update ' + imgfolder+filename)
                     symbol=filename.split('_')[2]
-                    qdf=getK(mkt,symbol,pdate)
+                    qdf=getK(mkt,symbol,pdate,int(symbol in drawedSymbolList))
                     draw(qdf,imgfolder+filename)
+                    drawedSymbolList.append(symbol)
 
 def draw(df,info,boardDates=[]):
     df.index=pd.to_datetime(df.index)
