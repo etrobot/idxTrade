@@ -13,14 +13,18 @@ IMG_FOLDER='../upknow/'
 def updateAllImg(mkt,pdate,calKey):
     for i in range(1,5):
         if pdate.weekday()+1!=i:
-            with open(r'../html/%s%s%s.html'%(mkt,i,calKey), "r") as f:
-                page = f.read()
-            html = lxml.html.fromstring(page)
-            imgs=(html.xpath('//img/@src'))
-            for s in imgs:
-                symbol=s.split('_')[2]
-                qdf=getK(mkt,symbol,pdate)
-                draw(qdf,IMG_FOLDER+'/'.join(s.split('/')[-3:]))
+            filename=r'../html/%s%s%s.html'%(mkt,i,calKey)
+            if os.path.isfile(filename):
+                with open(filename, "r") as f:
+                    page = f.read()
+                html = lxml.html.fromstring(page)
+                imgs=(html.xpath('//img/@src'))
+                for s in imgs:
+                    if s.startswith('data:image'):
+                        continue
+                    symbol=s.split('_')[2]
+                    qdf=getK(mkt,symbol,pdate)
+                    draw(qdf,IMG_FOLDER+'/'.join(s.split('/')[-3:]))
 
 def draw(df,info,boardDates=[]):
     df.index=pd.to_datetime(df.index)
@@ -327,6 +331,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     for k,v in cal.items():
         indDf[k]= v
         df2md(mkt,k,indDf.copy(),pdate,test)
+        updateAllImg(mkt,pdate,k)
 
     mtmDfBAK=indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
@@ -358,9 +363,11 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
         elif not g.testMode():
             vlines=dragonTigerBoard(k,g.xq_a_token)
         if not g.testMode():
-            draw(k,v['filename'],vlines)
+            qdf=getK(mkt,k,pdate)
+            draw(qdf,v['filename'],vlines)
         elif not os.path.isfile(v['filename']):
-            draw(k, v['filename'], vlines)
+            qdf = getK(mkt, k, pdate)
+            draw(qdf,v['filename'],vlines)
         deb=debts[debts.index==k]
         cur_year_perc={k:v['current_year_percent'],dfmax.name:dfmax['current_year_percent']}
         if mkt == 'cn':
