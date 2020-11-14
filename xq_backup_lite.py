@@ -394,6 +394,8 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
         .replace('a><br> <a','a><a')\
         .replace('TTMnan','亏损')\
         .replace('.0亿','亿')
+    if test==0:
+        html=html.replace(IMG_FOLDER,'https://upknow.gitee.io/')
 
     gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm='''
@@ -412,16 +414,10 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
-    with open('../upknow/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        giteehtml=html.replace(IMG_FOLDER,'./')
-        finalhtml=css+giteehtml+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
-        f.write(finalhtml)
-        mlog('complete gitee ' + title)
     with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        githubhtml=html.replace(IMG_FOLDER,'https://upknow.gitee.io/')
-        finalhtml=css+githubhtml+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
+        finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
         f.write(finalhtml)
-        mlog('complete github ' + title)
+        mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
 
