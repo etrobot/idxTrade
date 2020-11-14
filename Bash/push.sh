@@ -1,5 +1,6 @@
 #!/bin/bash
-cd /Users/admin/Documents/DEV/PY/upknow
+cd ../../upknow
+git fetch
 git checkout --orphan newBranch
 git add -A  # Add all files and commit them
 git commit -m "Removed history, due to large data"
@@ -8,9 +9,10 @@ git branch -m master  # Rename the current branch to master
 git push -f origin master  # Force push master branch to github
 git gc --aggressive --prune=all     # remove the old files
 
-/usr/local/bin/node /Users/admin/Documents/DEV/PY/idxTrade/gitee.js
+/usr/local/bin/node ../../gitee.js
 
-cd /Users/admin/Documents/DEV/PY/html
+cd ../html
+git fetch
 git checkout --orphan newBranch
 git add -A  # Add all files and commit them
 git commit -m "Removed history, due to large data"

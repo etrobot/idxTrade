@@ -1,24 +1,6 @@
 #!/bin/bash
-rm -f /Users/admin/Documents/DEV/PY/upknow/`date +%w`/$1/*.png
+rm -f ../../upknow/`date +%w`/$1/*.png
 
-cd /Users/admin/Documents/DEV/PY/idxTrade && /usr/local/bin/python3.7 -u xq_backup_lite.py $1 $2;
+cd .. && /usr/local/bin/python3.7 -u xq_backup_lite.py $1 $2;
 
-cd /Users/admin/Documents/DEV/PY/upknow
-git checkout --orphan newBranch
-git add -A  # Add all files and commit them
-git commit -m "Removed history, due to large data"
-git branch -D master  # Deletes the master branch
-git branch -m master  # Rename the current branch to master
-git push -f origin master  # Force push master branch to github
-git gc --aggressive --prune=all     # remove the old files
-
-/usr/local/bin/node /Users/admin/Documents/DEV/PY/idxTrade/gitee.js
-
-cd /Users/admin/Documents/DEV/PY/html
-git checkout --orphan newBranch
-git add -A  # Add all files and commit them
-git commit -m "Removed history, due to large data"
-git branch -D master  # Deletes the master branch
-git branch -m master  # Rename the current branch to master
-git push -f origin master  # Force push master branch to github
-git gc --aggressive --prune=all     # remove the old files
+bash push.sh
