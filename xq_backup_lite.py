@@ -264,22 +264,21 @@ def thsIndustry(mkt='cn',pdate=None):
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
-            if count>1:
+            if count>1 and 'forbidden.' not in driver.page_source and driver.current_url!=curl:
                 content=requests.get(curl,headers=headers).text
-                html=etree.HTML(content)
-            if u'暂无成份股数据' in content:
+            html=etree.HTML(content)
+            if '暂无成份股数据' in content:
                 count += 1
                 continue
             tr=html.xpath('//td//text()')
             if len(tr)==0:#cookie失效
                 driver.get(curl)
-                if 'forbidden.' in driver.page_source:
+                content=driver.page_source
+                if 'forbidden.' in content:
                     t.sleep(60)
                     continue
-                content=driver.page_source
-                html=etree.HTML(content)
                 headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
-                tr = html.xpath('/html/body/table/tbody/tr/td//text()')
+                continue
             for i in range(14,len(tr)+14,14):
                 if str(tr[i-13]).startswith('688'):
                     continue
