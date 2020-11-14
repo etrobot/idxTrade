@@ -271,7 +271,7 @@ def thsIndustry(mkt='cn',pdate=None):
                 count += 1
                 continue
             tr=html.xpath('//td//text()')
-            if len(tr)<0:#cookie失效
+            if len(tr)==0:#cookie失效
                 driver.get(curl)
                 content=driver.page_source
                 html=etree.HTML(content)
