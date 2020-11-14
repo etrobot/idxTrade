@@ -20,7 +20,7 @@ def updateAllImg(mkt,pdate,calKey):
                 html = lxml.html.fromstring(page)
                 imgs=(html.xpath('//img/@src'))
                 tqdmRange=tqdm(imgs)
-                for s in imgs:
+                for s in tqdmRange:
                     if s.startswith('data:image'):
                         continue
                     tqdmRange.set_description('update ' + s)
