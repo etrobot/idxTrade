@@ -267,7 +267,7 @@ def thsIndustry(mkt='cn',pdate=None):
             if count>1:
                 content=requests.get(curl,headers=headers).text
                 html=etree.HTML(content)
-            if '暂无成份股数据' in content:
+            if u'暂无成份股数据' in content:
                 count += 1
                 continue
             tr=html.xpath('//td//text()')
