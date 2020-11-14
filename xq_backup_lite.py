@@ -19,9 +19,11 @@ def updateAllImg(mkt,pdate,calKey):
                     page = f.read()
                 html = lxml.html.fromstring(page)
                 imgs=(html.xpath('//img/@src'))
+                tqdmRange=tqdm(imgs)
                 for s in imgs:
                     if s.startswith('data:image'):
                         continue
+                    tqdmRange.set_description('update ' + s)
                     symbol=s.split('_')[2]
                     qdf=getK(mkt,symbol,pdate)
                     draw(qdf,IMG_FOLDER+'/'.join(s.split('/')[-3:]))
