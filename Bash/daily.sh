@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-if $1=="us"; then
+if [ $1 == "us" ]; then
   rm -f ../../upknow/`date -v-1d +%w `/$1/*.png
 else
   rm -f ../../upknow/`date +%w `/$1/*.png
