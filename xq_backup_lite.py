@@ -33,7 +33,7 @@ def loadMd(filename,update=False):
         indDf.to_csv('concepts10jqka'+datetime.now().strftime('%Y%m%d')+'.csv',encoding='gb18030')
 
 def draw(symbol,info,boardDates=[]):
-    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding=ENCODE_IN_USE).iloc[:-1]
+    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding=ENCODE_IN_USE)
     df.index=pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
