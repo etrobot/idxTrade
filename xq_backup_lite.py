@@ -10,22 +10,18 @@ from selenium import webdriver
 ENCODE_IN_USE='GBK'
 IMG_FOLDER='../upknow/'
 
-def updateAllImg(mkt,pdate,calKey):
+def updateAllImg(mkt,pdate):
     tqdmRange = tqdm(range(1,5))
     for i in tqdmRange:
         if pdate.weekday()+1!=i:
-            filename=r'../html/%s%s%s.html'%(mkt,i,calKey)
-            if os.path.isfile(filename):
-                with open(filename, "r") as f:
-                    page = f.read()
-                html = lxml.html.fromstring(page)
-                for s in html.xpath('//img/@src'):
-                    if s.startswith('data:image'):
-                        continue
-                    tqdmRange.set_description('update ' + s)
-                    symbol=s.split('_')[2]
+            imgfolder=IMG_FOLDER+str(i)+'/'+mkt+'/'
+            fileList=os.listdir(imgfolder)
+            for filename in fileList:
+                if filename[-4:]=='.png':
+                    tqdmRange.set_description('update ' + imgfolder+filename)
+                    symbol=filename.split('_')[2]
                     qdf=getK(mkt,symbol,pdate)
-                    draw(qdf,IMG_FOLDER+'/'.join(s.split('/')[-3:]))
+                    draw(qdf,imgfolder+filename)
 
 def draw(df,info,boardDates=[]):
     df.index=pd.to_datetime(df.index)
@@ -332,14 +328,14 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     for k,v in cal.items():
         indDf[k]= v
         df2md(mkt,k,indDf.copy(),pdate,test)
-        updateAllImg(mkt,pdate,k)
-
     mtmDfBAK=indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
-
     if len(sys.argv)==1:
         idxtrade=idxTrade(mkt,0)
         idxtrade.run()
+    if test==0:
+        updateAllImg(mkt, pdate)
+
 
 def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
@@ -352,7 +348,7 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
     # indDf.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
-    images=[]
+    drawedSymbolList = []
     debts=debt()
     tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
     for k,v in tqdmRange:
@@ -363,11 +359,12 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
             vlines=g.boardlist.get(k)
         elif not g.testMode():
             vlines=dragonTigerBoard(k,g.xq_a_token)
-        if not g.testMode():
-            qdf=getK(mkt,k,pdate)
+        if not g.testMode() and k not in drawedSymbolList:
+            qdf=getK(mkt,k,pdate,0)
             draw(qdf,v['filename'],vlines)
+            drawedSymbolList.append(k)
         elif not os.path.isfile(v['filename']):
-            qdf = getK(mkt, k, pdate)
+            qdf = getK(mkt, k, pdate,1)
             draw(qdf,v['filename'],vlines)
         deb=debts[debts.index==k]
         cur_year_perc={k:v['current_year_percent'],dfmax.name:dfmax['current_year_percent']}
