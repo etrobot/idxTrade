@@ -12,9 +12,9 @@ git reflog expire --expire=now --all
 git gc --aggressive --prune=now # remove the old files
 }
 
-cd "$(dirname "$0")"|| exit
-cd ../../upknow|| exit
+cd "$(dirname "$0")" || exit
+cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
-cd ../html|| exit
+cd ../html || exit
 gitPush

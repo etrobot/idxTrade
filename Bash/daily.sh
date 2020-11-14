@@ -1,6 +1,6 @@
 #!/bin/bash
 curPath="$(dirname "$0")"
-cd $curPath
+cd $curPath || exit
 
 if [ $1 == "us" ]; then
   rm -f ../../upknow/"date -v-1d +%w "/$1/*.png
