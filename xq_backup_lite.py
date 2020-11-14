@@ -11,16 +11,15 @@ ENCODE_IN_USE='GBK'
 IMG_FOLDER='../upknow/'
 
 def updateAllImg(mkt,pdate,calKey):
-    for i in range(1,5):
+    tqdmRange = tqdm(range(1,5))
+    for i in tqdmRange:
         if pdate.weekday()+1!=i:
             filename=r'../html/%s%s%s.html'%(mkt,i,calKey)
             if os.path.isfile(filename):
                 with open(filename, "r") as f:
                     page = f.read()
                 html = lxml.html.fromstring(page)
-                imgs=(html.xpath('//img/@src'))
-                tqdmRange=tqdm(imgs)
-                for s in tqdmRange:
+                for s in html.xpath('//img/@src'):
                     if s.startswith('data:image'):
                         continue
                     tqdmRange.set_description('update ' + s)
