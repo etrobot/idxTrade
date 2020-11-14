@@ -273,11 +273,11 @@ def thsIndustry(mkt='cn',pdate=None):
             tr=html.xpath('//td//text()')
             if len(tr)==0:#cookie失效
                 driver.get(curl)
-                content=driver.page_source
-                html=etree.HTML(content)
                 if 'forbidden.' in driver.page_source:
                     t.sleep(60)
                     continue
+                content=driver.page_source
+                html=etree.HTML(content)
                 headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
                 tr = html.xpath('/html/body/table/tbody/tr/td//text()')
             for i in range(14,len(tr)+14,14):
