@@ -104,13 +104,14 @@ if __name__=='__main__':
 
     # idxtrade = idxTrade('us', 0)
     # idxtrade.run()
-    df=pd.read_csv('md/cn20201113.txt', dtype=str)
-    print(df.dropna(subset=['_U']).sort_values(by=['_U'], ascending=True).iloc[:10])
+    # df=pd.read_csv('md/cn20201113.txt', dtype=str)
+    # print(df.dropna(subset=['_U']).sort_values(by=['_U'], ascending=True).iloc[:10])
     # for symbol in df['symbol'][:10]:
     #     print(symbol)
-    # #     draw(symbol,'../upknow/4/cn/'+symbol+'.png')
+    # #
     # print(round(1.55))
-    mkt='cn'
-    calKey='_U'
+    # mkt='cn'
+    # calKey='_U'
     pdate=datetime.now().date()
-
+    qdf = qdf = xueqiuK(symbol='00410', startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
+    draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
