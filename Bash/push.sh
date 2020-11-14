@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "$0")"
 cd ../../upknow
 git fetch
 git checkout --orphan newBranch
