@@ -104,8 +104,7 @@ if __name__=='__main__':
     # idxtrade = idxTrade('us', 0)
     # idxtrade.run()
     df=pd.read_csv('md/cn20201113.txt', dtype=str)
-    newdf=df.dropna(subset=['_U'])
-    print(newdf.sort_values(by=['_U'], ascending=True).iloc[:10])
+    print(df.dropna(subset=['_U']).sort_values(by=['_U'], ascending=True).iloc[:10])
     # for symbol in df['symbol'][:10]:
     #     print(symbol)
     # #     draw(symbol,'../upknow/4/cn/'+symbol+'.png')
