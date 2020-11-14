@@ -1,9 +1,8 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 cd ../../upknow
-git fetch
-git rebase
 git checkout --orphan newBranch
+git merge -s ours master
 git add -A  # Add all files and commit them
 git commit -m "Removed history, due to large data"
 git branch -D master  # Deletes the master branch
@@ -14,9 +13,8 @@ git gc --aggressive --prune=all     # remove the old files
 /usr/local/bin/node ../gitee.js
 
 cd ../html
-git rebase
-git fetch
 git checkout --orphan newBranch
+git merge -s ours master
 git add -A  # Add all files and commit them
 git commit -m "Removed history, due to large data"
 git branch -D master  # Deletes the master branch
