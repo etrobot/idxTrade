@@ -355,9 +355,10 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
     capTpye={'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
-    df=indDf[indDf[mCap]<midMktCap].sort_values(by=[calKey], ascending=True).copy().iloc[:num]
+    df=indDf.dropna(subset=[calKey])
+    df=df[df[mCap]<midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap]=df[mCap].apply(str) + '亿'
-    df.dropna(subset=[calKey], inplace=True)
+
     # indDf.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
