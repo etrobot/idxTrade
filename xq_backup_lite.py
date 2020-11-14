@@ -280,9 +280,9 @@ def thsIndustry(mkt='cn',pdate=None):
                 headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
                 continue
             for i in range(14,len(tr)+14,14):
-                if str(tr[i-13]).startswith('688'):
-                    continue
-                elif str(tr[i-13]).startswith('6'):
+                # if str(tr[i-13]).startswith('688'):
+                #     continue
+                if str(tr[i-13]).startswith('6'):
                     row=['SH'+tr[i-13]]
                 else:
                     row=['SZ'+tr[i-13]]
@@ -319,6 +319,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     avgAmount=indDf['amount'].mean()
     indDf=indDf[indDf['amount']>avgAmount]
     indDf = indDf.fillna(value=np.nan)
+    indDf=indDf[~indDf['name'].str.startswith("688", na=False)]
     indDf=indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
     cal={'_J':[],'_U':[]}
     indDf['filename']=None
