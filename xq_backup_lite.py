@@ -3,37 +3,26 @@ import matplotlib as mpl  # 用于设置曲线参数
 from cycler import cycler  # 用于定制线条颜色
 import numpy as np
 from lxml import etree
-import base64
 from matplotlib.font_manager import _rebuild
 from idxTrade import *
 from selenium import webdriver
 
-
 ENCODE_IN_USE='GBK'
 IMG_FOLDER='../upknow/'
 
-def loadMd(filename,update=False):
-    indDf = pd.read_csv('concepts10jqka.csv', encoding='gb18030', dtype=str)
-    # indDf.drop(indDf.columns[:1], axis=1,inplace=True)
-    # indDf['行业'] = indDf['行业'].str.replace(r"[A-Za-z0-9\!\%\[\]\,\。]", '')
-    # indDf.dropna(subset=['symbl'],inplace=True)
-    # indDf['所属概念'] = indDf['所属概念'].str.replace(r"[A-Za-z0-9\!\%\[\]\。]", '')
-    # indDf['要点'] = indDf['要点'].str.replace("要点", '')
-    indDf.set_index('symbl',inplace=True)
-    with open (filename,'r') as f:
-        line=f.read().split('---')[0].split('***')#f.read().split('---')[1]是图片base64
-        mlog('入选数量：',len(line))
-        for l in line:
-            #0:'',1:'name',2:'symbl',3:'要点',4:'本地图片链接'
-            stock=l.split('\n<br>')
-            mlog(stock)
-            indDf.at[stock[2], 'BAK'] = indDf.loc[stock[2],'要点'].values[0]
-            indDf.at[stock[2],'要点']=stock[3]
-    if update:
-        indDf.to_csv('concepts10jqka'+datetime.now().strftime('%Y%m%d')+'.csv',encoding='gb18030')
+def updateAllImg(mkt,pdate,calKey):
+    for i in range(1,5):
+        if pdate.weekday()+1!=i:
+            with open(r'../html/%s%s%s.html'%(mkt,i,calKey), "r") as f:
+                page = f.read()
+            html = lxml.html.fromstring(page)
+            imgs=(html.xpath('//img/@src'))
+            for s in imgs:
+                symbol=s.split('_')[2]
+                qdf=getK(mkt,symbol,pdate)
+                draw(qdf,IMG_FOLDER+'/'.join(s.split('/')[-3:]))
 
-def draw(symbol,info,boardDates=[]):
-    df = pd.read_csv('Quotation/'+symbol+'.csv',index_col=0,encoding=ENCODE_IN_USE)
+def draw(df,info,boardDates=[]):
     df.index=pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
@@ -328,12 +317,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     tqdmRange=tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s"%(mkt, v['行业'], k, v['name'])).ljust(25))
-        if g.testMode() and os.path.isfile('Quotation/'+k+'.csv'):
-            qdf= pd.read_csv('Quotation/'+k+'.csv',index_col=0, parse_dates=True)
-        elif mkt=='cn':
-            qdf=cmsK(k)
-        else:
-            qdf = xueqiuK(symbol=k,startDate=(pdate-timedelta(days=250)).strftime('%Y%m%d'),cookie=g.xq_a_token)
+        qdf=getK(mkt,k,pdate,test)
         indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
         info = [mkt, v['行业'], k, v['name']]
         indDf.at[k, 'filename']=IMG_FOLDER+str(pdate.weekday()+1)+'/'+mkt+'/'+'_'.join(info)+'.png'
@@ -429,6 +413,15 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
         mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
+
+def getK(mkt,k,pdate,test=0):
+    if test==1 and os.path.isfile('Quotation/' + k + '.csv'):
+        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0, parse_dates=True)
+    elif mkt == 'cn':
+        qdf = cmsK(k)
+    else:
+        qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=g.xq_a_token)
+    return qdf
 
 def preparePlot():
     mlog(mpl.matplotlib_fname())

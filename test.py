@@ -1,5 +1,6 @@
 import random,hashlib
 from xq_backup_lite import *
+import lxml
 
 def _create_random_tmp(salt_count, seed):
     """
@@ -109,3 +110,7 @@ if __name__=='__main__':
     #     print(symbol)
     # #     draw(symbol,'../upknow/4/cn/'+symbol+'.png')
     # print(round(1.55))
+    mkt='cn'
+    calKey='_U'
+    pdate=datetime.now().date()
+
