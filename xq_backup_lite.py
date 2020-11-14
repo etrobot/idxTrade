@@ -255,6 +255,7 @@ def thsIndustry(mkt='cn',pdate=None):
         # 得出板块成分股有多少页
         html = etree.HTML(driver.page_source)
         result = html.xpath('//*[@id="m-page"]/span/text()')
+        tr = html.xpath('//td//text()')
         count = 1
         page = 1
         if len(result) > 0:
@@ -263,17 +264,18 @@ def thsIndustry(mkt='cn',pdate=None):
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
-            resp=requests.get(curl,headers=headers)
-            html=etree.HTML(resp.text)
-            if '暂无成份股数据' in resp.text:
-                count+=1
-                continue
-            tr=html.xpath('/html/body/table/tbody/tr/td//text()')
+            if count>1:
+                resp=requests.get(curl,headers=headers)
+                html=etree.HTML(resp.text)
+                if '暂无成份股数据' in resp.text:
+                    count+=1
+                    continue
+                tr=html.xpath('/html/body/table/tbody/tr/td//text()')
             if len(tr)==0:
                 driver.get(curl)
                 html=etree.HTML(driver.page_source)
                 if 'forbidden.' in driver.page_source:
-                    t.sleep(30)
+                    t.sleep(60)
                     continue
                 headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
                 tr = html.xpath('/html/body/table/tbody/tr/td//text()')
