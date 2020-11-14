@@ -291,6 +291,7 @@ def thsIndustry(mkt='cn',pdate=None):
                 rows.append(row)
             count += 1
         pageDf=pd.DataFrame(data=rows,columns=cols)
+        pageDf['pe_ttm']=pageDf['pe_ttm'].apply(pd.to_numeric, errors='coerce')
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
         indDf=indDf.append(pageDf)
     driver.quit()
@@ -386,8 +387,8 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
                 cur_year_perc[cnstock]=round(yr*100-100,2)
         rowtitle='[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s'%(v['name'],k,k,capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey)
         if len(deb)!=0:
-            rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey,v[calKey])
-        maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],dfmax['pe_ttm'],dfmax['past60Days']*100,cur_year_perc[dfmax.name])
+            rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],round(v['pe_ttm']),cur_year_perc[k],calKey,v[calKey])
+        maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],round(dfmax['pe_ttm']),dfmax['past60Days']*100,cur_year_perc[dfmax.name])
         artxt=[rowtitle,'![](%s)'%(v['filename']),maxtxt]
         article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
     txt = '\n<br>'.join(article)
