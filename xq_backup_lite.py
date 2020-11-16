@@ -14,6 +14,17 @@ def updateAllImg(mkt,pdate):
     tqdmRange = tqdm(range(0,5))
     drawedSymbolList = []
     for i in tqdmRange:
+        for calKey in ['_J', '_U']:
+            filename = '../html/%s%s%s.html' % ('us', i + 1, calKey)
+            print(filename)
+            if os.path.isfile(filename):
+                with open(filename, "r+") as f:
+                    data = f.read()
+                    # output = data.replace('.png', '.png?=' + datetime.now().strftime("%Y%m%d%H"))
+                    output = re.sub("", '?t=%s"' % datetime.now().strftime("%Y%m%d%H"), data)
+                    f.seek(0)
+                    f.write(output)
+                    f.truncate()
         if pdate.weekday()!=i:
             imgfolder=IMG_FOLDER+str(i+1)+'/'+mkt+'/'
             fileList=os.listdir(imgfolder)
@@ -323,7 +334,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         qdf=getK(mkt,k,pdate,test)
         indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
         info = [mkt, v['行业'], k, v['name']]
-        indDf.at[k, 'filename']=IMG_FOLDER+str(pdate.weekday()+1)+'/'+mkt+'/'+'_'.join(info)+'.png'
+        indDf.at[k, 'filename']=IMG_FOLDER+str(pdate.weekday()+1)+'/'+mkt+'/'+'_'.join(info)+'.png'+pdate.strftime("%Y%m%d%H")
         mtm = cauculate(qdf)
         for mk,mv in mtm.items():
             cal[mk].append(mv)
@@ -335,7 +346,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
     if len(sys.argv)==1:
         idxtrade=idxTrade(mkt,0)
         idxtrade.run()
-    if test==0:
+    if test==1:
         updateAllImg(mkt, pdate)
 
 

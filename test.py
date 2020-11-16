@@ -112,6 +112,20 @@ if __name__=='__main__':
     # print(round(1.55))
     # mkt='cn'
     # calKey='_U'
-    pdate=datetime.now().date()
-    qdf = qdf = xueqiuK(symbol='00410', startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
-    draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
+    # pdate=datetime.now().date()
+    # qdf = qdf = xueqiuK(symbol='00410', startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
+    # draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
+    tqdmRange = tqdm(range(0, 5))
+    drawedSymbolList = []
+    for i in tqdmRange:
+        for calKey in ['_J', '_U']:
+            filename = '../html/%s%s%s.html' % ('us', i + 1, calKey)
+            print(filename)
+            if os.path.isfile(filename):
+                with open(filename, "r+") as f:
+                    data = f.read()
+                    # output = data.replace('.png', '.png?=' + datetime.now().strftime("%Y%m%d%H"))
+                    output = re.sub("",'?t=%s"'%datetime.now().strftime("%Y%m%d%H"),data)
+                    f.seek(0)
+                    f.write(output)
+                    f.truncate()

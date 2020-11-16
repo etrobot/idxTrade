@@ -20,9 +20,10 @@ def checkTradingDay(mkt=None):#检查交易时间
         timeinfo = html.xpath('//div[@class="stock-time"]/span/text()')
         cfg['date']= pd.to_datetime(xqQuot(symbol=cfg['url'].split('/')[-1],cookie=cfg['xq_a_token'])['item'][-1][0],unit='ms',utc=True).tz_convert('Asia/Shanghai').date()
         print(market + ' '.join(timeinfo),cfg['date'])
-        if mkt is not None and market==mkt:
-            return market, config
-        if today.hour==config[market]['PM'] or today.hour==config[market]['AM']:
+        if mkt is not None:
+            if market == mkt:
+                return market, config
+        elif today.hour==config[market]['PM'] or today.hour==config[market]['AM']:
             return market,config
     return False,False
 
