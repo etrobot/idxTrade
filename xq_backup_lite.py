@@ -7,35 +7,36 @@ from matplotlib.font_manager import _rebuild
 from idxTrade import *
 from selenium import webdriver
 
-ENCODE_IN_USE='GBK'
-IMG_FOLDER='../upknow/'
+ENCODE_IN_USE = 'GBK'
+IMG_FOLDER = '../upknow/'
 
-def updateAllImg(mkt,pdate,calKeys):
-    tqdmRange = tqdm(range(0,5))
+
+def updateAllImg(mkt, pdate, calKeys):
+    tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
     for i in tqdmRange:
-        for calKey in calKeys:
+        for calKey in calKeys:  # 加入url参数（小时），让浏览器不使用缓存
             filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
             if os.path.isfile(filename):
                 with open(filename, "r+") as f:
-                    data = f.read()
-                    output = re.sub('\?.*"', '?t=%s"' % datetime.now().strftime("%Y%m%d%H"), output)
+                    output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
                     f.seek(0)
                     f.write(output)
                     f.truncate()
-        if pdate.weekday()!=i:
-            imgfolder=IMG_FOLDER+str(i+1)+'/'+mkt+'/'
-            fileList=os.listdir(imgfolder)
+        if pdate.weekday() != i:
+            imgfolder = IMG_FOLDER + str(i + 1) + '/' + mkt + '/'
+            fileList = os.listdir(imgfolder)
             for filename in fileList:
-                if filename[-4:]=='.png':
-                    tqdmRange.set_description('update ' + imgfolder+filename)
-                    symbol=filename.split('_')[2]
-                    qdf=getK(mkt,symbol,pdate,int(symbol in drawedSymbolList))
-                    draw(qdf,imgfolder+filename)
+                if filename[-4:] == '.png':
+                    tqdmRange.set_description('update ' + imgfolder + filename)
+                    symbol = filename.split('_')[2]
+                    qdf = getK(mkt, symbol, pdate, int(symbol in drawedSymbolList))
+                    draw(qdf, imgfolder + filename)
                     drawedSymbolList.append(symbol)
 
-def draw(df,info,boardDates=[]):
-    df.index=pd.to_datetime(df.index)
+
+def draw(df, info, boardDates=[]):
+    df.index = pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
     # 格式化列名，用于之后的绘制
@@ -49,7 +50,7 @@ def draw(df,info,boardDates=[]):
         },
         inplace=True)
     df = df[-60:]
-    dt= df.loc[df.index.isin(boardDates)].copy().index.to_list()
+    dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
 
     '''
     设置marketcolors
@@ -72,7 +73,7 @@ def draw(df,info,boardDates=[]):
     # gridaxis:设置网格线位置
     # gridstyle:设置网格线线型
     # y_on_right:设置y轴位置是否在右
-    rcpdict = {'font.family':'Source Han Sans CN'}
+    rcpdict = {'font.family': 'Source Han Sans CN'}
     mystyle = mpf.make_mpf_style(
         base_mpf_style='mike',
         rc=rcpdict,
@@ -102,11 +103,13 @@ def draw(df,info,boardDates=[]):
         style=mystyle,
         type='candle',
         volume=True,
-        mav=(5,10,20),
-        title=info[len(IMG_FOLDER+'1/cn/'):-4]+'60天'+str(round(df['Close'][-1]/df['Close'][0]*100-100,2))+'% 最新'+str(round(df['percent'][-1]*100,2))+'% 额'+str(round(df['amount'][-1]/100000000,2))+'亿',
+        mav=(5, 10, 20),
+        title=info[len(IMG_FOLDER + '1/cn/'):-4] + '60天' + str(
+            round(df['Close'][-1] / df['Close'][0] * 100 - 100, 2)) + '% 最新' + str(
+            round(df['percent'][-1] * 100, 2)) + '% 额' + str(round(df['amount'][-1] / 100000000, 2)) + '亿',
         # ylabel='OHLCV Candles',
         # ylabel_lower='Shares\nTraded Volume',
-        savefig = info,
+        savefig=info,
         figratio=(8, 5),
         figscale=1,
         tight_layout=True,
@@ -124,50 +127,55 @@ def draw(df,info,boardDates=[]):
     # 图形绘制
     # show_Uontrading:是否显示非交易日，默认False
     # savefig:导出图片，填写文件名及后缀
-    mpf.plot(df, **kwargs,scale_width_adjustment=dict(volume=0.5,candle=1,lines=0.5))
+    mpf.plot(df, **kwargs, scale_width_adjustment=dict(volume=0.5, candle=1, lines=0.5))
     plt.show()
 
+
 def cauculate(dfk):
-    if len(dfk['close'].values)<44:
-        return {'_J':np.nan,'_U':np.nan}
+    if len(dfk['close'].values) < 44:
+        return {'_J': np.nan, '_U': np.nan}
     # ma =dfk['close'].rolling(window=3).mean()
-    dfk=dfk.iloc[-25:]
+    dfk = dfk.iloc[-25:]
     closes = dfk['close']
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
-    mtm_1 = sum(closes[i]/min(closes[-2],closes[0])-1 for i in range(len(vol)))*vol[-1]/vol[-2]
-    mtm_2 = (closes[-10:].mean()-closes[-20:].mean())/(closes[-5:].mean()-closes[-10:].mean()-0.0001)*vol[-5:].mean()/vol[-20:].mean()
+    mtm_1 = sum(closes[i] / min(closes[-2], closes[0]) - 1 for i in range(len(vol))) * vol[-1] / vol[-2]
+    mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[
+                                                                                                                -5:].mean() / vol[
+                                                                                                                              -20:].mean()
 
-    return {'_J':round(mtm_1,12),'_U':round(mtm_2,12)}
+    return {'_J': round(mtm_1, 12), '_U': round(mtm_2, 12)}
 
-def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
+
+def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     # if market == 'cn':
     #     getLimit(pdate.strftime("%Y%m%d"))
     url = "https://xueqiu.com/hq#"
     mlog(url)
-    response = requests.get(url=url,headers={"user-agent": "Mozilla","cookie":g.xq_a_token})
+    response = requests.get(url=url, headers={"user-agent": "Mozilla", "cookie": g.xq_a_token})
     html = etree.HTML(response.text)
     hrefname = html.xpath('//li/a/@title')
     hrefList = html.xpath('//li/a/@href')[2:]
     # mlog(len(hrefname),hrefname,'\n',len(hrefList),hrefList)
 
-    mktDf=pd.DataFrame()
+    mktDf = pd.DataFrame()
     tqdmRange = tqdm(range(len(hrefList)))
     for i in tqdmRange:
-        tqdmRange.set_description((mkt+hrefname[i]).ljust(15))
+        tqdmRange.set_description((mkt + hrefname[i]).ljust(15))
         if '#exchange=' + mkt.upper() not in hrefList[i] or 'code=' not in hrefList[i]:
             continue
         indCode = hrefList[i].split('=')[-1]
-        mlog(mkt,hrefname[i])
+        mlog(mkt, hrefname[i])
         df = pd.DataFrame()
-        page=1
+        page = 1
         while True:
             try:
-                indUrl='https://xueqiu.com/service/v5/stock/screener/quote/list?page={page}&size=90&order=desc&order_by=percent&exchange={mkt}&market={mkt}&ind_code={code}'.format(page=page,mkt=mkt,code=indCode)
+                indUrl = 'https://xueqiu.com/service/v5/stock/screener/quote/list?page={page}&size=90&order=desc&order_by=percent&exchange={mkt}&market={mkt}&ind_code={code}'.format(
+                    page=page, mkt=mkt, code=indCode)
                 mlog(indUrl)
                 resp = requests.get(url=indUrl, headers={"user-agent": "Mozilla", "cookie": g.xq_a_token})
-                data=json.loads(resp.text)
-                if data['data']['count']==0:
+                data = json.loads(resp.text)
+                if data['data']['count'] == 0:
                     break
                 for b in data['data']['list']:
                     dict_ = []
@@ -177,31 +185,32 @@ def xueqiuBackupByIndustry(mkt=None,pdate=None,test=0):
                     dicts.append(dict_)
                     ans = pd.DataFrame(dicts, columns=data['data']['list'][0].keys())
                     df = df.append(ans)
-                if page>int(int(data['data']['count'])/90):
+                if page > int(int(data['data']['count']) / 90):
                     break
-                page+=1
+                page += 1
             except Exception as e:
                 mlog(e.args)
                 mlog('retrying...')
                 t.sleep(20)
                 continue
-        if len(df)==0:
+        if len(df) == 0:
             continue
         df.drop_duplicates(subset='symbol', keep='first', inplace=True)
-        df.to_csv('Industry/'+mkt+hrefname[i]+indCode+'.csv',encoding=ENCODE_IN_USE)
+        df.to_csv('Industry/' + mkt + hrefname[i] + indCode + '.csv', encoding=ENCODE_IN_USE)
         # writeIndustry(df[['symbol','name']].copy(), market, hrefname[i], indCode)
-        df.dropna(subset=['volume'],inplace=True)
-        df['行业']=hrefname[i]
+        df.dropna(subset=['volume'], inplace=True)
+        df['行业'] = hrefname[i]
         mktDf = mktDf.append(df)
 
-    mktDf=mktDf.loc[mktDf['current'] >= 1.0]
-    mktDf.set_index('symbol',inplace=True)
+    mktDf = mktDf.loc[mktDf['current'] >= 1.0]
+    mktDf.set_index('symbol', inplace=True)
     mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
     mktDf['market_capital'] = mktDf['market_capital'].astype('float').div(100000000.0).round(1)
-    mktDf.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'_Bak.csv',encoding=ENCODE_IN_USE)
+    mktDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return mktDf
 
-def thsIndustry(mkt='cn',pdate=None):
+
+def thsIndustry(mkt='cn', pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
     start = t.time()
     proxies = {}
@@ -209,7 +218,7 @@ def thsIndustry(mkt='cn',pdate=None):
     session = requests.session()
     while True:
         try:
-            response=requests.get(p_url,headers={"user-agent": "Mozilla"})
+            response = requests.get(p_url, headers={"user-agent": "Mozilla"})
             html = etree.HTML(response.text)
             break
         except Exception as e:
@@ -242,11 +251,12 @@ def thsIndustry(mkt='cn',pdate=None):
     data = {'Name': thsgnbk}
     # 存储
     gnbk = pd.DataFrame(data, index=bkcode)
-    #symbol,net_profit_cagr,ps,type,percent,has_follow,tick_size,pb_ttm,float_shares,current,amplitude,pcf,current_year_percent,float_float_market_capital,float_market_capital,dividend_yield,lot_size,roe_ttm,total_percent,percent5m,income_cagr,amount,chg,issue_date_ts,main_net_inflows,volume,volume_ratio,pb,followers,turnover_rate,first_percent,name,pe_ttm,total_shares
-    #序号	代码	名称	现价 	涨跌幅(%) 	涨跌 	涨速(%) 	换手(%) 	量比 	振幅(%) 	成交额 	流通股 	流通市值 	市盈率
-    cols=['symbol','name','current','percent','chg','speed','turnover_rate','qrr','amplitude','amount','float_shares','float_market_capital','pe_ttm','行业']
-    indDf=pd.DataFrame(columns=cols)
-    tqdmRange = tqdm(gnbk.iterrows(),total=gnbk.shape[0])
+    # symbol,net_profit_cagr,ps,type,percent,has_follow,tick_size,pb_ttm,float_shares,current,amplitude,pcf,current_year_percent,float_float_market_capital,float_market_capital,dividend_yield,lot_size,roe_ttm,total_percent,percent5m,income_cagr,amount,chg,issue_date_ts,main_net_inflows,volume,volume_ratio,pb,followers,turnover_rate,first_percent,name,pe_ttm,total_shares
+    # 序号	代码	名称	现价 	涨跌幅(%) 	涨跌 	涨速(%) 	换手(%) 	量比 	振幅(%) 	成交额 	流通股 	流通市值 	市盈率
+    cols = ['symbol', 'name', 'current', 'percent', 'chg', 'speed', 'turnover_rate', 'qrr', 'amplitude', 'amount',
+            'float_shares', 'float_market_capital', 'pe_ttm', '行业']
+    indDf = pd.DataFrame(columns=cols)
+    tqdmRange = tqdm(gnbk.iterrows(), total=gnbk.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(v['Name'])
         bk_code = str(k)
@@ -254,160 +264,168 @@ def thsIndustry(mkt='cn',pdate=None):
         driver.get(url)
         # print(v['Name'],url)
         # 得出板块成分股有多少页
-        content=driver.page_source
+        content = driver.page_source
         html = etree.HTML(content)
         result = html.xpath('//*[@id="m-page"]/span/text()')
         count = 1
         page = 1
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
-        headers = {"user-agent": "Mozilla","Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
+        headers = {"user-agent": "Mozilla", "Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
-            if count>1 and 'forbidden.' not in driver.page_source and driver.current_url!=curl:
-                content=requests.get(curl,headers=headers).text
-            html=etree.HTML(content)
+            if count > 1 and 'forbidden.' not in driver.page_source and driver.current_url != curl:
+                content = requests.get(curl, headers=headers).text
+            html = etree.HTML(content)
             if '暂无成份股数据' in content:
                 count += 1
                 continue
-            tr=html.xpath('//td//text()')
-            if len(tr)==0:#cookie失效
+            tr = html.xpath('//td//text()')
+            if len(tr) == 0:  # cookie失效
                 driver.get(curl)
-                content=driver.page_source
+                content = driver.page_source
                 if 'forbidden.' in content:
                     t.sleep(60)
                     continue
-                headers["Cookie"]="v={}".format(driver.get_cookies()[0]["value"])
+                headers["Cookie"] = "v={}".format(driver.get_cookies()[0]["value"])
                 continue
-            for i in range(14,len(tr)+14,14):
+            for i in range(14, len(tr) + 14, 14):
                 # if str(tr[i-13]).startswith('688'):
                 #     continue
-                if str(tr[i-13]).startswith('6'):
-                    row=['SH'+tr[i-13]]
+                if str(tr[i - 13]).startswith('6'):
+                    row = ['SH' + tr[i - 13]]
                 else:
-                    row=['SZ'+tr[i-13]]
-                row.extend(tr[i-12:i])
+                    row = ['SZ' + tr[i - 13]]
+                row.extend(tr[i - 12:i])
                 row.append(v['Name'])
                 rows.append(row)
             count += 1
-        pageDf=pd.DataFrame(data=rows,columns=cols)
-        pageDf['pe_ttm']=pageDf['pe_ttm'].apply(pd.to_numeric, errors='coerce')
+        pageDf = pd.DataFrame(data=rows, columns=cols)
+        pageDf['pe_ttm'] = pageDf['pe_ttm'].apply(pd.to_numeric, errors='coerce')
         pageDf.to_csv('Industry/' + mkt + v['Name'] + bk_code + '.csv', encoding=ENCODE_IN_USE)
-        indDf=indDf.append(pageDf)
+        indDf = indDf.append(pageDf)
     driver.quit()
     end = t.time()
     print(p_url + '爬取结束！！\n开始时间：%s\n结束时间：%s\n' % (t.ctime(start), t.ctime(end)))
     indDf.set_index('symbol', inplace=True)
-    indDf=indDf.replace('--',np.nan)
+    indDf = indDf.replace('--', np.nan)
     indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
     indDf['amount'] = indDf['amount'].str.rstrip('亿').astype('float')
-    indDf['current_year_percent']=np.nan
+    indDf['current_year_percent'] = np.nan
     indDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return indDf
 
-def dailyCheck(mkt=None,pdate=None,test=0):
+
+def dailyCheck(mkt=None, pdate=None, test=0):
     if mkt is None or pdate is None:
         mkt, pdate = g.paramSet['mkt'], g.paramSet['pdate']
         if not pdate:
             return
-    if os.path.isfile('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
-        indDf = pd.read_csv('md/'+mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE, dtype={'symbol': str})#防止港股数字
+    if os.path.isfile('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
+        indDf = pd.read_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE,
+                            dtype={'symbol': str})  # 防止港股数字
         indDf.set_index('symbol', inplace=True)
-    elif mkt=='cn':
+    elif mkt == 'cn':
         indDf = thsIndustry(mkt, pdate)
     else:
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
-    avgAmount=indDf['amount'].mean()
-    indDf=indDf[indDf['amount']>avgAmount]
+    avgAmount = indDf['amount'].mean()
+    indDf = indDf[indDf['amount'] > avgAmount]
     indDf = indDf.fillna(value=np.nan)
-    indDf=indDf[~indDf['name'].str.startswith("SH688", na=False)]
-    indDf=indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
-    cal={'_J':[],'_U':[]}
-    indDf['filename']=None
-    indDf['past60Days']=-999.0
-    tqdmRange=tqdm(indDf.iterrows(), total=indDf.shape[0])
+    indDf = indDf[~indDf['name'].str.startswith("SH688", na=False)]
+    indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
+    cal = {'_J': [], '_U': []}
+    indDf['filename'] = None
+    indDf['past60Days'] = -999.0
+    tqdmRange = tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
-        tqdmRange.set_description(("%s %s %s %s"%(mkt, v['行业'], k, v['name'])).ljust(25))
-        qdf=getK(mkt,k,pdate,test)
-        indDf.at[k, 'past60Days']=round(qdf['close'][-1]/min(qdf['close'][-60:])-1,4)
+        tqdmRange.set_description(("%s %s %s %s" % (mkt, v['行业'], k, v['name'])).ljust(25))
+        qdf = getK(mkt, k, pdate, test)
+        indDf.at[k, 'past60Days'] = round(qdf['close'][-1] / min(qdf['close'][-60:]) - 1, 4)
         info = [mkt, v['行业'], k, v['name']]
-        indDf.at[k, 'filename']=IMG_FOLDER+str(pdate.weekday()+1)+'/'+mkt+'/'+'_'.join(info)+'.png'+pdate.strftime("%Y%m%d%H")
+        indDf.at[k, 'filename'] = IMG_FOLDER + str(pdate.weekday() + 1) + '/' + mkt + '/' + '_'.join(
+            info) + '.png' + pdate.strftime("%Y%m%d%H")
         mtm = cauculate(qdf)
-        for mk,mv in mtm.items():
+        for mk, mv in mtm.items():
             cal[mk].append(mv)
-    for k,v in cal.items():
-        indDf[k]= v
-        df2md(mkt,k,indDf.copy(),pdate,test)
-    mtmDfBAK=indDf[list(cal.keys())].copy()
-    mtmDfBAK.to_csv('md/'+mkt+pdate.strftime('%Y%m%d')+'.txt',encoding=ENCODE_IN_USE,index_label='symbol')
-    if len(sys.argv)==1:
-        idxtrade=idxTrade(mkt,0)
+    for k, v in cal.items():
+        indDf[k] = v
+        df2md(mkt, k, indDf.copy(), pdate, test)
+    mtmDfBAK = indDf[list(cal.keys())].copy()
+    mtmDfBAK.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '.txt', encoding=ENCODE_IN_USE, index_label='symbol')
+    if len(sys.argv) == 1:
+        idxtrade = idxTrade(mkt, 0)
         idxtrade.run()
-    if test==1:
-        updateAllImg(mkt, pdate,cal.keys())
+    if test == 1:
+        updateAllImg(mkt, pdate, cal.keys())
 
 
-def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
+def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
-    capTpye={'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
+    capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
-    df=indDf.dropna(subset=[calKey])
-    df=df[df[mCap]<midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
-    df[mCap]=df[mCap].apply(str) + '亿'
+    df = indDf.dropna(subset=[calKey])
+    df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
+    df[mCap] = df[mCap].apply(str) + '亿'
 
     # indDf.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
     # df = df.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
     drawedSymbolList = []
-    debts=debt()
-    tqdmRange=tqdm(df.iterrows(),total=df.shape[0])
-    for k,v in tqdmRange:
-        tqdmRange.set_description('【'+calKey+'】'+k+v['name'])
-        dfmax=indDf[indDf['行业']==v['行业']].sort_values(by=['past60Days'], ascending=False).iloc[0]
-        vlines=[]
+    debts = debt()
+    tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
+    for k, v in tqdmRange:
+        tqdmRange.set_description('【' + calKey + '】' + k + v['name'])
+        dfmax = indDf[indDf['行业'] == v['行业']].sort_values(by=['past60Days'], ascending=False).iloc[0]
+        vlines = []
         if g.boardlist:
-            vlines=g.boardlist.get(k)
+            vlines = g.boardlist.get(k)
         elif not g.testMode():
-            vlines=dragonTigerBoard(k,g.xq_a_token)
+            vlines = dragonTigerBoard(k, g.xq_a_token)
         if not g.testMode() and k not in drawedSymbolList:
-            qdf=getK(mkt,k,pdate,1)
-            draw(qdf,v['filename'],vlines)
+            qdf = getK(mkt, k, pdate, 1)
+            draw(qdf, v['filename'], vlines)
             drawedSymbolList.append(k)
         elif not os.path.isfile(v['filename']):
-            qdf = getK(mkt, k, pdate,1)
-            draw(qdf,v['filename'],vlines)
-        deb=debts[debts.index==k]
-        cur_year_perc={k:v['current_year_percent'],dfmax.name:dfmax['current_year_percent']}
+            qdf = getK(mkt, k, pdate, 1)
+            draw(qdf, v['filename'], vlines)
+        deb = debts[debts.index == k]
+        cur_year_perc = {k: v['current_year_percent'], dfmax.name: dfmax['current_year_percent']}
         if mkt == 'cn':
             for cnstock in cur_year_perc.keys():
                 mK = cmsK(cnstock, 'monthly')
-                yr=1
-                for i in range(-min(datetime.now().month,len(mK)),0):
-                    yr=yr*(1+mK['percent'][i])
-                cur_year_perc[cnstock]=round(yr*100-100,2)
-        rowtitle='[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s'%(v['name'],k,k,capTpye,v[mCap],v['pe_ttm'],cur_year_perc[k],calKey)
-        if len(deb)!=0:
-            rowtitle='[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s'%(v['name'],k,'债溢价'+deb['premium_rt'].values[0],deb['id'].values[0],capTpye,v[mCap],round(v['pe_ttm']),cur_year_perc[k],calKey,v[calKey])
-        maxtxt=v['行业']+'行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%'%(dfmax['name'],dfmax.name,capTpye,dfmax[mCap],round(dfmax['pe_ttm']),dfmax['past60Days']*100,cur_year_perc[dfmax.name])
-        artxt=[rowtitle,'![](%s)'%(v['filename']),maxtxt]
-        article.append('\n<br><div>'+'\n<br>'.join([str(x) for x in artxt])+'</div>')
+                yr = 1
+                for i in range(-min(datetime.now().month, len(mK)), 0):
+                    yr = yr * (1 + mK['percent'][i])
+                cur_year_perc[cnstock] = round(yr * 100 - 100, 2)
+        rowtitle = '[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s' % (
+            v['name'], k, k, capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
+        if len(deb) != 0:
+            rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
+                v['name'], k, '债溢价' + deb['premium_rt'].values[0], deb['id'].values[0], capTpye, v[mCap],
+                round(v['pe_ttm']), cur_year_perc[k], calKey, v[calKey])
+        maxtxt = v['行业'] + '行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
+            dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm']), dfmax['past60Days'] * 100,
+            cur_year_perc[dfmax.name])
+        artxt = [rowtitle, '![](%s)' % (v['filename']), maxtxt]
+        article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
-    title=mkt+calKey+pdate.strftime('%Y%m%d')
+    title = mkt + calKey + pdate.strftime('%Y%m%d')
     # with open('md/'+title+'.md','w') as f:
     #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
     #     f.write(txt)
-    html = markdown.markdown('#'+title+'#'+txt)\
-        .replace('<a href="https://xueqiu','<a class="button is-dark" href="https://xueqiu')\
-        .replace('/a>','/a><br>')\
-        .replace('a><br> <a','a><a')\
-        .replace('TTMnan','亏损')\
-        .replace('.0亿','亿')
-    if test==0:
-        html=html.replace(IMG_FOLDER,'https://upknow.gitee.io/')
+    html = markdown.markdown('#' + title + '#' + txt) \
+        .replace('<a href="https://xueqiu', '<a class="button is-dark" href="https://xueqiu') \
+        .replace('/a>', '/a><br>') \
+        .replace('a><br> <a', 'a><a') \
+        .replace('TTMnan', '亏损') \
+        .replace('.0亿', '亿')
+    if test == 0:
+        html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
 
-    gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
-    gAdBtm='''
+    gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
+    gAdBtm = '''
         <!-- toufu -->
         <ins class="adsbygoogle"
              style="display:block"
@@ -418,20 +436,22 @@ def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
         <script>
              (adsbygoogle = window.adsbygoogle || []).push({});
         </script>'''
-    css='<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
+    css = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
-        <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(title=title,gAds=gAds)
-    with open('../html/'+mkt+str(pdate.weekday()+1)+calKey+'.html', 'w') as f:
-        finalhtml=css+html+'<p><br>© Frank Lin 2020</p></ariticle></div>'+gAdBtm+'</div></div></body></html>'
+        <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(
+        title=title, gAds=gAds)
+    with open('../html/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
+        finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div></body></html>'
         f.write(finalhtml)
         mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
 
-def getK(mkt,k,pdate,test=0):
-    if test==1 and os.path.isfile('Quotation/' + k + '.csv'):
+
+def getK(mkt, k, pdate, test=0):
+    if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0, parse_dates=True)
     elif mkt == 'cn':
         qdf = cmsK(k)
@@ -439,21 +459,23 @@ def getK(mkt,k,pdate,test=0):
         qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=g.xq_a_token)
     return qdf
 
+
 def preparePlot():
     mlog(mpl.matplotlib_fname())
     mpl.rcParams['font.family'] = ['sans-serif']
-    mpl.rcParams['font.sans-serif']=['Source Han Sans CN']  # 用来正常显示中文标签
-    mpl.rcParams['axes.unicode_minus']=False  # 用来正常显示负号
+    mpl.rcParams['font.sans-serif'] = ['Source Han Sans CN']  # 用来正常显示中文标签
+    mpl.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     _rebuild()
 
+
 class params:
-    def __init__(self,market=None,test=0):
-        self.test=test
+    def __init__(self, market=None, test=0):
+        self.test = test
         self.xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies[
             'xq_a_token'] + ';'
-        mkt,cfg = checkTradingDay(market)#交易时间
-        self.paramSet={'mkt':mkt, 'pdate':cfg[mkt]['date']}
-        self.boardlist={}
+        mkt, cfg = checkTradingDay(market)  # 交易时间
+        self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
+        self.boardlist = {}
 
     def go(self):
         dailyCheck(test=self.test)
@@ -461,14 +483,15 @@ class params:
     def testMode(self):
         return self.test
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     preparePlot()
     logging.basicConfig(
         filename='daily.log',
         level=logging.DEBUG
     )
     if len(sys.argv) > 2:
-        g = params(market=sys.argv[1],test=int(sys.argv[2]))
+        g = params(market=sys.argv[1], test=int(sys.argv[2]))
     else:
-        g=params(market=sys.argv[1])
+        g = params(market=sys.argv[1])
     g.go()
