@@ -11,11 +11,11 @@ ENCODE_IN_USE='GBK'
 IMG_FOLDER='../upknow/'
 
 def updateAllImg(mkt,pdate):
-    tqdmRange = tqdm(range(1,5))
+    tqdmRange = tqdm(range(0,5))
     drawedSymbolList = []
     for i in tqdmRange:
-        if pdate.weekday()+1!=i:
-            imgfolder=IMG_FOLDER+str(i)+'/'+mkt+'/'
+        if pdate.weekday()!=i:
+            imgfolder=IMG_FOLDER+str(i+1)+'/'+mkt+'/'
             fileList=os.listdir(imgfolder)
             for filename in fileList:
                 if filename[-4:]=='.png':
