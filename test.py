@@ -117,15 +117,14 @@ if __name__=='__main__':
     # draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
-    for i in tqdmRange:
-        for calKey in ['_J', '_U']:
-            filename = '../html/%s%s%s.html' % ('us', i + 1, calKey)
-            print(filename)
-            if os.path.isfile(filename):
-                with open(filename, "r+") as f:
-                    data = f.read()
-                    # output = data.replace('.png', '.png?=' + datetime.now().strftime("%Y%m%d%H"))
-                    output = re.sub("",'?t=%s"'%datetime.now().strftime("%Y%m%d%H"),data)
-                    f.seek(0)
-                    f.write(output)
-                    f.truncate()
+    for mkt in ['us','cn','hk']:
+        for i in tqdmRange:
+            for calKey in ['_J', '_U']:
+                filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
+                if os.path.isfile(filename):
+                    with open(filename, "r+") as f:
+                        data = f.read()
+                        output = re.sub('\?.*"','?t=%s"'%datetime.now().strftime("%Y%m%d%H"),output)
+                        f.seek(0)
+                        f.write(output)
+                        f.truncate()

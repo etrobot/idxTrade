@@ -10,18 +10,16 @@ from selenium import webdriver
 ENCODE_IN_USE='GBK'
 IMG_FOLDER='../upknow/'
 
-def updateAllImg(mkt,pdate):
+def updateAllImg(mkt,pdate,calKeys):
     tqdmRange = tqdm(range(0,5))
     drawedSymbolList = []
     for i in tqdmRange:
-        for calKey in ['_J', '_U']:
-            filename = '../html/%s%s%s.html' % ('us', i + 1, calKey)
-            print(filename)
+        for calKey in calKeys:
+            filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
             if os.path.isfile(filename):
                 with open(filename, "r+") as f:
                     data = f.read()
-                    # output = data.replace('.png', '.png?=' + datetime.now().strftime("%Y%m%d%H"))
-                    output = re.sub('\?.*\"', '?t=%s"' % datetime.now().strftime("%Y%m%d%H"), data)
+                    output = re.sub('\?.*"', '?t=%s"' % datetime.now().strftime("%Y%m%d%H"), output)
                     f.seek(0)
                     f.write(output)
                     f.truncate()
@@ -347,7 +345,7 @@ def dailyCheck(mkt=None,pdate=None,test=0):
         idxtrade=idxTrade(mkt,0)
         idxtrade.run()
     if test==1:
-        updateAllImg(mkt, pdate)
+        updateAllImg(mkt, pdate,cal.keys())
 
 
 def df2md(mkt,calKey,indDf,pdate,test=0,num=10):
