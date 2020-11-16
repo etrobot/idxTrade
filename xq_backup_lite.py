@@ -21,7 +21,7 @@ def updateAllImg(mkt,pdate):
                 with open(filename, "r+") as f:
                     data = f.read()
                     # output = data.replace('.png', '.png?=' + datetime.now().strftime("%Y%m%d%H"))
-                    output = re.sub("", '?t=%s"' % datetime.now().strftime("%Y%m%d%H"), data)
+                    output = re.sub('\?.*\"', '?t=%s"' % datetime.now().strftime("%Y%m%d%H"), data)
                     f.seek(0)
                     f.write(output)
                     f.truncate()
