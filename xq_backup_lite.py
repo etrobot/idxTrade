@@ -461,5 +461,5 @@ if __name__=='__main__':
     if len(sys.argv) > 2:
         g = params(market=sys.argv[1],test=int(sys.argv[2]))
     else:
-        g=params()
+        g=params(market=sys.argv[1])
     g.go()
