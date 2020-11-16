@@ -345,7 +345,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf.at[k, 'past60Days'] = round(qdf['close'][-1] / min(qdf['close'][-60:]) - 1, 4)
         info = [mkt, v['行业'], k, v['name']]
         indDf.at[k, 'filename'] = IMG_FOLDER + str(pdate.weekday() + 1) + '/' + mkt + '/' + '_'.join(
-            info) + '.png' + pdate.strftime("%Y%m%d%H")
+            info) + '.png'
         mtm = cauculate(qdf)
         for mk, mv in mtm.items():
             cal[mk].append(mv)
@@ -408,7 +408,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         maxtxt = v['行业'] + '行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
             dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm']), dfmax['past60Days'] * 100,
             cur_year_perc[dfmax.name])
-        artxt = [rowtitle, '![](%s)' % (v['filename']), maxtxt]
+        artxt = [rowtitle, '![](%s%s)' % (v['filename'],'?t=%s"' % datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
     title = mkt + calKey + pdate.strftime('%Y%m%d')
