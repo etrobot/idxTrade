@@ -15,15 +15,15 @@ def updateAllImg(mkt, pdate, calKeys):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
     for i in tqdmRange:
-        for calKey in calKeys:  # 加入url参数（小时），让浏览器不使用缓存
-            filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
-            if os.path.isfile(filename):
-                with open(filename, "r+") as f:
-                    output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
-                    f.seek(0)
-                    f.write(output)
-                    f.truncate()
         if pdate.weekday() != i:
+            for calKey in calKeys:  # 加入url参数（小时），让浏览器不使用缓存
+                filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
+                if os.path.isfile(filename):
+                    with open(filename, "r+") as f:
+                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
+                        f.seek(0)
+                        f.write(output)
+                        f.truncate()
             imgfolder = IMG_FOLDER + str(i + 1) + '/' + mkt + '/'
             fileList = os.listdir(imgfolder)
             for filename in fileList:
