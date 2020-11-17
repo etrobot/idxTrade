@@ -396,7 +396,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         maxtxt = v['行业'] + '行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
             dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm']), dfmax['past60Days'] * 100,
             cur_year_perc[dfmax.name])
-        artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t=%s"' % datetime.now().strftime("%m%d%H")), maxtxt]
+        artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t='+datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
     title = ' '.join([mkt, pdate.strftime('%Y/%m/%d'), datetime.now().strftime('%H:%M'), calKey])
@@ -456,7 +456,8 @@ class params:
     def __init__(self, market=None, test=0):
         self.test = test
         mkt, cfg = checkTradingDay(market)  # 交易时间
-        self.xq_a_token = cfg['xq_a_token']
+        print(mkt,cfg)
+        self.xq_a_token = cfg[mkt]['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
         self.boardlist = {}
 
