@@ -10,6 +10,7 @@ from selenium import webdriver
 ENCODE_IN_USE = 'GBK'
 IMG_FOLDER = '../upknow/'
 
+
 def updateAllImg(mkt, pdate, calKeys):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
@@ -34,7 +35,7 @@ def updateAllImg(mkt, pdate, calKeys):
                     drawedSymbolList.append(symbol)
 
 
-def draw(df, info, boardDates=[]):
+def draw(df, info, boardDates=()):
     df.index = pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
@@ -137,8 +138,11 @@ def cauculate(dfk):
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
     mtm_1 = sum(closes[i] / min(closes[-2], closes[0]) - 1 for i in range(len(vol))) * vol[-1] / vol[-2]
-    mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[-5:].mean() / vol[-20:].mean()
+    mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[
+                                                                                                                -5:].mean() / vol[
+                                                                                                                              -20:].mean()
     return {'_J': round(mtm_1, 12), '_U': round(mtm_2, 12)}
+
 
 def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     # if market == 'cn':
@@ -199,6 +203,7 @@ def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     mktDf['market_capital'] = mktDf['market_capital'].astype('float').div(100000000.0).round(1)
     mktDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return mktDf
+
 
 def thsIndustry(mkt='cn', pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
@@ -391,10 +396,10 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         maxtxt = v['行业'] + '行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
             dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm']), dfmax['past60Days'] * 100,
             cur_year_perc[dfmax.name])
-        artxt = [rowtitle, '![](%s%s)' % (v['filename'],'?t=%s"' % datetime.now().strftime("%m%d%H")), maxtxt]
+        artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t=%s"' % datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
-    title = ' '.join([mkt,pdate.strftime('%Y/%m/%d'),datetime.now().strftime('%H:%M'),calKey])
+    title = ' '.join([mkt, pdate.strftime('%Y/%m/%d'), datetime.now().strftime('%H:%M'), calKey])
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="https://xueqiu', '<a class="button is-dark" href="https://xueqiu') \
         .replace('/a>', '/a><br>') \
@@ -428,6 +433,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         # if g.testMode():
         #     return finalhtml
 
+
 def getK(mkt, k, pdate, test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0, parse_dates=True)
@@ -437,12 +443,14 @@ def getK(mkt, k, pdate, test=0):
         qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=g.xq_a_token)
     return qdf
 
+
 def preparePlot():
     mlog(mpl.matplotlib_fname())
     mpl.rcParams['font.family'] = ['sans-serif']
     mpl.rcParams['font.sans-serif'] = ['Source Han Sans CN']  # 用来正常显示中文标签
     mpl.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     _rebuild()
+
 
 class params:
     def __init__(self, market=None, test=0):
@@ -457,6 +465,7 @@ class params:
 
     def testMode(self):
         return self.test
+
 
 if __name__ == '__main__':
     preparePlot()
