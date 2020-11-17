@@ -115,16 +115,7 @@ if __name__=='__main__':
     # pdate=datetime.now().date()
     # qdf = qdf = xueqiuK(symbol='00410', startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
     # draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
-    tqdmRange = tqdm(range(0, 5))
-    drawedSymbolList = []
-    calKeys=['_J','_U']
-    for mkt in ['us','cn','hk']:
-        for i in tqdmRange:
-            for calKey in calKeys:  # 加入url参数（小时），让浏览器不使用缓存
-                filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
-                if os.path.isfile(filename):
-                    with open(filename, "r+") as f:
-                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
-                        f.seek(0)
-                        f.write(output)
-                        f.truncate()
+    toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
+    toBuy.dropna(subset=['_U'], inplace=True)
+    toBuy.sort_values(by='_U', ascending=True, inplace=True)
+    print(toBuy['symbol'])

@@ -44,7 +44,8 @@ class idxTrade:#保存参数的类
                     # toBuy['f']=factor
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
                     toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
-                    toBuy.dropna(subset=['_U']).sort_values(by='_U', ascending=True,inplace=True)
+                    toBuy.dropna(subset=['_U'],inplace=True)
+                    toBuy.sort_values(by='_U', ascending=True,inplace=True)
                     if toBuy['symbol'][0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
