@@ -10,7 +10,6 @@ from selenium import webdriver
 ENCODE_IN_USE = 'GBK'
 IMG_FOLDER = '../upknow/'
 
-
 def updateAllImg(mkt, pdate, calKeys):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
@@ -51,7 +50,6 @@ def draw(df, info, boardDates=[]):
         inplace=True)
     df = df[-60:]
     dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
-
     '''
     设置marketcolors
     up:设置K线线柱颜色，up意为收盘价大于等于开盘价
@@ -86,7 +84,6 @@ def draw(df, info, boardDates=[]):
         facecolor='#20212A',
         edgecolor='#393f52',
     )
-
     '''
     设置基本参数
     type:绘制图形的类型，有candle, renko, ohlc, line等
@@ -140,12 +137,8 @@ def cauculate(dfk):
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
     mtm_1 = sum(closes[i] / min(closes[-2], closes[0]) - 1 for i in range(len(vol))) * vol[-1] / vol[-2]
-    mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[
-                                                                                                                -5:].mean() / vol[
-                                                                                                                              -20:].mean()
-
+    mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[-5:].mean() / vol[-20:].mean()
     return {'_J': round(mtm_1, 12), '_U': round(mtm_2, 12)}
-
 
 def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     # if market == 'cn':
@@ -157,7 +150,6 @@ def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     hrefname = html.xpath('//li/a/@title')
     hrefList = html.xpath('//li/a/@href')[2:]
     # mlog(len(hrefname),hrefname,'\n',len(hrefList),hrefList)
-
     mktDf = pd.DataFrame()
     tqdmRange = tqdm(range(len(hrefList)))
     for i in tqdmRange:
@@ -201,7 +193,6 @@ def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
         df.dropna(subset=['volume'], inplace=True)
         df['行业'] = hrefname[i]
         mktDf = mktDf.append(df)
-
     mktDf = mktDf.loc[mktDf['current'] >= 1.0]
     mktDf.set_index('symbol', inplace=True)
     mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
@@ -209,13 +200,10 @@ def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     mktDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return mktDf
 
-
 def thsIndustry(mkt='cn', pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
     start = t.time()
-    proxies = {}
     # 爬取板块名称以及代码并且存在文件
-    session = requests.session()
     while True:
         try:
             response = requests.get(p_url, headers={"user-agent": "Mozilla"})
@@ -226,12 +214,10 @@ def thsIndustry(mkt='cn', pdate=None):
             print('retrying...')
             t.sleep(150)
             continue
-
     gnbk = html.xpath('/html/body/div[2]/div[1]/div//div//div//a')
     thsgnbk = []
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
-
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
@@ -368,9 +354,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     df = indDf.dropna(subset=[calKey])
     df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'
-
-    # indDf.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=True)).to_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '.csv', encoding=ENCODE_IN_USE)
-    # df = df.groupby('行业').apply(lambda x: x.sort_values(calKey, ascending=False))
     article = []
     drawedSymbolList = []
     debts = debt()
@@ -412,9 +395,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
     title = ' '.join([mkt,pdate.strftime('%Y/%m/%d'),datetime.now().strftime('%H:%M'),calKey])
-    # with open('md/'+title+'.md','w') as f:
-    #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
-    #     f.write(txt)
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="https://xueqiu', '<a class="button is-dark" href="https://xueqiu') \
         .replace('/a>', '/a><br>') \
@@ -423,7 +403,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         .replace('.0亿', '亿')
     if test == 0:
         html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
-
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm = '''
         <!-- toufu -->
@@ -449,7 +428,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         # if g.testMode():
         #     return finalhtml
 
-
 def getK(mkt, k, pdate, test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0, parse_dates=True)
@@ -459,7 +437,6 @@ def getK(mkt, k, pdate, test=0):
         qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=g.xq_a_token)
     return qdf
 
-
 def preparePlot():
     mlog(mpl.matplotlib_fname())
     mpl.rcParams['font.family'] = ['sans-serif']
@@ -467,13 +444,11 @@ def preparePlot():
     mpl.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     _rebuild()
 
-
 class params:
     def __init__(self, market=None, test=0):
         self.test = test
-        self.xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies[
-            'xq_a_token'] + ';'
         mkt, cfg = checkTradingDay(market)  # 交易时间
+        self.xq_a_token = cfg['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
         self.boardlist = {}
 
@@ -482,7 +457,6 @@ class params:
 
     def testMode(self):
         return self.test
-
 
 if __name__ == '__main__':
     preparePlot()
