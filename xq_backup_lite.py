@@ -411,7 +411,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         artxt = [rowtitle, '![](%s%s)' % (v['filename'],'?t=%s"' % datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
-    title = mkt + calKey + pdate.strftime('%Y%m%d')
+    title = ' '.join([mkt,pdate.strftime('%Y/%m/%d'),calKey])
     # with open('md/'+title+'.md','w') as f:
     #     # f.write('\n***'.join(article)+'\n\n---\n'+'\n'.join(images))
     #     f.write(txt)
