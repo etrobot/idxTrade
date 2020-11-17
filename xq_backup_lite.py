@@ -357,7 +357,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     if len(sys.argv) == 1:
         idxtrade = idxTrade(mkt, 0)
         idxtrade.run()
-    if test == 1:
+    if test == 0:
         updateAllImg(mkt, pdate, cal.keys())
 
 
