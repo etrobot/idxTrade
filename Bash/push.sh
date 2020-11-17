@@ -16,4 +16,6 @@ cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
 cd ../html || exit
-gitPush
+git add .
+git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
+git push
