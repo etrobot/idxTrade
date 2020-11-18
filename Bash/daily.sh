@@ -8,6 +8,6 @@ else
   rm -f ../../upknow/"$(date +%w)"/$1/*.png
 fi
 
-cd .. && /usr/local/bin/python3.7 -u xq_backup_lite.py $1 $2;
+cd .. && /usr/local/Cellar/python@3.8/3.8.6_1/bin/python3 -u xq_backup_lite.py $1 $2;
 
 bash $curPath/push.sh

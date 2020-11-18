@@ -20,7 +20,7 @@ def updateAllImg(mkt, pdate, calKeys):
                 filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
                 if os.path.isfile(filename):
                     with open(filename, "r+") as f:
-                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
+                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read()).replace(IMG_FOLDER,'https://upknow.gitee.io/')
                         f.seek(0)
                         f.write(output)
                         f.truncate()
