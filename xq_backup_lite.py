@@ -400,7 +400,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t='+datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     txt = '\n<br>'.join(article)
-    title = ' '.join([mkt, pdate.strftime('%Y/%m/%d'), datetime.now().strftime('%H:%M'), calKey])
+    title = ' '.join([mkt, pdate.strftime('%y/%m/%d'), datetime.now().strftime('%H:%M'), calKey])
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="https://xueqiu', '<a class="button is-dark" href="https://xueqiu') \
         .replace('/a>', '/a><br>') \
