@@ -325,7 +325,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     avgAmount = indDf['amount'].mean()
     indDf = indDf[indDf['amount'] > avgAmount]
     indDf = indDf.fillna(value=np.nan)
-    indDf = indDf[~indDf['name'].str.startswith("SH688", na=False)]
+    indDf = indDf[~indDf.index.str.startswith("SH688", na=False)]
     indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
     cal = {'_J': [], '_U': []}
     indDf['filename'] = None
