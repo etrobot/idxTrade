@@ -116,24 +116,29 @@ def dragonTigerBoard(symbol,xq_a_token):
     for q in quoteData:
         if len(q)!=2:
             continue
-        if '机构' in str(q[0]['branches']) and '机构' not in str(q[1]['branches']):
+        if '专用' in str(q[0]['branches']) and '专用' not in str(q[1]['branches']):
             tdateList.append(q[0]['td_date'])
-    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms')
+    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
     return tdateSeries
 
+def getTimestamp(dateString):
+    d=[int(x) for x in str(dateString).split('-')]
+    return int(t.mktime(datetime(d[0],d[1],d[2]).timetuple())) * 1000
+
 def dragonTigerBoards(pdate,xq_a_token):
-    klineSZZS = xqQuot(symbol='SH000001', period='day', latestDay=int(t.mktime(pdate.timetuple())) * 1000, type='before', cookie=xq_a_token)
+    klineSZZS = xueqiuK('SH000001',pdate.strftime('%Y-%m-%d'),xq_a_token)
     stocks=[]
     stocksDict=dict()
     checked=[]
-    for d in klineSZZS['timestamp'].values[-20:]:
-        timestampstr=str(d)
+    tqdmRange=tqdm(klineSZZS.index.values[-20:])
+    for d in tqdmRange:
+        timestampstr=str(int(t.mktime(d.timetuple())*1000))
         if os.path.isfile('md/board'+timestampstr+'.json'):
             df = pd.read_json('md/board'+timestampstr+'.json')
             stocks.extend(df['symbol'].to_list())
         else:
             url = 'https://xueqiu.com/service/v5/stock/hq/longhu?date=' + timestampstr
-            mlog(url)
+            # print(url)
             response = requests.get(url=url,
                                     headers={"user-agent": "Mozilla", "cookie": xq_a_token, "Connection": "close"},
                                     timeout=5)
@@ -144,13 +149,14 @@ def dragonTigerBoards(pdate,xq_a_token):
             df=pd.DataFrame(result)
 
         for s in df['symbol'].to_list():
+            tqdmRange.set_description(str(d)+s)
             if s in checked:
                 continue
             checked.append(s)
             check = dragonTigerBoard(s, xq_a_token)
             if len(check) == 0:
                 continue
-            elif klineSZZS['timestamp'].values[-60]>int(t.mktime(check[0].timetuple())) * 1000:
+            elif t.mktime(klineSZZS.index.values[-60].timetuple())>t.mktime(check[0].timetuple()):
                 continue
             else:
                 stocksDict[s] = check

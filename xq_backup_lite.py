@@ -37,7 +37,6 @@ def updateAllImg(mkt, pdate, calKeys):
 
 
 def draw(df, info, boardDates=()):
-    df.index = pd.to_datetime(df.index)
     # 导入数据
     # 导入股票数据
     # 格式化列名，用于之后的绘制
@@ -314,6 +313,8 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         mkt, pdate = g.paramSet['mkt'], g.paramSet['pdate']
         if not pdate:
             return
+    g.boardlist = dragonTigerBoards(pdate, g.xq_a_token)
+
     if os.path.isfile('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
         indDf = pd.read_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE,
                             dtype={'symbol': str})  # 防止港股数字
@@ -358,7 +359,10 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
-    df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
+    if mkt=='cn' and calKey=='_U':
+        df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
+    else:
+        df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'
     article = []
     drawedSymbolList = []
@@ -369,7 +373,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         dfmax = indDf[indDf['行业'] == v['行业']].sort_values(by=['past60Days'], ascending=False).iloc[0]
         vlines = []
         if g.boardlist:
-            vlines = g.boardlist.get(k)
+            vlines = g.boardlist.get(k,[])
         elif not g.testMode():
             vlines = dragonTigerBoard(k, g.xq_a_token)
         if not g.testMode() and k not in drawedSymbolList:
