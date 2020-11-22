@@ -11,7 +11,7 @@ ENCODE_IN_USE = 'GBK'
 IMG_FOLDER = '../upknow/'
 
 
-def updateAllImg(mkt, pdate, calKeys):
+def updateAllImg(mkt, pdate, calKeys,boardlist):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
     for i in tqdmRange:
@@ -32,7 +32,7 @@ def updateAllImg(mkt, pdate, calKeys):
                     tqdmRange.set_description('update ' + imgfolder + filename)
                     symbol = filename.split('_')[2]
                     qdf = getK(mkt, symbol, pdate, int(symbol in drawedSymbolList))
-                    draw(qdf, imgfolder + filename)
+                    draw(qdf, imgfolder + filename,boardlist.get(symbol,[]))
                     drawedSymbolList.append(symbol)
 
 
@@ -313,8 +313,6 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         mkt, pdate = g.paramSet['mkt'], g.paramSet['pdate']
         if not pdate:
             return
-    g.boardlist = dragonTigerBoards(pdate, g.xq_a_token)
-
     if os.path.isfile('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'):
         indDf = pd.read_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE,
                             dtype={'symbol': str})  # 防止港股数字
@@ -350,8 +348,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     if len(sys.argv) == 2:
         idxtrade = idxTrade(mkt, 0)
         idxtrade.run()
-    if test == 0:
-        updateAllImg(mkt, pdate, cal.keys())
+    updateAllImg(mkt, pdate, cal.keys(),g.boardlist)
 
 
 def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
@@ -463,7 +460,7 @@ class params:
         mkt, cfg = checkTradingDay(market)  # 交易时间
         self.xq_a_token = cfg[mkt]['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
-        self.boardlist = {}
+        self.boardlist = dragonTigerBoards(self.paramSet['pdate'], g.xq_a_token)
 
     def go(self):
         dailyCheck(test=self.test)
