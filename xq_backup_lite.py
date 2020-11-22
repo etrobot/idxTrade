@@ -36,7 +36,7 @@ def updateAllImg(mkt, pdate, calKeys,boardlist):
                     drawedSymbolList.append(symbol)
 
 
-def draw(df, info, boardDates=()):
+def draw(df, info, boardDates:list):
     # 导入数据
     # 导入股票数据
     # 格式化列名，用于之后的绘制
@@ -51,6 +51,8 @@ def draw(df, info, boardDates=()):
         inplace=True)
     df = df[-60:]
     dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
+    if len(dt)==0:
+        dt=pd.DatetimeIndex([date(1980,1,1)]).tolist()
     '''
     设置marketcolors
     up:设置K线线柱颜色，up意为收盘价大于等于开盘价
