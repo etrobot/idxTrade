@@ -462,7 +462,7 @@ class params:
         mkt, cfg = checkTradingDay(market)  # 交易时间
         self.xq_a_token = cfg[mkt]['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
-        self.boardlist = dragonTigerBoards(self.paramSet['pdate'], g.xq_a_token)
+        self.boardlist = dragonTigerBoards(self.paramSet['pdate'], self.xq_a_token)
 
     def go(self):
         dailyCheck(test=self.test)
