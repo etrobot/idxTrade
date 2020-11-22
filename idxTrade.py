@@ -44,6 +44,11 @@ class idxTrade:#保存参数的类
                     # toBuy['f']=factor
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
                     toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
+                    if self.mkt=='cn':
+                        filename = '../html/cn%s_U.html' % (ik['k'].index[-1].weekday+1)
+                        if os.path.isfile(filename):
+                            with open(filename, "r") as f:
+                                toBuy=toBuy[toBuy['symbol'].isin(f.read())]
                     toBuy.dropna(subset=['_U'],inplace=True)
                     toBuy.sort_values(by='_U', ascending=True,inplace=True)
                     if toBuy['symbol'][0] not in [x['stock_symbol'] for x in position]:

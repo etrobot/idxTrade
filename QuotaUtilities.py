@@ -149,7 +149,7 @@ def dragonTigerBoards(pdate,xq_a_token):
             df=pd.DataFrame(result)
 
         for s in df['symbol'].to_list():
-            tqdmRange.set_description(str(d)+s)
+            tqdmRange.set_description(str(d)+'龙虎'+s)
             if s in checked:
                 continue
             checked.append(s)
