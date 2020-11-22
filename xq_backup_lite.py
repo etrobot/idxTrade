@@ -32,14 +32,15 @@ def updateAllImg(mkt, pdate, calKeys,boardlist):
                     tqdmRange.set_description('update ' + imgfolder + filename)
                     symbol = filename.split('_')[2]
                     qdf = getK(mkt, symbol, pdate, int(symbol in drawedSymbolList))
-                    draw(qdf, imgfolder + filename,boardlist.get(symbol,[]))
+                    draw(qdf, imgfolder + filename,boardlist.get(symbol,()))
                     drawedSymbolList.append(symbol)
 
 
-def draw(df, info, boardDates:list):
+def draw(df, info, boardDates=()):
     # 导入数据
     # 导入股票数据
     # 格式化列名，用于之后的绘制
+    df.index.names=['date']
     df.rename(
         columns={
             'open': 'Open',
@@ -51,8 +52,6 @@ def draw(df, info, boardDates:list):
         inplace=True)
     df = df[-60:]
     dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
-    if len(dt)==0:
-        dt=pd.DatetimeIndex([date(1980,1,1)]).tolist()
     '''
     设置marketcolors
     up:设置K线线柱颜色，up意为收盘价大于等于开盘价
@@ -113,9 +112,9 @@ def draw(df, info, boardDates:list):
         figratio=(8, 5),
         figscale=1,
         tight_layout=True,
-        vlines=dict(vlines=dt, linewidths=8, alpha=0.2, colors='khaki')
     )
-
+    if len(dt)>0:
+        kwargs['vlines']=dict(vlines=dt, linewidths=8, alpha=0.2, colors='khaki')
     # 设置均线颜色，配色表可见下图
     # 建议设置较深的颜色且与红色、绿色形成对比
     # 此处设置七条均线的颜色，也可应用默认设置
@@ -123,7 +122,6 @@ def draw(df, info, boardDates:list):
         color=['dodgerblue', 'deeppink',
                'navy', 'teal', 'maroon', 'darkorange',
                'indigo'])
-
     # 图形绘制
     # show_Uontrading:是否显示非交易日，默认False
     # savefig:导出图片，填写文件名及后缀
@@ -442,7 +440,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
 def getK(mkt, k, pdate, test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
-        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0, parse_dates=True)
+        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0)
+        qdf.index=pd.to_datetime(qdf.index)
     elif mkt == 'cn':
         qdf = cmsK(k)
     else:

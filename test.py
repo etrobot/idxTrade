@@ -115,7 +115,15 @@ if __name__=='__main__':
     # pdate=datetime.now().date()
     # qdf = qdf = xueqiuK(symbol='00410', startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
     # draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
-    toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
-    toBuy.dropna(subset=['_U'], inplace=True)
-    toBuy.sort_values(by='_U', ascending=True, inplace=True)
-    print(toBuy['symbol'])
+    # toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
+    # toBuy.dropna(subset=['_U'], inplace=True)
+    # toBuy.sort_values(by='_U', ascending=True, inplace=True)
+    fileList = os.listdir('../upknow/4/cn')
+    for filename in fileList:
+        if filename[-4:]!='.png':
+            continue
+        symbol = filename.split('_')[2]
+        print(symbol)
+        qdf = getK('cn',symbol,date(2020,11,21),0)
+        print(qdf.index)
+        draw(qdf, '../upknow/4/cn/cn_半导体及元件_SH603290_斯达半导.png', dragonTigerBoard(symbol,xq_a_token))

@@ -150,7 +150,7 @@ def dragonTigerBoards(pdate,xq_a_token):
 
         for s in df['symbol'].to_list():
             tqdmRange.set_description(str(d)+'龙虎'+s)
-            if s in checked:
+            if s in checked or s.startswith('SH688'):
                 continue
             checked.append(s)
             check = dragonTigerBoard(s, xq_a_token)
@@ -378,7 +378,7 @@ def cmsK(code:str,type:str='daily'):
     data = json.loads(getUrl(url))['results'][0]['array']
     df=pd.DataFrame(data=data,columns=['date','open','high','close','low','yesterday','volume','amount','price_chg','percent','turnoverrate','ma5','ma10','ma20','ma30','ma60','afterAmt','afterVol'])
     df.set_index('date',inplace=True)
-    df.index=pd.to_datetime(df.index,format='%Y%m%d').date
+    df.index=pd.to_datetime(df.index,format='%Y%m%d')
     df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
     if type=='daily':
         df.to_csv(quoFile,encoding='utf-8',index_label='date')
