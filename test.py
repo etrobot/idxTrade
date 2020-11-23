@@ -135,5 +135,5 @@ if __name__=='__main__':
             for filename in fileList:
                 if filename[-4:] == '.png':
                     symbol = filename.split('_')[2]
-                    qdf = getK(mkt, symbol, date(2020,11,23), 0)
+                    qdf = xueqiuK(symbol=symbol, startDate=(date(2020,11,23) - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
                     draw(qdf, imgfolder + filename, dragonTigerBoard(symbol, xq_a_token))
