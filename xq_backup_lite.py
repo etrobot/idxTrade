@@ -345,10 +345,10 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         df2md(mkt, k, indDf.copy(), pdate, test)
     mtmDfBAK = indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '.txt', encoding=ENCODE_IN_USE, index_label='symbol')
+    updateAllImg(mkt, pdate, cal.keys(), g.boardlist)
     if len(sys.argv) == 2:
         idxtrade = idxTrade(mkt, 0)
         idxtrade.run()
-    updateAllImg(mkt, pdate, cal.keys(),g.boardlist)
 
 
 def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
