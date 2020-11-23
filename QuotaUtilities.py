@@ -130,7 +130,7 @@ def dragonTigerBoards(pdate,xq_a_token):
     stocks=[]
     stocksDict=dict()
     checked=[]
-    tqdmRange=tqdm(klineSZZS.index.values[-1:])
+    tqdmRange=tqdm(klineSZZS.index.values[-20:])
     for d in tqdmRange:
         timestampstr=str(int(t.mktime(d.timetuple())*1000))
         if os.path.isfile('md/board'+timestampstr+'.json'):
