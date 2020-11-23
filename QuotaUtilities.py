@@ -132,13 +132,12 @@ def dragonTigerBoards(pdate,xq_a_token):
     checked=[]
     tqdmRange=tqdm(klineSZZS.index.values[-20:])
     for d in tqdmRange:
-        timestampstr=str(int(t.mktime(d.timetuple())*1000))
+        timestampstr=str(int((d.astype('uint64') / 1e6).astype('uint32')*1000))
         if os.path.isfile('md/board'+timestampstr+'.json'):
             df = pd.read_json('md/board'+timestampstr+'.json')
             stocks.extend(df['symbol'].to_list())
         else:
             url = 'https://xueqiu.com/service/v5/stock/hq/longhu?date=' + timestampstr
-            print(url)
             response = requests.get(url=url,
                                     headers={"user-agent": "Mozilla", "cookie": xq_a_token, "Connection": "close"},
                                     timeout=5)
