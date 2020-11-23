@@ -119,11 +119,21 @@ if __name__=='__main__':
     # toBuy.dropna(subset=['_U'], inplace=True)
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
     fileList = os.listdir('../upknow/4/cn')
-    for filename in fileList:
-        if filename[-4:]!='.png':
-            continue
-        symbol = filename.split('_')[2]
-        print(symbol)
-        qdf = getK('cn',symbol,date(2020,11,21),0)
-        print(qdf.index)
-        draw(qdf, '../upknow/4/cn/cn_半导体及元件_SH603290_斯达半导.png', dragonTigerBoard(symbol,xq_a_token))
+    for mkt in ['cn','hk']:
+        for i in range(0,5):
+            for calKey in ['_J','_U']:  # 加入url参数（小时），让浏览器不使用缓存
+                filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
+                if os.path.isfile(filename):
+                    with open(filename, "r+") as f:
+                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
+                        output = output.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
+                        f.seek(0)
+                        f.write(output)
+                        f.truncate()
+            imgfolder = IMG_FOLDER + str(i + 1) + '/' + mkt + '/'
+            fileList = os.listdir(imgfolder)
+            for filename in fileList:
+                if filename[-4:] == '.png':
+                    symbol = filename.split('_')[2]
+                    qdf = getK(mkt, symbol, date(2020,11,23), 0)
+                    draw(qdf, imgfolder + filename, dragonTigerBoard(symbol, xq_a_token))

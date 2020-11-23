@@ -32,7 +32,7 @@ def updateAllImg(mkt, pdate, calKeys,boardlist):
                     tqdmRange.set_description('update ' + imgfolder + filename)
                     symbol = filename.split('_')[2]
                     qdf = getK(mkt, symbol, pdate, int(symbol in drawedSymbolList))
-                    draw(qdf, imgfolder + filename,boardlist.get(symbol,()))
+                    draw(qdf, imgfolder + filename,dragonTigerBoard(symbol,g.xq_a_token))
                     drawedSymbolList.append(symbol)
 
 
