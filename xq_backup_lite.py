@@ -11,7 +11,7 @@ ENCODE_IN_USE = 'GBK'
 IMG_FOLDER = '../upknow/'
 
 
-def updateAllImg(mkt, pdate, calKeys,boardlist):
+def updateAllImg(mkt, pdate, calKeys):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
     for i in tqdmRange:
@@ -345,7 +345,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         df2md(mkt, k, indDf.copy(), pdate, test)
     mtmDfBAK = indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '.txt', encoding=ENCODE_IN_USE, index_label='symbol')
-    updateAllImg(mkt, pdate, cal.keys(), g.boardlist)
+    updateAllImg(mkt, pdate, cal.keys())
     if len(sys.argv) == 2:
         idxtrade = idxTrade(mkt, 0)
         idxtrade.run()

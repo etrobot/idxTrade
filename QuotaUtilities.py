@@ -118,7 +118,7 @@ def dragonTigerBoard(symbol,xq_a_token):
             continue
         if '专用' in str(q[0]['branches']) and '专用' not in str(q[1]['branches']):
             tdateList.append(q[0]['td_date'])
-    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai')
+    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
     return tdateSeries
 
 def getTimestamp(dateString):
@@ -130,14 +130,16 @@ def dragonTigerBoards(pdate,xq_a_token):
     stocks=[]
     stocksDict=dict()
     checked=[]
-    tqdmRange=tqdm(klineSZZS.index.values[-20:])
+    # print(klineSZZS.index[-60].date(),klineSZZS.index.date[-60])
+    tqdmRange=tqdm(klineSZZS.index[-20:].date)
     for d in tqdmRange:
-        timestampstr=str(int((d.astype('uint64') / 1e6).astype('uint32')*1000))
+        timestampstr=str(int(t.mktime(d.timetuple())*1000))
         if os.path.isfile('md/board'+timestampstr+'.json'):
             df = pd.read_json('md/board'+timestampstr+'.json')
             stocks.extend(df['symbol'].to_list())
         else:
             url = 'https://xueqiu.com/service/v5/stock/hq/longhu?date=' + timestampstr
+            print(url)
             response = requests.get(url=url,
                                     headers={"user-agent": "Mozilla", "cookie": xq_a_token, "Connection": "close"},
                                     timeout=5)
@@ -157,7 +159,7 @@ def dragonTigerBoards(pdate,xq_a_token):
             check = dragonTigerBoard(s, xq_a_token)
             if len(check) == 0:
                 continue
-            elif t.mktime(klineSZZS.index.values[-60].timetuple())>t.mktime(check[0].timetuple()):
+            elif t.mktime(klineSZZS.index.date[-60].timetuple())>t.mktime(check[0].timetuple()):
                 continue
             else:
                 stocksDict[s] = check
