@@ -118,7 +118,7 @@ def dragonTigerBoard(symbol,xq_a_token):
             continue
         if '专用' in str(q[0]['branches']) and '专用' not in str(q[1]['branches']):
             tdateList.append(q[0]['td_date'])
-    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
+    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai')
     return tdateSeries
 
 def getTimestamp(dateString):
