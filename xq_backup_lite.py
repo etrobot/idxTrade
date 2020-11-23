@@ -440,8 +440,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
 def getK(mkt, k, pdate, test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
-        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col=0)
-        qdf.index=pd.to_datetime(qdf.index)
+        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])
     elif mkt == 'cn':
         qdf = cmsK(k)
     else:
@@ -463,7 +462,9 @@ class params:
         mkt, cfg = checkTradingDay(market)  # 交易时间
         self.xq_a_token = cfg[mkt]['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
-        self.boardlist = dragonTigerBoards(self.paramSet['pdate'], self.xq_a_token)
+        self.boardlist ={}
+        if market=='cn':
+            self.boardlist = dragonTigerBoards(self.paramSet['pdate'], self.xq_a_token)
 
     def go(self):
         dailyCheck(test=self.test)
