@@ -103,7 +103,7 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
     df.index.name='date'
     df.sort_index(inplace=True)
     df['percent']=df['percent'].div(100).round(4)
-    df.to_csv(quoFile,encoding='utf-8',index_label='date')
+    df.to_csv(quoFile,encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
     return df
 
 def dragonTigerBoard(symbol,xq_a_token):
@@ -245,7 +245,7 @@ def usETFlist():
     for page in tqdm(range(1, total_page_count)):
         pageDf=pd.DataFrame(usETFpage(str(page))["data"])
         big_df= big_df.append(pageDf, ignore_index=True)
-    big_df.to_csv('usETFsina.csv',encoding='GBK')
+    big_df.to_csv('usETFsina.csv',encoding='GBK',date_format='%Y-%m-%d')
     return big_df
 
 def tencentK(mkt:str = '',symbol: str = "QQQ",KAll=False) -> pd.DataFrame:
@@ -316,7 +316,7 @@ def tencentK(mkt:str = '',symbol: str = "QQQ",KAll=False) -> pd.DataFrame:
     temp_df = temp_df.astype("float")
     temp_df.drop_duplicates(inplace=True)
     temp_df.rename(columns={'amount':'volume'}, inplace = True)
-    temp_df.to_csv('Quotation/'+symbol+'.csv',encoding='utf-8',index_label='date')
+    temp_df.to_csv('Quotation/'+symbol+'.csv',encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
     return temp_df
 
 def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
@@ -354,7 +354,7 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
             df.set_index('date',inplace=True)
             df.index=pd.to_datetime(df.index).date
             df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
-            df.to_csv(quoFile,encoding='utf-8',index_label='date')
+            df.to_csv(quoFile,encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
             return df
         except Exception as e:
             print(e)
@@ -384,6 +384,6 @@ def cmsK(code:str,type:str='daily'):
     df.index=pd.to_datetime(df.index,format='%Y%m%d')
     df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
     if type=='daily':
-        df.to_csv(quoFile,encoding='utf-8',index_label='date')
+        df.to_csv(quoFile,encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
     df['percent']=df['percent'].round(4)
     return df
