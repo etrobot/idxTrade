@@ -28,7 +28,7 @@ class idxTrade:#保存参数的类
                     if market=='cn':
                         cls=cmsK(stock['stock_symbol'])['close']
                     else:
-                        cls=getK(market,stock['stock_symbol'],(self.cfg['date']-timedelta(days=250)).strftime('%Y%m%d'),self.xq_a_token)['close']
+                        cls=getK(stock['stock_symbol'],self.cfg['date'],self.xq_a_token)['close']
                     if cls[-1]/cls[-2]<iCls[-1]/iCls[-2] and cls[-1]/cls[-5]<iCls[-1]/iCls[-5]:
                         stock['weight']=0
                         stock["proactive"] = True
