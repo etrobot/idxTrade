@@ -3,6 +3,7 @@ import sys
 from Selectors import *
 from XueqiuPortfolio import *
 from QuotaUtilities import *
+from lxml import etree
 
 class idxTrade:#保存参数的类
     def __init__(self,market=None,backtest=0):
@@ -35,9 +36,9 @@ class idxTrade:#保存参数的类
 
                 avalableNum=3-(len(position)-len(sell))
                 #检查买入
-                if ik['k'][ik['idx'] + '_sig'][-1]==1 and avalableNum>0:
+                if avalableNum>0:
                     # toBuy=pd.read_csv('md/'+self.mkt+ik['k'].index[-5].strftime("%Y%m%d")+'.csv').iloc[:10].copy()
-                    factor=[]
+                    # factor=[]
                     # for stock in toBuy['雪球代码']:
                     #     stockK=cmsK(stock)
                     #     factor.append(factor_2(stockK))
@@ -45,16 +46,22 @@ class idxTrade:#保存参数的类
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
                     toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
                     if self.mkt=='cn':
-                        filename = '../html/cn%s_U.html' % (ik['k'].index[-1].weekday+1)
+                        filename = '../html/cn%s_U.html' % (ik['k'].index[-1].weekday()+1)
                         if os.path.isfile(filename):
                             with open(filename, "r") as f:
-                                toBuy=toBuy[toBuy['symbol'].isin(f.read())]
+                                html = etree.HTML(f.read())
+                                symbols=[x.split('/')[-1] for x in html.xpath('//a/@href') ]
+                                toBuy=toBuy[toBuy['symbol'].isin(symbols)]
                     toBuy.dropna(subset=['_U'],inplace=True)
                     toBuy.sort_values(by='_U', ascending=True,inplace=True)
-                    if toBuy['symbol'][0] not in [x['stock_symbol'] for x in position]:
+                    cls = xueqiuK(toBuy['symbol'].values[0], (self.cfg['date'] - timedelta(days=250)).strftime('%Y%m%d'),
+                                  self.xq_a_token)['close']
+                    if cls[-1] / cls[-2] < iCls[-1] / iCls[-2] and cls[-1] / cls[-5] < iCls[-1] / iCls[-5]:
+                        return
+                    if toBuy['symbol'].values[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
-                        position.append(self.xueqiu.newPostition(market, toBuy['symbol'][0], 25))
+                        position.append(self.xueqiu.newPostition(market, toBuy['symbol'].values[0], 25))
                         # print(sell,toBuy,position)
                         self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
