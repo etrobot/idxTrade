@@ -31,7 +31,7 @@ def updateAllImg(mkt, pdate, calKeys):
                 if filename[-4:] == '.png':
                     tqdmRange.set_description('update ' + imgfolder + filename)
                     symbol = filename.split('_')[2]
-                    qdf = getK(mkt, symbol, pdate,g.xq_a_token,int(symbol in drawedSymbolList))
+                    qdf = getK(symbol, pdate,g.xq_a_token,int(symbol in drawedSymbolList))
                     draw(qdf, imgfolder + filename,dragonTigerBoard(symbol,g.xq_a_token))
                     drawedSymbolList.append(symbol)
 
@@ -338,7 +338,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     tqdmRange = tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s" % (mkt, v['行业'], k, v['name'])).ljust(25))
-        qdf = getK(mkt, k, pdate,g.xq_a_token, test)
+        qdf = getK(k, pdate,g.xq_a_token, test)
         indDf.at[k, 'past60Days'] = round(qdf['close'][-1] / min(qdf['close'][-60:]) - 1, 4)
         info = [mkt, v['行业'], k, v['name']]
         indDf.at[k, 'filename'] = IMG_FOLDER + str(pdate.weekday() + 1) + '/' + mkt + '/' + '_'.join(
@@ -380,11 +380,11 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         elif not g.testMode():
             vlines = dragonTigerBoard(k, g.xq_a_token)
         if not g.testMode() and k not in drawedSymbolList:
-            qdf = getK(mkt, k, pdate,g.xq_a_token, 1)
+            qdf = getK(k, pdate,g.xq_a_token, 1)
             draw(qdf, v['filename'], vlines)
             drawedSymbolList.append(k)
         elif not os.path.isfile(v['filename']):
-            qdf = getK(mkt, k, pdate,g.xq_a_token, 1)
+            qdf = getK(k, pdate,g.xq_a_token, 1)
             draw(qdf, v['filename'], vlines)
         deb = debts[debts.index == k]
         cur_year_perc = {k: v['current_year_percent'], dfmax.name: dfmax['current_year_percent']}

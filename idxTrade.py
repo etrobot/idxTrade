@@ -54,10 +54,6 @@ class idxTrade:#保存参数的类
                                 toBuy=toBuy[toBuy['symbol'].isin(symbols)]
                     toBuy.dropna(subset=['_U'],inplace=True)
                     toBuy.sort_values(by='_U', ascending=True,inplace=True)
-                    cls = getK(market,toBuy['symbol'].values[0], (self.cfg['date'] - timedelta(days=250)).strftime('%Y%m%d'),
-                                  self.xq_a_token)['close']
-                    if cls[-1] / cls[-2] < iCls[-1] / iCls[-2] and cls[-1] / cls[-5] < iCls[-1] / iCls[-5]:
-                        return
                     if toBuy['symbol'].values[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
