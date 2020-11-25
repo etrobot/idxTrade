@@ -118,23 +118,5 @@ if __name__=='__main__':
     # toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
     # toBuy.dropna(subset=['_U'], inplace=True)
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
-    fileList = os.listdir('../upknow/4/cn')
-    for mkt in ['cn','hk']:
-        for i in range(0,5):
-            for calKey in ['_J','_U']:  # 加入url参数（小时），让浏览器不使用缓存
-                filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
-                if os.path.isfile(filename):
-                    with open(filename, "r+") as f:
-                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
-                        output = output.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
-                        f.seek(0)
-                        f.write(output)
-                        f.truncate()
-            # imgfolder = IMG_FOLDER + str(i + 1) + '/' + mkt + '/'
-            # fileList = os.listdir(imgfolder)
-            # for filename in fileList:
-            #     if filename[-4:] == '.png':
-            #         symbol = filename.split('_')[2]
-            #         print(symbol)
-            #         qdf = xueqiuK(symbol=symbol, startDate=(date(2020,11,23) - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
-            #         draw(qdf, imgfolder + filename, dragonTigerBoard(symbol, xq_a_token))
+    thsIndustry('cn',date(2020,11,25))
+

@@ -224,7 +224,7 @@ def thsIndustry(mkt='cn', pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -248,6 +248,7 @@ def thsIndustry(mkt='cn', pdate=None):
             'float_shares', 'float_market_capital', 'pe_ttm', '行业']
     indDf = pd.DataFrame(columns=cols)
     tqdmRange = tqdm(gnbk.iterrows(), total=gnbk.shape[0])
+    last=[]
     for k, v in tqdmRange:
         tqdmRange.set_description(v['Name'])
         bk_code = str(k)
@@ -263,6 +264,11 @@ def thsIndustry(mkt='cn', pdate=None):
         if len(result) > 0:
             page = int(result[0].split('/')[-1])
         headers = {"user-agent": "Mozilla", "Cookie": "v={}".format(driver.get_cookies()[0]["value"])}
+        # lasturl='http://d.10jqka.com.cn/v4/time/bk_%s/last.js'%bk_code
+        # driver.get(lasturl)
+        # lastJson=re.findall(r'data":"(.*)","dotsCount',driver.page_source)[0].split(';')
+        # bkQuot=[float(x.split(',')[1]) for x in lastJson][-60:]
+        # last.append([v['Name'],bkQuot[-1]/bkQuot[0]])
         rows = []
         while count <= page:
             curl = p_url + '/detail/field/199112/order/desc/page/' + str(count) + '/ajax/1/code/' + bk_code
