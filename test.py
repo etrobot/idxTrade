@@ -118,6 +118,7 @@ if __name__=='__main__':
     # toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
     # toBuy.dropna(subset=['_U'], inplace=True)
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
-    print( 'sh000001'.upper()[2:8].isdigit())
+    k='sh000001'
+    print(k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8)
 
 
