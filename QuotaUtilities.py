@@ -8,6 +8,15 @@ from urllib import parse
 from concurrent.futures import ThreadPoolExecutor, as_completed,wait
 import lxml.html
 
+def getK(mkt, k, pdate,xq_a_token,test=0):
+    if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
+        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])
+    elif mkt == 'cn':
+        qdf = cmsK(k)
+    else:
+        qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
+    return qdf
+
 def checkTradingDay(mkt=None):#检查交易时间
     with open('idxTradeConfig.json') as f:
         config=json.load(f)

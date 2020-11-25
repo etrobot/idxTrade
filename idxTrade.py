@@ -28,7 +28,7 @@ class idxTrade:#保存参数的类
                     if market=='cn':
                         cls=cmsK(stock['stock_symbol'])['close']
                     else:
-                        cls=xueqiuK(stock['stock_symbol'],(self.cfg['date']-timedelta(days=250)).strftime('%Y%m%d'),self.xq_a_token)['close']
+                        cls=getK(market,stock['stock_symbol'],(self.cfg['date']-timedelta(days=250)).strftime('%Y%m%d'),self.xq_a_token)['close']
                     if cls[-1]/cls[-2]<iCls[-1]/iCls[-2] and cls[-1]/cls[-5]<iCls[-1]/iCls[-5]:
                         stock['weight']=0
                         stock["proactive"] = True
@@ -54,7 +54,7 @@ class idxTrade:#保存参数的类
                                 toBuy=toBuy[toBuy['symbol'].isin(symbols)]
                     toBuy.dropna(subset=['_U'],inplace=True)
                     toBuy.sort_values(by='_U', ascending=True,inplace=True)
-                    cls = xueqiuK(toBuy['symbol'].values[0], (self.cfg['date'] - timedelta(days=250)).strftime('%Y%m%d'),
+                    cls = getK(market,toBuy['symbol'].values[0], (self.cfg['date'] - timedelta(days=250)).strftime('%Y%m%d'),
                                   self.xq_a_token)['close']
                     if cls[-1] / cls[-2] < iCls[-1] / iCls[-2] and cls[-1] / cls[-5] < iCls[-1] / iCls[-5]:
                         return
