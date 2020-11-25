@@ -118,6 +118,6 @@ if __name__=='__main__':
     # toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
     # toBuy.dropna(subset=['_U'], inplace=True)
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
-    print(getK('00700',date(2020,11,25),xq_a_token))
+    print( 'sh000001'.upper()[2:8].isdigit())
 
 

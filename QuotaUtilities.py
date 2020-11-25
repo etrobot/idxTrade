@@ -11,7 +11,7 @@ import lxml.html
 def getK(k:str, pdate,xq_a_token,test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])
-    elif k.upper()[:2] in ['SH','SZ']:
+    elif k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit():
         qdf = cmsK(k)
     else:
         qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
@@ -125,7 +125,7 @@ def dragonTigerBoard(symbol,xq_a_token):
     for q in quoteData:
         if len(q)!=2:
             continue
-        if '专用' in str(q[0]['branches']) and '专用' not in str(q[1]['branches']):
+        if '专用' in str(q[0]['branches']) or '专用' in str(q[1]['branches']):
             tdateList.append(q[0]['td_date'])
     tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
     return tdateSeries
@@ -140,7 +140,7 @@ def dragonTigerBoards(pdate,xq_a_token):
     stocksDict=dict()
     checked=[]
     # print(klineSZZS.index[-60].date(),klineSZZS.index.date[-60])
-    tqdmRange=tqdm(klineSZZS.index[-20:].date)
+    tqdmRange=tqdm(klineSZZS.index[-10:].date)
     for d in tqdmRange:
         timestampstr=str(int(t.mktime(d.timetuple())*1000))
         if os.path.isfile('md/board'+timestampstr+'.json'):
@@ -161,7 +161,7 @@ def dragonTigerBoards(pdate,xq_a_token):
             df=pd.DataFrame(result)
 
         for s in df['symbol'].to_list():
-            tqdmRange.set_description(str(d)+'龙虎'+s)
+            tqdmRange.set_description(str(d)+'龙虎 '+s)
             if s in checked or s.startswith('SH688'):
                 continue
             checked.append(s)

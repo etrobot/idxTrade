@@ -409,7 +409,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     txt = '\n<br>'.join(article)
     title = ' '.join([mkt, pdate.strftime('%y/%m/%d'), datetime.now().strftime('%H:%M'), calKey])
     if mkt == 'cn' and calKey == '_U':
-        txt='\n<br>高亮k线代表当天被机构或港资买入，近期5日10日均线交缠\n<br>'+txt
+        txt='\n<br>高亮k线代表当天被机构或港资参与，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="https://xueqiu', '<a class="button is-dark" href="https://xueqiu') \
         .replace('/a>', '/a><br>') \

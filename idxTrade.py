@@ -74,7 +74,7 @@ class idxTrade:#保存参数的类
         return
 
 if __name__=='__main__':
-    if len(sys.argv)>1:
+    if len(sys.argv)==3:
         g = idxTrade(sys.argv[1], int(sys.argv[2]))
     else:
         g=idxTrade()
