@@ -400,7 +400,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         if len(deb) != 0:
             rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
                 v['name'], k, '债溢价' + deb['premium_rt'].values[0], deb['id'].values[0], capTpye, v[mCap],
-                round(v['pe_ttm']), cur_year_perc[k], calKey, v[calKey])
+                v['pe_ttm'], cur_year_perc[k], calKey, v[calKey])
         maxtxt = v['行业'] + '行业近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
             dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm'],0), dfmax['past60Days'] * 100,
             cur_year_perc[dfmax.name])
