@@ -45,19 +45,15 @@ class idxTrade:#保存参数的类
                     # toBuy['f']=factor
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
                     toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
-                    if self.mkt=='cn':
-                        filename = '../html/cn%s_U.html' % (ik['k'].index[-1].weekday()+1)
-                        if os.path.isfile(filename):
-                            with open(filename, "r") as f:
-                                html = etree.HTML(f.read())
-                                symbols=[x.split('/')[-1] for x in html.xpath('//a/@href') ]
-                                toBuy=toBuy[toBuy['symbol'].isin(symbols)]
-                    toBuy.dropna(subset=['_U'],inplace=True)
-                    toBuy.sort_values(by='_U', ascending=True,inplace=True)
-                    if toBuy['symbol'].values[0] not in [x['stock_symbol'] for x in position]:
+                    filename = '../html/%s%s_U.html' % (market,ik['k'].index[-1].weekday()+1)
+                    if os.path.isfile(filename):
+                        with open(filename, "r") as f:
+                            html = etree.HTML(f.read())
+                            symbols=[x.split('/')[-1] for x in html.xpath('//a/@href') ]
+                    if symbols[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
-                        position.append(self.xueqiu.newPostition(market, toBuy['symbol'].values[0], 25))
+                        position.append(self.xueqiu.newPostition(market, symbols[0], 25))
                         # print(sell,toBuy,position)
                         self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
