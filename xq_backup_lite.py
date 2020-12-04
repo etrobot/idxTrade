@@ -137,7 +137,7 @@ def cauculate(dfk):
     closes = dfk['close']
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
-    mtm_1 = sum(closes[i]/min(closes[-5:].mean(),closes[0])-1 for i in range(len(vol)))*vol[-1]/vol.mean()
+    mtm_1 = abs(closes[-1]-closes[-20:].mean())/(closes[-20]-closes[-1])*vol.argmax()*closes[-1]/closes[-2]
     mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[
                                                                                                                 -5:].mean() / vol[
                                                                                                                               -20:].mean()
