@@ -8,11 +8,12 @@ import time as t
 from datetime import *
 import configparser
 
-def xqStockInfo(mkt, code, s, h):  # 雪球股票信息
+def xqStockInfo(mkt, code:str, s, h):  # 雪球股票信息
+    code=code.upper()
     data = {
         'code': str(code),
-        'size': '300',
-        'key': '47bce5c74f',
+        'size': '30',
+        # 'key': '47bce5c74f',
         'market': mkt,
     }
     r = s.get("https://xueqiu.com/stock/p/search.json", headers=h, params=data)
@@ -20,7 +21,9 @@ def xqStockInfo(mkt, code, s, h):  # 雪球股票信息
     stocks = stocks['stocks']
     stock = None
     if len(stocks) > 0:
-        stock = stocks[0]
+        for info in stocks:
+            if info['code']==code:
+                return info
     return stock
 
 def send_email(subject,content):
