@@ -141,7 +141,7 @@ def cauculate(dfk):
     mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[
                                                                                                                 -5:].mean() / vol[
                                                                                                                               -20:].mean()
-    return {'_J': round(mtm_1, 12), '_U': round(mtm_2, 12)}
+    return {'_U': round(mtm_1, 12), '_J': round(mtm_2, 12)}
 
 
 def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
