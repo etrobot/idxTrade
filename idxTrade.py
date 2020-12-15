@@ -45,7 +45,7 @@ class idxTrade:#保存参数的类
                     # toBuy['f']=factor
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
                     # toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
-                    filename = '../html/%s%s_U.html' % (market,ik['k'].index[-1].weekday()+1)
+                    filename = '../html/%s%s_J.html' % (market,ik['k'].index[-1].weekday()+1)
                     if os.path.isfile(filename):
                         with open(filename, "r") as f:
                             html = etree.HTML(f.read())
