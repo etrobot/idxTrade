@@ -34,7 +34,7 @@ class idxTrade:#保存参数的类
                         stock["proactive"] = True
                         sell.append(stock['stock_symbol'])
 
-                avalableNum=3-(len(position)-len(sell))
+                avalableNum=4-(len(position)-len(sell))
                 #检查买入
                 if avalableNum>0:
                     # toBuy=pd.read_csv('md/'+self.mkt+ik['k'].index[-5].strftime("%Y%m%d")+'.csv').iloc[:10].copy()
@@ -53,7 +53,7 @@ class idxTrade:#保存参数的类
                     if symbols[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
-                        position.append(self.xueqiu.newPostition(market, symbols[0], 25))
+                        position.append(self.xueqiu.newPostition(market, symbols[0], 21))
                         # print(sell,toBuy,position)
                         self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
