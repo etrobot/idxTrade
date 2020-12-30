@@ -362,7 +362,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
-    if mkt=='cn' and calKey=='_U':
+    if mkt=='cn' and calKey=='_J':
         df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
     else:
         df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
