@@ -138,9 +138,7 @@ def cauculate(dfk):
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
     mtm_1 = abs(closes[-1]-closes[-20:].mean())/(closes[-20]-closes[-1]-0.0001)*vol.argmax()*closes[-1]/closes[-2]
-    mtm_2 = (closes[-10:].mean() - closes[-20:].mean()) / (closes[-5:].mean() - closes[-10:].mean() - 0.0001) * vol[
-                                                                                                                -5:].mean() / vol[
-                                                                                                                              -20:].mean()
+    mtm_2 = (closes[-10:].mean()-closes.mean())/((max(closes[-5:])+min(closes[-5:]))/2-closes[-10:].mean())*vol.argmin()
     return {'_U': round(mtm_2, 12), '_J': round(mtm_1, 12)}
 
 
@@ -362,7 +360,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
-    if mkt=='cn' and calKey=='_J':
+    if mkt=='cn' and calKey=='_U':
         df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
     else:
         df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]

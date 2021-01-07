@@ -125,7 +125,7 @@ def dragonTigerBoard(symbol,xq_a_token):
     for q in quoteData:
         if len(q)!=2:
             continue
-        if '专用' in str(q[0]['branches']) or '专用' in str(q[1]['branches']):
+        if '股通' in str(q[0]['branches']):
             tdateList.append(q[0]['td_date'])
     tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
     return tdateSeries
@@ -148,7 +148,6 @@ def dragonTigerBoards(pdate,xq_a_token):
             stocks.extend(df['symbol'].to_list())
         else:
             url = 'https://xueqiu.com/service/v5/stock/hq/longhu?date=' + timestampstr
-            print(url)
             response = requests.get(url=url,
                                     headers={"user-agent": "Mozilla", "cookie": xq_a_token, "Connection": "close"},
                                     timeout=5)
