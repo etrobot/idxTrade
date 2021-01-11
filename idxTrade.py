@@ -29,7 +29,7 @@ class idxTrade:#保存参数的类
                         cls=cmsK(stock['stock_symbol'])['close']
                     else:
                         cls=getK(stock['stock_symbol'],self.cfg['date'],self.xq_a_token)['close']
-                    if cls[-1]/cls[-2]<iCls[-1]/iCls[-2] and cls[-1]/cls[-5]<iCls[-1]/iCls[-5]:
+                    if cls[-1]/cls[-2]<iCls[-1]/iCls[-2] and cls[-1]/cls[-7]<iCls[-1]/iCls[-7]:
                         stock['weight']=0
                         stock["proactive"] = True
                         sell.append(stock['stock_symbol'])
