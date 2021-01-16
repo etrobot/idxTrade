@@ -125,7 +125,7 @@ def dragonTigerBoard(symbol,xq_a_token):
     for q in quoteData:
         if len(q)!=2:
             continue
-        if '股通' in str(q[0]['branches']):
+        if '股通' in str(q[0]['branches']) and '股通' not in str(q[1]['branches']):
             tdateList.append(q[0]['td_date'])
     tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
     return tdateSeries
