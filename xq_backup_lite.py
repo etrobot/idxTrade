@@ -137,7 +137,7 @@ def cauculate(dfk):
     closes = dfk['close']
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
-    mtm_1 = abs(closes[-1]-closes[-20:].mean())/(closes[-20]-closes[-1]-0.0001)*vol.argmax()*closes[-1]/closes[-2]
+    mtm_1 = abs(closes[-10:].mean()-closes.mean())/(closes[-1]-closes[-10:].mean())
     mtm_2 = (closes[-10:].mean()-closes.mean())/((max(closes[-5:])+min(closes[-5:]))/2-closes[-10:].mean())*vol.argmin()
     return {'_U': round(mtm_2, 12), '_J': round(mtm_1, 12)}
 
@@ -434,7 +434,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(
         title=title, gAds=gAds)
-    with open('../html/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
+    with open('../etrobot.github.io/Quant/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
         finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div></body></html>'
         f.write(finalhtml)
         mlog('complete' + title)
