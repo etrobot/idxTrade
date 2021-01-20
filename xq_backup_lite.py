@@ -8,7 +8,7 @@ from idxTrade import *
 from selenium import webdriver
 
 ENCODE_IN_USE = 'GBK'
-IMG_FOLDER = '../upknow/'
+IMG_FOLDER = '../../upknow/'
 
 
 def updateAllImg(mkt, pdate, calKeys):
