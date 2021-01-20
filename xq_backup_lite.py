@@ -8,7 +8,7 @@ from idxTrade import *
 from selenium import webdriver
 
 ENCODE_IN_USE = 'GBK'
-IMG_FOLDER = '../../upknow/'
+IMG_FOLDER = '../upknow/'
 
 
 def updateAllImg(mkt, pdate, calKeys):
@@ -222,18 +222,20 @@ def thsIndustry(mkt='cn', pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument("--disable-blink-features")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    # options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    # options.add_experimental_option('useAutomationExtension', False)
     driver = webdriver.Chrome(executable_path='./chromedriver', options=options)
-    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": """
-            Object.defineProperty(navigator, 'webdriver', {
-              get: () => undefined
-            })
-          """
-    })
+    # with open('stealth.min.js') as f:
+    #     js = f.read()
+    #     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+    #         "source": js
+    #     })
     # 板块代码
     bkcode = html.xpath('/html/body/div[2]/div[1]/div//div//div//a/@href')
     bkcode = list(map(lambda x: x.split('/')[-2], bkcode))
