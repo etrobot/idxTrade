@@ -17,7 +17,7 @@ def updateAllImg(mkt, pdate, calKeys):
     for i in tqdmRange:
         if pdate.weekday() != i:
             for calKey in calKeys:  # 加入url参数（小时），让浏览器不使用缓存
-                filename = '../html/%s%s%s.html' % (mkt, i + 1, calKey)
+                filename = '../etrobot.github.io/Quant/%s%s%s.html' % (mkt, i + 1, calKey)
                 if os.path.isfile(filename):
                     with open(filename, "r+") as f:
                         output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
