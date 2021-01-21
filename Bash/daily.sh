@@ -1,5 +1,9 @@
 #!/bin/bash
 curPath="$(dirname "$0")"
+
+cd $curPath/../etrobot.github.io || exit
+git pull
+
 cd $curPath || exit
 
 if [ $1 == "us" ]; then

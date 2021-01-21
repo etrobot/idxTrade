@@ -15,7 +15,7 @@ cd "$(dirname "$0")" || exit
 cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
-cd ../etrobot.github.io/Quant || exit
+cd ../etrobot.github.io || exit
 git add .
 git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
 git push --set-upstream origin master
