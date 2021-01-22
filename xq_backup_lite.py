@@ -222,7 +222,7 @@ def thsIndustry(mkt='cn', pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
     options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
+    options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -436,7 +436,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(
         title=title, gAds=gAds)
-    with open('../etrobot.github.io/Quant/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
+    with open('../CMS/source/Quant/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
         finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div></body></html>'
         f.write(finalhtml)
         mlog('complete' + title)
