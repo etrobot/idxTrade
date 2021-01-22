@@ -1,7 +1,7 @@
 #!/bin/bash
 curPath="$(dirname "$0")"
 
-cd $curPath/../etrobot.github.io || exit
+cd $(dirname $(pwd))/etrobot.github.io || exit
 git pull
 
 cd $curPath || exit
