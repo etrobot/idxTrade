@@ -433,7 +433,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     if mkt == 'cn' and calKey == '_U':
         txt='\n<br>高亮k线代表当天被港资大力买入，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
-        .replace('<a href="https://xueqiu', '<a class="button is-dark" href="https://xueqiu') \
+        .replace('<a href="https://xueqiu', '<a class="button is-black" href="https://xueqiu') \
         .replace('/a>', '/a><br>') \
         .replace('a><br> <a', 'a><a') \
         .replace('TTMnan', '亏损') \
@@ -454,10 +454,10 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         </script>'''
     css = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
-    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}</head>\
-        <body class="has-background-grey-dark has-text-white-ter"><div class="container">\
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}{style}</head>\
+        <body class="bgc has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(
-        title=title, gAds=gAds)
+        title=title, gAds=gAds,style='<style>.bgc{background-color: #33363b;}</style>')
     with open('../CMS/source/Quant/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
         finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div></body></html>'
         f.write(finalhtml)
