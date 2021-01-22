@@ -202,6 +202,26 @@ def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
     mktDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return mktDf
 
+def usHot(pdate:date,xq_a_token:str):
+    mktDf=pd.DataFrame()
+    for ustype in ['us_star','us_china']:
+        page=0
+        while True:
+            page+=1
+            url='https://xueqiu.com/service/v5/stock/screener/quote/list?page=%s&size=90&order=desc&orderby=percent&order_by=percent&market=US&type=%s'%(page,ustype)
+            resp = requests.get(url=url, headers={"user-agent": "Mozilla", "cookie": xq_a_token})
+            data = json.loads(resp.text)
+            if len(data['data']['list']) == 0:
+                break
+            df=pd.DataFrame(data['data']['list'])
+            df['行业'] = {'us_star': '美明星股', 'us_china': '中概股'}[ustype]
+            mktDf=mktDf.append(df)
+    mktDf = mktDf.loc[mktDf['current'] >= 1.0]
+    mktDf.set_index('symbol', inplace=True)
+    mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
+    mktDf['market_capital'] = mktDf['market_capital'].astype('float').div(100000000.0).round(1)
+    mktDf.to_csv('md/' + 'us' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
+    return mktDf
 
 def thsIndustry(mkt='cn', pdate=None):
     p_url = 'http://q.10jqka.com.cn/thshy'
@@ -325,6 +345,8 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf.set_index('symbol', inplace=True)
     elif mkt == 'cn':
         indDf = thsIndustry(mkt, pdate)
+    elif mkt=='us':
+        indDf=usHot(pdate,g.xq_a_token)
     else:
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
     avgAmount = indDf['amount'].mean()
