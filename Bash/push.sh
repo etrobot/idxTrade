@@ -16,7 +16,9 @@ cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
 cd ../CMS || exit
-git pull
 hexo clean
 hexo g
+git add .
+git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
+git push
 hexo deploy

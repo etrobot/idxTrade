@@ -9,6 +9,9 @@ else
   rm -f ../../upknow/"$(date +%w)"/$1/*.png
 fi
 
-cd .. && /usr/local/Cellar/python@3.8/3.8.6_1/bin/python3 -u xq_backup_lite.py $1 $2;
+cd ../../CMS || exit
+git pull
+
+cd ../idxTrade && /usr/local/Cellar/python@3.8/3.8.6_1/bin/python3 -u xq_backup_lite.py $1 $2;
 
 bash $curPath/push.sh
