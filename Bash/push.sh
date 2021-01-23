@@ -16,6 +16,7 @@ cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
 cd ../CMS || exit
+git pull
 hexo clean
 hexo g
 hexo deploy
