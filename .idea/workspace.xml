@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/idxTrade.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/idxTrade.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="bg color">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,10 +118,10 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.test" />
-      <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.Research" />
       <item itemvalue="Python.idxTrade" />
+      <item itemvalue="Python.test" />
+      <item itemvalue="Python.xq_backup_lite" />
     </list>
     <recent_temporary>
       <list>
@@ -143,13 +140,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00041" summary="chromedriver">
-      <created>1605259575555</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1605259575556</updated>
     </task>
     <task id="LOCAL-00042" summary="bak">
       <created>1605327877554</created>
@@ -487,7 +477,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611336620576</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="bg color">
+      <created>1611339475424</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1611339475425</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -559,7 +556,8 @@
     <MESSAGE value="fix bug" />
     <MESSAGE value="update" />
     <MESSAGE value="add us hot" />
-    <option name="LAST_COMMIT_MESSAGE" value="add us hot" />
+    <MESSAGE value="bg color" />
+    <option name="LAST_COMMIT_MESSAGE" value="bg color" />
   </component>
   <component name="WindowStateProjectService">
     <state x="140" y="0" key="#Notifications" timestamp="1603116596849">
@@ -578,50 +576,54 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="315" y="0" key="#xq_backup_lite/0.0.1280.800@0.0.1280.800" timestamp="1603299593396" />
-    <state x="225" y="0" key="CommitChangelistDialog2" timestamp="1611336620269">
+    <state x="225" y="0" key="CommitChangelistDialog2" timestamp="1611339552068">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="225" y="0" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1611336620269" />
-    <state x="99" y="100" width="1080" height="600" key="DiffContextDialog" timestamp="1603300115854">
+    <state x="225" y="0" key="CommitChangelistDialog2/0.0.1280.800@0.0.1280.800" timestamp="1611339552068" />
+    <state x="99" y="100" width="1080" height="600" key="DiffContextDialog" timestamp="1611339540993">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="99" y="100" width="1080" height="600" key="DiffContextDialog/0.0.1280.800@0.0.1280.800" timestamp="1603300115854" />
-    <state width="1255" height="180" key="GridCell.Tab.0.bottom" timestamp="1611339409973">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state x="99" y="100" width="1080" height="600" key="DiffContextDialog/0.0.1280.800@0.0.1280.800" timestamp="1611339540993" />
+    <state width="1255" height="180" key="GridCell.Tab.0.bottom" timestamp="1611340399402">
+      <screen x="0" y="25" width="1280" height="775" />
     </state>
-    <state width="1255" height="180" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1611339409973" />
+    <state width="1255" height="180" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1611339498311" />
     <state width="1255" height="201" key="GridCell.Tab.0.bottom/0.23.1280.777@0.23.1280.777" timestamp="1603215989203" />
-    <state width="1255" height="180" key="GridCell.Tab.0.bottom/0.25.1280.775@0.25.1280.775" timestamp="1606062149792" />
-    <state width="1255" height="180" key="GridCell.Tab.0.center" timestamp="1611339409971">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state width="1255" height="180" key="GridCell.Tab.0.bottom/0.25.1280.775@0.25.1280.775" timestamp="1611340399402" />
+    <state width="1255" height="180" key="GridCell.Tab.0.center" timestamp="1611340399397">
+      <screen x="0" y="25" width="1280" height="775" />
     </state>
-    <state width="1255" height="180" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1611339409971" />
+    <state width="1255" height="180" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1611339498308" />
     <state width="1255" height="201" key="GridCell.Tab.0.center/0.23.1280.777@0.23.1280.777" timestamp="1603215989201" />
-    <state width="1255" height="180" key="GridCell.Tab.0.center/0.25.1280.775@0.25.1280.775" timestamp="1606062149790" />
-    <state width="1255" height="180" key="GridCell.Tab.0.left" timestamp="1611339409970">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state width="1255" height="180" key="GridCell.Tab.0.center/0.25.1280.775@0.25.1280.775" timestamp="1611340399397" />
+    <state width="1255" height="180" key="GridCell.Tab.0.left" timestamp="1611340399397">
+      <screen x="0" y="25" width="1280" height="775" />
     </state>
-    <state width="1255" height="180" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1611339409970" />
+    <state width="1255" height="180" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1611339498307" />
     <state width="1255" height="201" key="GridCell.Tab.0.left/0.23.1280.777@0.23.1280.777" timestamp="1603215989200" />
-    <state width="1255" height="180" key="GridCell.Tab.0.left/0.25.1280.775@0.25.1280.775" timestamp="1606062149788" />
-    <state width="1255" height="180" key="GridCell.Tab.0.right" timestamp="1611339409972">
-      <screen x="0" y="0" width="1280" height="800" />
+    <state width="1255" height="180" key="GridCell.Tab.0.left/0.25.1280.775@0.25.1280.775" timestamp="1611340399397" />
+    <state width="1255" height="180" key="GridCell.Tab.0.right" timestamp="1611340399398">
+      <screen x="0" y="25" width="1280" height="775" />
     </state>
-    <state width="1255" height="180" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1611339409972" />
+    <state width="1255" height="180" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1611339498310" />
     <state width="1255" height="201" key="GridCell.Tab.0.right/0.23.1280.777@0.23.1280.777" timestamp="1603215989202" />
-    <state width="1255" height="180" key="GridCell.Tab.0.right/0.25.1280.775@0.25.1280.775" timestamp="1606062149791" />
+    <state width="1255" height="180" key="GridCell.Tab.0.right/0.25.1280.775@0.25.1280.775" timestamp="1611340399398" />
     <state x="290" y="58" key="MultipleFileMergeDialog" timestamp="1611332658554">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="290" y="58" key="MultipleFileMergeDialog/0.0.1280.800@0.0.1280.800" timestamp="1611332658554" />
+    <state x="403" y="63" key="RollbackChangesDialog" timestamp="1611339628376">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="403" y="63" key="RollbackChangesDialog/0.0.1280.800@0.0.1280.800" timestamp="1611339628376" />
     <state x="33" y="0" key="SettingsEditor" timestamp="1611333897746">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="33" y="0" key="SettingsEditor/0.0.1280.800@0.0.1280.800" timestamp="1611333897746" />
-    <state x="140" y="79" key="Vcs.Push.Dialog.v2" timestamp="1611336622672">
+    <state x="140" y="79" key="Vcs.Push.Dialog.v2" timestamp="1611339643389">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="140" y="79" key="Vcs.Push.Dialog.v2/0.0.1280.800@0.0.1280.800" timestamp="1611336622672" />
+    <state x="140" y="79" key="Vcs.Push.Dialog.v2/0.0.1280.800@0.0.1280.800" timestamp="1611339643389" />
     <state x="407" y="306" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1611334006866">
       <screen x="0" y="0" width="1280" height="800" />
     </state>

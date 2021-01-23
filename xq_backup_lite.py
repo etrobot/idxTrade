@@ -207,15 +207,21 @@ def usHot(pdate:date,xq_a_token:str):
     for ustype in ['us_star','us_china']:
         page=0
         while True:
-            page+=1
-            url='https://xueqiu.com/service/v5/stock/screener/quote/list?page=%s&size=90&order=desc&orderby=percent&order_by=percent&market=US&type=%s'%(page,ustype)
-            resp = requests.get(url=url, headers={"user-agent": "Mozilla", "cookie": xq_a_token})
-            data = json.loads(resp.text)
-            if len(data['data']['list']) == 0:
-                break
-            df=pd.DataFrame(data['data']['list'])
-            df['行业'] = {'us_star': '美明星股', 'us_china': '中概股'}[ustype]
-            mktDf=mktDf.append(df)
+            try:
+                page+=1
+                url='https://xueqiu.com/service/v5/stock/screener/quote/list?page=%s&size=90&order=desc&orderby=percent&order_by=percent&market=US&type=%s'%(page,ustype)
+                resp = requests.get(url=url, headers={"user-agent": "Mozilla", "cookie": xq_a_token})
+                data = json.loads(resp.text)
+                if len(data['data']['list']) == 0:
+                    break
+                df=pd.DataFrame(data['data']['list'])
+                df['行业'] = {'us_star': '美明星股', 'us_china': '中概股'}[ustype]
+                mktDf=mktDf.append(df)
+            except Exception as e:
+                mlog(e.args)
+                mlog('retrying...')
+                t.sleep(20)
+                continue
     mktDf = mktDf.loc[mktDf['current'] >= 1.0]
     mktDf.set_index('symbol', inplace=True)
     mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
