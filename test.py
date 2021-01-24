@@ -90,7 +90,7 @@ def tencentQuotaAbu(mkt,symbol):
 if __name__=='__main__':
     # print(list({'abc':'cccc'}).values()[0])
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
-    usHot(xq_a_token)
+    # usHot(xq_a_token)
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
     # mthk=cmsK('SZ300638')
@@ -120,5 +120,6 @@ if __name__=='__main__':
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
     # k='sh000001'
     # print(k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8)
+    print(getLimit(date(2021,1,22))['代码'].tolist())
 
 

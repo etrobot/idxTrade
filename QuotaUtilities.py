@@ -8,6 +8,77 @@ from urllib import parse
 from concurrent.futures import ThreadPoolExecutor, as_completed,wait
 import lxml.html
 
+def getLimit(pdate:date,fname=None,mode=None):
+    zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + pdate.strftime("%Y%m%d") + ".js"
+    zdt_indexx = [u'代码', u'名称', u'最新价格', u'涨跌幅', u'封成比', u'封流比', u'封单金额', u'最后一次涨停时间',
+                  u'第一次涨停时间', u'打开次数',u'振幅', u'涨停强度']
+    header_zdt = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Upgrade-Insecure-Requests': '1',
+        'Host': 'home.flashdata2.jrj.com.cn',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Safari/605.1.15',
+        'Accept-Language': 'en-us',
+        'Accept-Encoding': 'gzip, deflate',
+        'Connection': 'close',
+    }
+
+    #获取昨日连板
+    if mode is not None:
+        zdt_url = 'http://hqdata.jrj.com.cn/zrztjrbx/limitup.js'+'?_='+str(t.time()).replace('.','')[:13]
+        zdt_indexx = [u'序号', u'代码', u'名称',u'最后一次涨停时间', u'最新价格', u'涨跌幅', u'最大涨幅',u'最大跌幅',u'是否连续涨停',
+                      u'连续涨停次数',u'昨日强度', u'今日强度', u'是否开板', u'上个交易日',u'昨日涨停价',u'今日开盘价',u'开盘涨幅 ']
+        header_zdt = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Upgrade-Insecure-Requests': '1',
+            'Host': 'hqdata.jrj.com.cn',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Safari/605.1.15',
+            'Accept-Language': 'en-us',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+        }
+        # {index: 0, stockcode: 1, stockname: 2, lastzttime: 3, nowprice: 4, pricelimit: 5, highlimit: 6, lowlimit: 7,
+        #  iscon: 8, conztnums: 9, lastforce: 10, todayforce: 11, isstop: 12, lasttradedate: 13, lastcloseprice: 14,
+        #  openprice: 15, openlimit: 16}
+
+    mlog(zdt_url)
+    s = requests.Session()
+
+    try:
+        resp = s.get(zdt_url, headers=header_zdt)
+        mlog(resp.text)
+        if resp.status_code == 404:
+            mlog(resp.status_code)
+        md_check = re.findall('summary|lasttradedate', resp.text)
+        if resp.text and len(md_check) > 0:
+            p = re.compile(r'"Data":(.*)};', re.S)
+            if len(resp.text) <= 0:
+                mlog('Content\'s length is 0')
+                exit(0)
+            result = p.findall(resp.text.replace('Infinity','0').replace('\r','').replace('\n','').replace(',,',',"",'))
+            if result:
+                try:
+                    t1 = result[0]
+                    t2 = list(eval(t1))
+                    t2.reverse()
+                    for i in range(len(t2)):
+                        if t2[i][0].startswith('6'):
+                            t2[i][0]='SH'+t2[i][0]
+                        else:
+                            t2[i][0] = 'SZ' + t2[i][0]
+                    df = pd.DataFrame(t2, columns=zdt_indexx)
+                    if fname is not None:
+                        df.to_csv(fname)
+                    elif mode is not None:
+                        df.to_csv('./limit/'+re.compile(r'"lasttradedate":"(.*)",\r\n"Column', re.S).findall(resp.text)[0]+'.csv')
+                    return df
+                except Exception as e:
+                    mlog(e)
+        else:
+            mlog('failed to get content')
+    except Exception as e:
+        mlog(e)
+
+
 def getK(k:str, pdate,xq_a_token,test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])

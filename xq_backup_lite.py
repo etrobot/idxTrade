@@ -390,8 +390,11 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
-    if mkt=='cn' and calKey=='_U':
-        df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
+    if mkt=='cn':
+        if calKey=='_U':
+            df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
+        else:
+            df = df[df.index.isin(getLimit(pdate)['代码'])].sort_values(by=[calKey], ascending=True).iloc[:num]
     else:
         df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'
