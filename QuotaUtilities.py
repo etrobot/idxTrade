@@ -70,7 +70,8 @@ def getLimit(pdate:date,fname=None,mode=None):
                         df.to_csv(fname)
                     elif mode is not None:
                         df.to_csv('./limit/'+re.compile(r'"lasttradedate":"(.*)",\r\n"Column', re.S).findall(resp.text)[0]+'.csv')
-                    return df
+                    if mode is None:
+                        return df.sort_values(by=['振幅'], ascending=False)
                 except Exception as e:
                     mlog(e)
         else:
