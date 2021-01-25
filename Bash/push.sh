@@ -16,9 +16,9 @@ cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
 cd ../CMS || exit
-hexo clean
-hexo g
+/usr/local/lib/node_modules/hexo-cli/bin/hexo clean
+/usr/local/lib/node_modules/hexo-cli/bin/hexo g
 git add .
 git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
 git push
-hexo deploy
+/usr/local/lib/node_modules/hexo-cli/bin/hexo deploy
