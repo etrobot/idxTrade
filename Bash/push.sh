@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 gitPush(){
 git checkout --orphan newBranch
@@ -16,9 +16,9 @@ cd ../../upknow || exit
 gitPush
 /usr/local/bin/node ../gitee.js
 cd ../CMS || exit
-/usr/local/lib/node_modules/hexo-cli/bin/hexo clean
-/usr/local/lib/node_modules/hexo-cli/bin/hexo g
+/usr/local/bin/hexo clean
+/usr/local/bin/hexo g
 git add .
 git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
 git push
-/usr/local/lib/node_modules/hexo-cli/bin/hexo deploy
+/usr/local/bin/hexo deploy

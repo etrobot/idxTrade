@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 curPath="$(dirname "$0")"
 
 cd $curPath || exit

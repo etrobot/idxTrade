@@ -394,7 +394,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         if calKey=='_U':
             df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
         else:
-            df = df[df.index.isin(getLimit(pdate)['代码'][:30])].sort_values(by=[calKey], ascending=True).iloc[:num]
+            df = df[df.index.isin(getLimit(pdate)['代码'])].sort_values(by=[calKey], ascending=True).iloc[:num]
     else:
         df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'
