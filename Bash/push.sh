@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+source /Users/admin/.bash_profile
 
 gitPush(){
 git checkout --orphan newBranch
@@ -14,11 +16,11 @@ git gc --aggressive --prune=now # remove the old files 2
 cd "$(dirname "$0")" || exit
 cd ../../upknow || exit
 gitPush
-/usr/local/bin/node ../gitee.js
+node ../gitee.js
 cd ../CMS || exit
-/usr/local/bin/hexo clean
-/usr/local/bin/hexo g
+hexo clean
+hexo g
 git add .
 git commit -m "$(date "+%Y-%m-%d %H:%M:%S")"
 git push
-/usr/local/bin/hexo deploy
+hexo deploy
