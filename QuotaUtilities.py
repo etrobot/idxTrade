@@ -8,7 +8,16 @@ from urllib import parse
 from concurrent.futures import ThreadPoolExecutor, as_completed,wait
 import lxml.html
 
-def getLimit(pdate:date,fname=None,mode=None):
+def getK(k:str, pdate,xq_a_token=None,test=0):
+    if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
+        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])
+    elif k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8:
+        qdf = cmsK(k)
+    elif xq_a_token is not None:
+        qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
+    return qdf
+
+def getLimit(pdate:date=None,fname=None,mode=None):
     zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + pdate.strftime("%Y%m%d") + ".js"
     zdt_indexx = [u'代码', u'名称', u'最新价格', u'涨跌幅', u'封成比', u'封流比', u'封单金额', u'最后一次涨停时间',
                   u'第一次涨停时间', u'打开次数',u'振幅', u'涨停强度']
@@ -79,15 +88,6 @@ def getLimit(pdate:date,fname=None,mode=None):
     except Exception as e:
         mlog(e)
 
-
-def getK(k:str, pdate,xq_a_token,test=0):
-    if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
-        qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])
-    elif k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8:
-        qdf = cmsK(k)
-    else:
-        qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
-    return qdf
 
 def checkTradingDay(mkt=None):#检查交易时间
     with open('idxTradeConfig.json') as f:
