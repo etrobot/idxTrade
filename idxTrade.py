@@ -30,7 +30,7 @@ class idxTrade:#保存参数的类
                     else:
                         cls=getK(stock['stock_symbol'],self.cfg['date'],self.xq_a_token)['close']
                     sellSignal=False
-                    if cls[-1]/cls[-7]<iCls[-1]/iCls[-7] and cls[-1]/cls[-2]<iCls[-1]/iCls[-2]:
+                    if cls[-1]/cls[-6]<iCls[-1]/iCls[-6] and cls[-1]/cls[-2]<iCls[-1]/iCls[-2]:
                         sellSignal = True
                     if stock['weight']>30:
                         sellSignal = True
