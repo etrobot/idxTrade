@@ -75,10 +75,7 @@ def getLimit(pdate:date=None,fname=None,mode=None):
                         else:
                             t2[i][0] = 'SZ' + t2[i][0]
                     df = pd.DataFrame(t2, columns=zdt_indexx)
-                    if fname is not None:
-                        df.to_csv(fname)
-                    elif mode is not None:
-                        df.to_csv('./limit/'+re.compile(r'"lasttradedate":"(.*)",\r\n"Column', re.S).findall(resp.text)[0]+'.csv')
+                    df.to_csv('md/limit'+pdate.strftime("%Y%m%d")+'.csv')
                     if mode is None:
                         return df[~df['代码'].astype(str).str.startswith('SH688') & ~df['代码'].astype(str).str.startswith('SZ3')]
                 except Exception as e:
@@ -212,7 +209,7 @@ def dragonTigerBoards(pdate,xq_a_token):
     stocksDict=dict()
     checked=[]
     # print(klineSZZS.index[-60].date(),klineSZZS.index.date[-60])
-    tqdmRange=tqdm(klineSZZS.index[-10:].date)
+    tqdmRange=tqdm(klineSZZS.index[-20:].date)
     for d in tqdmRange:
         timestampstr=str(int(t.mktime(d.timetuple())*1000))
         if os.path.isfile('md/board'+timestampstr+'.json'):
