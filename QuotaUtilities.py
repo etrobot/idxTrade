@@ -194,7 +194,7 @@ def dragonTigerBoard(symbol,xq_a_token):
     for q in quoteData:
         if len(q)!=2:
             continue
-        for branch in q[0]['branchs']:
+        for branch in q[0]['branches']:
             if '股通' in branch['branch_name'] and branch['net_amt']>0:
                 tdateList.append(q[0]['td_date'])
                 break
