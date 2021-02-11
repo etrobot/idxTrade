@@ -86,7 +86,7 @@ def getLimit(pdate:date=None,fname=None,mode=None):
         mlog(e)
 
 
-def checkTradingDay(mkt=None):#检查交易时间
+def checkTradingDay(mkt=None,pdate=None):#检查交易时间
     with open('idxTradeConfig.json') as f:
         config=json.load(f)
     today = datetime.now()
@@ -96,7 +96,9 @@ def checkTradingDay(mkt=None):#检查交易时间
         cfg['xq_a_token'] = 'xq_a_token=' + response.cookies['xq_a_token'] + ';'
         html = lxml.html.etree.HTML(response.text)
         timeinfo = html.xpath('//div[@class="stock-time"]/span/text()')
-        cfg['date']= pd.to_datetime(xqQuot(symbol=cfg['url'].split('/')[-1],cookie=cfg['xq_a_token'])['item'][-1][0],unit='ms',utc=True).tz_convert('Asia/Shanghai').date()
+        cfg['date'] = pdate
+        if pdate is None:
+            cfg['date']= pd.to_datetime(xqQuot(symbol=cfg['url'].split('/')[-1],cookie=cfg['xq_a_token'])['item'][-1][0],unit='ms',utc=True).tz_convert('Asia/Shanghai').date()
         print(market + ' '.join(timeinfo),cfg['date'])
         if mkt is not None:
             if market == mkt:

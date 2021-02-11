@@ -248,7 +248,7 @@ def thsIndustry(mkt='cn', pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -484,9 +484,9 @@ def preparePlot():
 
 
 class params:
-    def __init__(self, market=None, test=0):
+    def __init__(self, market=None, test=0,pdate=None):
         self.test = test
-        mkt, cfg = checkTradingDay(market)  # 交易时间
+        mkt, cfg = checkTradingDay(market,pdate)  # 交易时间
         self.xq_a_token = cfg[mkt]['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
         self.boardlist ={}
@@ -506,8 +506,11 @@ if __name__ == '__main__':
         filename='daily.log',
         level=logging.DEBUG
     )
-    if len(sys.argv) > 2:
+    if len(sys.argv) == 3:
         g = params(market=sys.argv[1], test=int(sys.argv[2]))
+    if len(sys.argv) == 4:
+        dateInts=[int(x) for x in sys.argv[3].split('-')]
+        g = params(market=sys.argv[1], test=int(sys.argv[2]),pdate=date(dateInts[0],dateInts[1],dateInts[2]))
     else:
         g = params(market=sys.argv[1])
     g.go()
