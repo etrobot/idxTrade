@@ -2,7 +2,6 @@ import mplfinance as mpf
 import matplotlib as mpl  # 用于设置曲线参数
 from cycler import cycler  # 用于定制线条颜色
 import numpy as np
-from lxml import etree
 from matplotlib.font_manager import _rebuild
 from idxTrade import *
 from selenium import webdriver
