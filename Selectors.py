@@ -165,7 +165,7 @@ def idxCompare(mkt,cfg,mode='idx',backtest=0):
         navForCompare = -999
         for iCode in cfg['paramSet'][mode].keys():
             ctype = iCode + '_'+mixType
-            nav20 = iK[iCode][ctype][i] / iK[iCode][ctype][i - days]*(days-iK[iCode][ctype][i-days:i].argmin())
+            nav20 = iK[iCode][ctype][i] / iK[iCode][ctype][i - days]
             compare.append((iCode,nav20))
             if nav20 > navForCompare:
                 navForCompare = nav20
