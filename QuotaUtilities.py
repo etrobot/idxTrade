@@ -7,6 +7,8 @@ from tqdm import tqdm
 from urllib import parse
 from concurrent.futures import ThreadPoolExecutor, as_completed,wait
 import lxml.html
+import akshare as ak
+from lxml import etree
 
 def getK(k:str, pdate,xq_a_token=None,test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
@@ -467,4 +469,64 @@ def cmsK(code:str,type:str='daily'):
     if type=='daily':
         df.to_csv(quoFile,encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
     df['percent']=df['percent'].round(4)
+    return df
+
+def reportDate():
+    '''
+    每季度最后一日
+    :return:
+    '''
+    months = [1, 4, 7, 10, 12]
+    for i in range(1, len(months)):
+        if months[i - 1] <= datetime.now().month < months[i]:
+            rmonth = months[i - 1]
+    reportDate = datetime(datetime.now().year, rmonth, 1) - timedelta(days=1)
+    return reportDate.strftime('%Y-%m-%d')
+
+def heldBy(symbol:str,pdate:date):
+    '''
+    获取持仓当前股票的基金列表
+    :param symbol:
+    :return list:
+    '''
+    symbol=symbol[-6:]
+    furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate())
+    response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
+    data=pd.DataFrame(json.loads(response.text)['data'])
+    if len(data)>0:
+        flist=data[data['f6'].isin(getFundListSorted()[:20])]['f3'].to_list()
+        fname='./fund/'+pdate.strftime('%Y%m%d')+'.csv'
+        if os.path.isfile(fname):
+            df=pd.read_csv(fname)
+        else:
+            df=ak.fund_em_open_fund_rank()
+            df.drop('序号',1,inplace=True)
+            df.to_csv(fname)
+        df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
+        return df[df['基金代码'].isin(flist)].sort_values(by=['近1月','近1周'],ascending=False)
+
+def getFundListSorted():
+    '''
+    获取基金公司规模倒序排名，返回名单
+    :return list:
+    '''
+    furl='http://fund.eastmoney.com/Company/home/gspmlist?fundType=25'
+    response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
+    html = etree.HTML(response.text)
+    result = html.xpath('//td[position()=2]/a/text()')
+    return result
+
+def getFundHolding(fundCode:str):
+    '''
+    基金持仓
+    :param fundCode:
+    :return:
+    '''
+    furl='http://datainterface3.eastmoney.com/EM_DataCenter_V3/api/ZLCCMX/GetZLCCMX?tkn=eastmoney&SHType=1&SHCode=%s&SCode=&ReportDate=%s&sortField=SCode&sortDirec=1&pageNum=1&pageSize=1000&cfg=ZLCCMX'%(fundCode,reportDate())
+    response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
+    cols='SCode,SName,RDate,SHCode,SHName,IndtCode,InstSName,TypeCode,Type,ShareHDNum,Vposition,TabRate,TabProRate'.split(',')
+    rawdata = [x.split('|') for x in json.loads(response.text)['Data'][0]['Data']]
+    df = pd.DataFrame(rawdata,columns=cols)
+    df['SCode']=[x[7:]+x[:6] for x in df['SCode']]
+    df.set_index('SCode',inplace=True)
     return df

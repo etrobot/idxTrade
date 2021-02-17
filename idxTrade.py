@@ -51,7 +51,7 @@ class idxTrade:#保存参数的类
                     # toBuy.sort_values(by='f', ascending=True,inplace=True)
                     # toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
                     filename = '../CMS/source/Quant/%s%s_U.html' % (market,ik['k'].index[-1].weekday()+1)
-                    if self.mkt=='cn' and datetime.now().hour>14:
+                    if self.mkt!='us' and datetime.now().hour>14:
                         filename = '../CMS/source/Quant/%s%s_J.html' % (market, ik['k'].index[-1].weekday() + 1)
                     if os.path.isfile(filename):
                         with open(filename, "r") as f:
