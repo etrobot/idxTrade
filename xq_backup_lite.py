@@ -431,7 +431,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
                 v['name'], k, '债溢价' + deb['premium_rt'].values[0], deb['id'].values[0], capTpye, v[mCap],
                 v['pe_ttm'], cur_year_perc[k], calKey, v[calKey])
-        fundDf = heldBy(k, datetime.now())
+        fundDf = heldBy(k, pdate)
         if fundDf is not None:
             rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](../%s.html) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
                 v['name'], k, '持股基金',k, capTpye, v[mCap],
