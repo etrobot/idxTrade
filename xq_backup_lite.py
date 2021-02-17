@@ -433,6 +433,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 v['pe_ttm'], cur_year_perc[k], calKey, v[calKey])
         fundDf = heldBy(k, datetime.now())
         if fundDf is not None:
+            rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](../%s.html) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
+                v['name'], k, '持股基金',k, capTpye, v[mCap],
+                v['pe_ttm'], cur_year_perc[k], calKey, v[calKey])
             fundDf.to_html('../CMS/source/Fund/' + mkt + str(pdate.weekday() + 1) +k+'.html', index=False)
 
         maxtxt = v['行业'] + '板块近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
