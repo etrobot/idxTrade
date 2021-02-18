@@ -480,24 +480,14 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
 
 def renderHtml(df,filename:str):
-    pd.set_option('colheader_justify', 'center')  # FOR TABLE <th>
-
-    html_string = '''
-    <html>
-      <head><title>%s</title>
-      <style type="text/css">
-      .bgc{background-color: #33363b;color:#f5f5f5;}</style>
-      </style>
-      </head>
-      <body class="bgc">
-        {table}
-      </body>
-    </html>
-    '''%filename
-
-    # OUTPUT AN HTML FILE
+    pd.set_option('colheader_justify', 'center')
+    html_string = '<html><head><title>%s</title>{style}{gAds}</head><body class="bgc">{table}</body></html>'%filename
     with open(filename, 'w') as f:
-        f.write(html_string.format(table=df.to_html(render_links=True,escape=False)))
+        f.write(html_string.format(
+            table=df.to_html(render_links=True,escape=False),
+            style='<style>.bgc{background-color: #33363b;color:#f5f5f5;}</style>',
+            gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
+        ))
 
 
 def preparePlot():
