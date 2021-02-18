@@ -484,8 +484,8 @@ def renderHtml(df,filename:str):
     html_string = '<html><head><title>%s</title>{style}{gAds}</head><body class="bgc">{table}</body></html>'%filename
     with open(filename, 'w') as f:
         f.write(html_string.format(
-            table=df.to_html(render_links=True,escape=False),
-            style='<style>.bgc{background-color: #33363b;color:#f5f5f5;}</style>',
+            table=df.to_html(render_links=True,escape=False,index=False),
+            style='<style>.bgc{background-color: #33363b;color:#f5f5f5;}a{color:#9fa5ff}</style>',
             gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
         ))
 

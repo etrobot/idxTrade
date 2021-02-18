@@ -499,14 +499,14 @@ def heldBy(symbol:str,pdate:date):
         flist=data[data['f6'].isin(getFundListSorted()[:20])]['f3'].to_list()
         fname='./fund/'+pdate.strftime('%Y%m%d')+'.csv'
         if os.path.isfile(fname):
-            df=pd.read_csv(fname)
+            df=pd.read_csv(fname,dtype={'基金代码':str})
         else:
             df=ak.fund_em_open_fund_rank()
             df.drop('序号',1,inplace=True)
             df.to_csv(fname)
-        df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
+        df['近1月'] = pd.to_numeric(df['近1月'])
         df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
-        df['基金代码'] = df['基金代码'].apply(lambda x: "<a href='http://fundact.eastmoney.com/fundinfo/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+        df['基金代码'] = df['基金代码'].apply(lambda x: "<a href='http://fundact.eastmoney.com/fundinfo/{fundcode}.html'>{fundcode}</a>".format(fundcode=x))
         return df
 
 
