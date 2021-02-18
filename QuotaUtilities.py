@@ -489,6 +489,8 @@ def heldBy(symbol:str,pdate:date):
     :param symbol:
     :return list:
     '''
+    if len(symbol)!=8 and not symbol.startswith('S'):
+        return None
     symbol=symbol[-6:]
     furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate())
     response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
@@ -502,6 +504,8 @@ def heldBy(symbol:str,pdate:date):
             df=ak.fund_em_open_fund_rank()
             df.drop('序号',1,inplace=True)
             df.to_csv(fname)
+        df["基金代码"] = df["基金代码"].apply(
+            lambda x: "<a href='http://fundact.eastmoney.com/fundinfo/{fundcode}'>{fundcode}</a>".format(fundcode=x))
         df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
         return df[df['基金代码'].isin(flist)].sort_values(by=['近1月','近1周'],ascending=False)
 

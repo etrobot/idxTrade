@@ -416,8 +416,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         elif not os.path.isfile(v['filename']):
             qdf = getK(k, pdate,g.xq_a_token, 1)
             draw(qdf, v['filename'], vlines)
-        deb = debts[debts.index == k]
         cur_year_perc = {k: v['current_year_percent'], dfmax.name: dfmax['current_year_percent']}
+
+        rowtitle='[%s(%s)](https://xueqiu.com/S/%s)'%(v['name'], k,k)
         if mkt == 'cn':
             for cnstock in cur_year_perc.keys():
                 mK = cmsK(cnstock, 'monthly')
@@ -425,18 +426,14 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 for i in range(-min(datetime.now().month, len(mK)), 0):
                     yr = yr * (1 + mK['percent'][i])
                 cur_year_perc[cnstock] = round(yr * 100 - 100, 2)
-        rowtitle = '[%s(%s)](https://xueqiu.com/S/%s) %s市值%s TTM%s 今年%s%%  %s' % (
-            v['name'], k, k, capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
-        if len(deb) != 0:
-            rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
-                v['name'], k, '债溢价' + deb['premium_rt'].values[0], deb['id'].values[0], capTpye, v[mCap],
-                v['pe_ttm'], cur_year_perc[k], calKey, v[calKey])
-        fundDf = heldBy(k, pdate)
-        if fundDf is not None:
-            rowtitle = '[%s](https://xueqiu.com/S/%s) [%s](../Fund/%s.html) %s市值%s亿 TTM%s 今年%s%%  %s%s' % (
-                v['name'], k, '持股基金',k, capTpye, v[mCap],
-                v['pe_ttm'], cur_year_perc[k], calKey, v[calKey])
-            fundDf.to_html('../CMS/source/Fund/' + mkt + str(pdate.weekday() + 1) +k+'.html', index=False)
+            fundDf = heldBy(k, pdate)
+            if fundDf is not None:
+                rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
+                renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html')
+            deb = debts[debts.index == k]
+            if len(deb) != 0:
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债溢价' + deb['premium_rt'].values[0], deb['id'].values[0])
+        rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
         maxtxt = v['行业'] + '板块近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
             dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm'],0), dfmax['past60Days'] * 100,
@@ -480,6 +477,27 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
+
+
+def renderHtml(df,filename:str):
+    pd.set_option('colheader_justify', 'center')  # FOR TABLE <th>
+
+    html_string = '''
+    <html>
+      <head><title>%s</title>
+      <style type="text/css">
+      .bgc{background-color: #33363b;color:#f5f5f5;}</style>
+      </style>
+      </head>
+      <body class="bgc">
+        {table}
+      </body>
+    </html>
+    '''%filename
+
+    # OUTPUT AN HTML FILE
+    with open(filename, 'w') as f:
+        f.write(html_string.format(table=df.to_html(render_links=True,escape=False)))
 
 
 def preparePlot():
