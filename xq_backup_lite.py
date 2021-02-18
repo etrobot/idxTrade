@@ -446,11 +446,12 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         txt='\n<br>高亮k线代表当天被港资大力买入，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="https://xueqiu', '<a class="button is-black" href="https://xueqiu') \
+        .replace('<a href="../Fund', '<a class="button is-dark" href="../Fund')\
         .replace('/a>', '/a><br>') \
         .replace('a><br> <a', 'a><a') \
         .replace('TTMnan', '亏损') \
-        .replace('.0亿', '亿') \
-        .replace('<a href="../Fund', '<a class="button is-black" href="../Fund')
+        .replace('.0亿', '亿')
+
     if test == 0:
         html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
