@@ -504,10 +504,11 @@ def heldBy(symbol:str,pdate:date):
             df=ak.fund_em_open_fund_rank()
             df.drop('序号',1,inplace=True)
             df.to_csv(fname)
-        df["基金代码"] = df["基金代码"].apply(
-            lambda x: "<a href='http://fundact.eastmoney.com/fundinfo/{fundcode}'>{fundcode}</a>".format(fundcode=x))
         df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
-        return df[df['基金代码'].isin(flist)].sort_values(by=['近1月','近1周'],ascending=False)
+        df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
+        df['基金代码'] = df['基金代码'].apply(lambda x: "<a href='http://fundact.eastmoney.com/fundinfo/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+        return df
+
 
 def getFundListSorted():
     '''

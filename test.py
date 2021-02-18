@@ -120,6 +120,8 @@ if __name__=='__main__':
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
     # k='sh000001'
     # print(k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8)
-    print(getLimit(getK('SH000001', date(2021,1,22)).index[-2])['代码'].tolist())
+    # print(getLimit(getK('SH000001', date(2021,1,22)).index[-2])['代码'].tolist())
+    fundDf = heldBy('SZ002459', datetime.now())
+    renderHtml(fundDf,'../CMS/source/Fund/SZ002459.html')
 
 
