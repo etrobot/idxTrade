@@ -490,7 +490,7 @@ def renderHtml(df,filename:str):
         gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     )
     with open(filename, 'w') as f:
-        f.write(html_string.replace('<table border="1" class="dataframe">','<table id="container">'))
+        f.write(html_string.replace('<table border="1" class="dataframe">','<table id="container">').replace('<th>','<th role="columnheader">'))
 
 
 def preparePlot():

@@ -508,8 +508,7 @@ def heldBy(symbol:str,pdate:date):
         df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
         df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
         df['基金简称'] = df.apply(
-            lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
-                                                                                         fundname=x['基金简称']), axis=1)
+            lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
         df['基金代码'] = df['基金代码'].apply(
             lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
         return df
