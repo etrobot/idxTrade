@@ -448,7 +448,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         .replace('<a href="https://xueqiu', '<a class="button is-black" href="https://xueqiu') \
         .replace('<a href="../Fund', '<a class="button is-dark" href="../Fund')\
         .replace('/a>', '/a><br>') \
-        .replace('a><br> <a', 'a><a') \
+        .replace('a><br><a', 'a><a') \
         .replace('TTMnan', '亏损') \
         .replace('.0亿', '亿')
 
