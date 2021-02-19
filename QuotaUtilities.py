@@ -504,9 +504,13 @@ def heldBy(symbol:str,pdate:date):
             df=ak.fund_em_open_fund_rank()
             df.drop('序号',1,inplace=True)
             df.to_csv(fname)
-        df['近1月'] = pd.to_numeric(df['近1月'])
+        cols=['单位净值','累计净值','日增长率','近1周','近1月','近3月','近6月','近1年','近2年','近3年','今年来','成立来','自定义']
+        df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
         df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
-        df['基金代码'] = df['基金代码'].apply(lambda x: "<a href='http://fundact.eastmoney.com/fundinfo/{fundcode}.html'>{fundcode}</a>".format(fundcode=x))
+        df['基金代码'] = df['基金代码'].apply(lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+        df['基金简称'] = df.apply(
+            lambda x: "<a href='https://xueqiu.com/S/F{fundcode}'>{fundname}</a>".format(fundcode=x['基金代码'],
+                                                                                         fundname=x['基金简称']), axis=1)
         return df
 
 

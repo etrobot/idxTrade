@@ -482,13 +482,15 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
 def renderHtml(df,filename:str):
     pd.set_option('colheader_justify', 'center')
-    html_string = '<html><head><title>%s</title>{style}{gAds}</head><body class="bgc">{table}</body></html>'%filename
+    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%filename
+    html_string = html_string.format(
+        table=df.to_html(render_links=True, escape=False, index=False),
+        style='<link rel="stylesheet" type="text/css" href="./fund.css"/>',
+        tablesort='<script src="tablesort.min.js"></script><script src="tablesort.number.min.js"></script><script>new Tablesort(document.getElementById("container"));</script>',
+        gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
+    )
     with open(filename, 'w') as f:
-        f.write(html_string.format(
-            table=df.to_html(render_links=True,escape=False,index=False),
-            style='<style>.bgc{background-color: #33363b;color:#f5f5f5;}a{color:#9fa5ff}</style>',
-            gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
-        ))
+        f.write(html_string.replace('<table border="1" class="dataframe">','<table id="container">'))
 
 
 def preparePlot():
