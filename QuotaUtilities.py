@@ -496,7 +496,7 @@ def heldBy(symbol:str,pdate:date):
     response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
     data=pd.DataFrame(json.loads(response.text)['data'])
     if len(data)>0:
-        flist=data[data['f6'].isin(getFundListSorted()[:20])]['f3'].to_list()
+        flist=data[data['f6'].isin(getFundListSorted()[:30])]['f3'].to_list()
         fname='./fund/'+pdate.strftime('%Y%m%d')+'.csv'
         if os.path.isfile(fname):
             df=pd.read_csv(fname,dtype={'基金代码':str})
