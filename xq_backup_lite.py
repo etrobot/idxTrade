@@ -482,7 +482,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
 def renderHtml(df,filename:str):
     pd.set_option('colheader_justify', 'center')
-    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%filename
+    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%filename[-11:-6]
     html_string = html_string.format(
         table=df.to_html(render_links=True, escape=False, index=False),
         style='<link rel="stylesheet" type="text/css" href="./fund.css"/>',
