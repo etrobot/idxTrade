@@ -429,7 +429,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             fundDf = heldBy(k, pdate)
             if fundDf is not None:
                 rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
-                renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html')
+                renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
             deb = debts[debts['正股代码'] == k[2:]]
             if len(deb) != 0:
                 rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
@@ -482,9 +482,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         #     return finalhtml
 
 
-def renderHtml(df,filename:str):
+def renderHtml(df,filename:str,title:str):
     pd.set_option('colheader_justify', 'center')
-    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%filename[-13:-5]
+    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%title
     html_string = html_string.format(
         table=df.to_html(render_links=True, escape=False, index=False),
         style='<link rel="stylesheet" type="text/css" href="./fund.css"/>',
