@@ -432,7 +432,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html')
             deb = debts[debts['正股代码'] == k[2:]]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债赎'+ str(round(deb['强赎触发价'].values[0]-v['current'],2))+'溢' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
+                rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债赎'+ str(round(deb['强赎触发价'].values[0]-v['current'],2))+'溢' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
         maxtxt = v['行业'] + '板块近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
@@ -446,6 +446,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         txt='\n<br>高亮k线代表当天被港资大力买入，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="https://xueqiu', '<a class="button is-black" href="https://xueqiu') \
+        .replace('<a href="http://quote.eastmoney', '<a class="button is-dark" href="http://quote.eastmoney') \
         .replace('<a href="../Fund', '<a class="button is-dark" href="../Fund')\
         .replace('/a>', '/a><br>') \
         .replace('a><br><a', 'a><a') \
