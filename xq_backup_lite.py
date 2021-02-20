@@ -356,7 +356,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     avgAmount = indDf['amount'].mean()
     indDf = indDf[indDf['amount'] > avgAmount]
     indDf = indDf.fillna(value=np.nan)
-    indDf = indDf[~indDf.index.str.startswith("SH688", na=False)]
+    # indDf = indDf[~indDf.index.str.startswith("SH688", na=False)]
     indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
     cal = {'_J': [], '_U': []}
     indDf['filename'] = None
@@ -399,7 +399,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     df[mCap] = df[mCap].apply(str) + '亿'
     article = []
     drawedSymbolList = []
-    debts = debt()
+    debts = ak.bond_cov_comparison()
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description('【' + calKey + '】' + k + v['name'])
@@ -430,9 +430,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             if fundDf is not None:
                 rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
                 renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html')
-            deb = debts[debts.index == k]
+            deb = debts[debts['正股代码'] == k[2:]]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债溢价' + deb['premium_rt'].values[0], deb['id'].values[0])
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债赎'+ str(round(deb['强赎触发价'].values[0]-v['current'],2))+'溢' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
         maxtxt = v['行业'] + '板块近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
@@ -468,12 +468,12 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         </script>'''
     css = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
-    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{gAds}{style}</head>\
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{style}</head>\
         <body class="bgc has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(
-        title=title, gAds=gAds,style='<style>.bgc{background-color: #33363b;}</style>')
+        title=title,style='<style>.bgc{background-color: #33363b;}</style>')
     with open('../CMS/source/Quant/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
-        finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div></body></html>'
+        finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div>'+gAds+'</body></html>'
         f.write(finalhtml)
         mlog('complete' + title)
         # if g.testMode():
