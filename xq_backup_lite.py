@@ -427,7 +427,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                     yr = yr * (1 + mK['percent'][i])
                 cur_year_perc[cnstock] = round(yr * 100 - 100, 2)
         if mkt=='cn' or mkt=='hk':
-            fundDf = heldBy(k, pdate)
+            fundDf = heldBy(k, pdate,mkt)
             if fundDf is not None:
                 rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
                 renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
