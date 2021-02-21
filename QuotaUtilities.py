@@ -2,6 +2,7 @@ import requests,datetime,json,demjson,os,re
 import time as t
 import pandas as pd
 import logging
+import datetime as dt
 from datetime import *
 from tqdm import tqdm
 from urllib import parse
@@ -481,37 +482,46 @@ def reportDate():
         if months[i - 1] <= datetime.now().month < months[i]:
             rmonth = months[i - 1]
     reportDate = datetime(datetime.now().year, rmonth, 1) - timedelta(days=1)
-    return reportDate.strftime('%Y-%m-%d')
+    return reportDate
 
-def heldBy(symbol:str,pdate:date):
+def heldBy(symbol:str,pdate:dt,mkt='cn'):
     '''
     获取持仓当前股票的基金列表
     :param symbol:
     :return list:
     '''
-    if len(symbol)!=8 and not symbol.startswith('S'):
+    if mkt not in ['cn','hk'] and len(symbol)!=8 and not symbol.startswith('S'):
         return None
-    symbol=symbol[-6:]
-    furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate())
-    response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
-    data=pd.DataFrame(json.loads(response.text)['data'])
-    if len(data)>0:
-        flist=data[data['f6'].isin(getFundListSorted()[:30])]['f3'].to_list()
-        fname='./fund/'+pdate.strftime('%Y%m%d')+'.csv'
-        if os.path.isfile(fname):
-            df=pd.read_csv(fname,dtype={'基金代码':str})
+    if mkt=='cn':
+        symbol=symbol[-6:]
+        furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate().strftime('%Y-%m-%d'))
+        response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
+        data=pd.DataFrame(json.loads(response.text)['data'])
+        if len(data) > 0:
+            flist = data[data['f6'].isin(getFundListSorted()[:30])]['f3'].to_list()
         else:
-            df=ak.fund_em_open_fund_rank()
-            df.drop('序号',1,inplace=True)
-            df.to_csv(fname)
-        cols=['单位净值','累计净值','日增长率','近1周','近1月','近3月','近6月','近1年','近2年','近3年','今年来','成立来','自定义']
-        df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
-        df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
-        df['基金简称'] = df.apply(
-            lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
-        df['基金代码'] = df['基金代码'].apply(
-            lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
-        return df
+            return None
+    else:
+        data=getFundHoldingHK(pdate)
+        if len(data) > 0:
+            flist = data[data['股票代码']==symbol]['fundCode'].to_list()
+        else:
+            return None
+    fname='./fund/'+pdate.strftime('%Y%m%d')+'.csv'
+    if os.path.isfile(fname):
+        df=pd.read_csv(fname,dtype={'基金代码':str})
+    else:
+        df=ak.fund_em_open_fund_rank()
+        df.drop('序号',1,inplace=True)
+        df.to_csv(fname)
+    cols=['单位净值','累计净值','日增长率','近1周','近1月','近3月','近6月','近1年','近2年','近3年','今年来','成立来','自定义']
+    df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
+    df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
+    df['基金简称'] = df.apply(
+        lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
+    df['基金代码'] = df['基金代码'].apply(
+        lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+    return df
 
 
 def getFundListSorted():
@@ -539,3 +549,24 @@ def getFundHolding(fundCode:str):
     df['SCode']=[x[7:]+x[:6] for x in df['SCode']]
     df.set_index('SCode',inplace=True)
     return df
+
+def getFundHoldingHK(pdate:dt):
+    rDate=reportDate()
+    fname='fund/hk'+rDate.strftime('%Y%m%d')+'.csv'
+    if os.path.isfile(fname):
+        return pd.read_csv(fname,dtype={'fundCode':str})
+    mlog('港股基金爬取中...')
+    hkQuote = pd.read_csv('md/hk'+pdate.strftime('%Y%m%d')+'_Bak.csv', encoding='GBK')
+    df = ak.fund_em_open_fund_rank()
+    df = df[df['基金简称'].str.contains('港')]
+    df_hk_holding=pd.DataFrame()
+    for fundCode in df['基金代码'].values.tolist():
+        df_holding=ak.fund_em_portfolio_hold(code=fundCode, year=str(rDate.year))
+        if len(df_holding)==0:
+            continue
+        df_hk=df_holding[df_holding['股票名称'].isin(hkQuote['name'])]
+        df_hk['股票代码'] = [x[1:] for x in df_hk['股票代码'].values]
+        df_hk['fundCode']=fundCode
+        df_hk_holding=df_hk_holding.append(df_hk)
+    df_hk_holding.to_csv(fname)
+    return df_hk_holding
