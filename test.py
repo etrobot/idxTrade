@@ -133,4 +133,4 @@ if __name__=='__main__':
     # df = df[df['基金简称'].str.contains('港')]
     # print(df['基金简称'].values[0])
 
-    print(heldBy('00700',datetime(2020,11,25),'hk'))
+    print(heldBy('00700',datetime(2021,2,19),'hk')['基金简称'])
