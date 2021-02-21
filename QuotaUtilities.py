@@ -558,7 +558,7 @@ def getFundHoldingHK(pdate:dt):
     mlog('港股基金爬取中...')
     hkQuote = pd.read_csv('md/hk'+pdate.strftime('%Y%m%d')+'_Bak.csv', encoding='GBK')
     df = ak.fund_em_open_fund_rank()
-    df = df[df['基金简称'].str.contains('港股|香港|恒生')]
+    df = df[df['基金简称'].str.contains('港股|香港')]
     df_hk_holding=pd.DataFrame()
     for fundCode in df['基金代码'].values.tolist():
         df_holding=ak.fund_em_portfolio_hold(code=fundCode, year=str(rDate.year))
