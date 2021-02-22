@@ -523,6 +523,17 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
         lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
     return df
 
+def renderHtml(df,filename:str,title:str):
+    pd.set_option('colheader_justify', 'center')
+    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%title
+    html_string = html_string.format(
+        table=df.to_html(render_links=True, escape=False, index=False),
+        style='<link rel="stylesheet" type="text/css" href="../link/table.css"/>',
+        tablesort='<script src="../link/tablesort.min.js"></script><script src="../link/tablesort.number.min.js"></script><script>new Tablesort(document.getElementById("container"));</script>',
+        gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
+    )
+    with open(filename, 'w') as f:
+        f.write(html_string.replace('<table border="1" class="dataframe">','<table id="container">').replace('<th>','<th role="columnheader">'))
 
 def getFundListSorted():
     '''
@@ -551,16 +562,25 @@ def getFundHolding(fundCode:str):
     return df
 
 def getFundHoldingHK(pdate:dt):
+    '''
+    生成持仓为港股通的基金列表
+    '''
     rDate=reportDate()
+    hkQuote = pd.read_csv('md/hk' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK')
+    df = ak.fund_em_open_fund_rank()
+    df.drop('序号', 1, inplace=True)
+    df = df[df['基金简称'].str.contains('港')]
+    df = df[~df['基金简称'].str.contains('沪|深')]
+    df['基金简称'] = df.apply(
+        lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
+                                                                                     fundname=x['基金简称']), axis=1)
+    df['基金代码'] = df['基金代码'].apply(
+        lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+    renderHtml(df, '../CMS/source/Quant/fundhk.html', '持仓港股的内地基金' + rDate.strftime('%y%m%d'))
     fname='fund/hk'+rDate.strftime('%Y%m%d')+'.csv'
     if os.path.isfile(fname):
         return pd.read_csv(fname,dtype={'fundCode':str})
     mlog('港股基金爬取中...')
-    hkQuote = pd.read_csv('md/hk'+pdate.strftime('%Y%m%d')+'_Bak.csv', encoding='GBK')
-    df = ak.fund_em_open_fund_rank()
-    df = df[df['基金简称'].str.contains('港')]
-    df = df[~df['基金简称'].str.contains('沪|深')]
-    df.set_index('基金代码',inplace=True)
     df_hk_holding=pd.DataFrame()
     for fundCode in df.index.values.tolist():
         df_holding=ak.fund_em_portfolio_hold(code=fundCode, year=str(rDate.year))

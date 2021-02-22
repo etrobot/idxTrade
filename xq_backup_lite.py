@@ -407,7 +407,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         for k, v in indDf.iterrows():
             if k[2:] in debts.index and v['current'] > 0:
                 debts.at[k[2:], '距强赎价'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
-                if len(debts.at[k[2:], '转债代码'])==6:
+                if '<a' not in debts.at[k[2:], '转债代码']:
                     debts.at[k[2:], '转债代码'] = '<a href="https://xueqiu.com/S/'+ k[:2] + debts.at[k[2:], '转债代码']+'">'+debts.at[k[2:], '转债代码']+'</a>'
         debts.sort_values(by=['距强赎价'], inplace=True)
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
@@ -500,19 +500,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
-
-
-def renderHtml(df,filename:str,title:str):
-    pd.set_option('colheader_justify', 'center')
-    html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%title
-    html_string = html_string.format(
-        table=df.to_html(render_links=True, escape=False, index=False),
-        style='<link rel="stylesheet" type="text/css" href="../link/table.css"/>',
-        tablesort='<script src="../link/tablesort.min.js"></script><script src="../link/tablesort.number.min.js"></script><script>new Tablesort(document.getElementById("container"));</script>',
-        gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
-    )
-    with open(filename, 'w') as f:
-        f.write(html_string.replace('<table border="1" class="dataframe">','<table id="container">').replace('<th>','<th role="columnheader">'))
 
 
 def preparePlot():
