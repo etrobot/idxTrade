@@ -560,14 +560,16 @@ def getFundHoldingHK(pdate:dt):
     df = ak.fund_em_open_fund_rank()
     df = df[df['基金简称'].str.contains('港')]
     df = df[~df['基金简称'].str.contains('沪|深')]
+    df.set_index('基金代码',inplace=True)
     df_hk_holding=pd.DataFrame()
-    for fundCode in df['基金代码'].values.tolist():
+    for fundCode in df.index.values.tolist():
         df_holding=ak.fund_em_portfolio_hold(code=fundCode, year=str(rDate.year))
         if len(df_holding)==0:
             continue
         df_hk=df_holding[df_holding['股票名称'].isin(hkQuote['name'])]
         df_hk['股票代码'] = [x[1:] for x in df_hk['股票代码'].values]
         df_hk['fundCode']=fundCode
+        df_hk['fundName']=df.at[fundCode,'基金简称']
         df_hk_holding=df_hk_holding.append(df_hk)
     df_hk_holding.to_csv(fname)
     return df_hk_holding
