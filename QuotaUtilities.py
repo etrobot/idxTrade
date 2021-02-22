@@ -490,9 +490,9 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     :param symbol:
     :return list:
     '''
-    if mkt not in ['cn','hk'] and len(symbol)!=8 and not symbol.startswith('S'):
+    if mkt not in ['cn','hk']:
         return None
-    if mkt=='cn':
+    if mkt == 'cn':
         symbol=symbol[-6:]
         furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate().strftime('%Y-%m-%d'))
         response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
