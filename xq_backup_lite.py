@@ -333,6 +333,7 @@ def thsIndustry(mkt='cn', pdate=None):
     indDf = indDf.replace('--', np.nan)
     indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
     indDf['amount'] = indDf['amount'].str.rstrip('亿').astype('float')
+    indDf[['current']] = indDf[['current']].apply(pd.to_numeric, errors='coerce', axis=1)
     indDf['current_year_percent'] = np.nan
     indDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return indDf
@@ -406,6 +407,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         for k, v in indDf.iterrows():
             if k[2:] in debts.index and v['current'] > 0:
                 debts.at[k[2:], '距强赎价'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
+                if len(debts.at[k[2:], '转债代码'])==6:
+                    debts.at[k[2:], '转债代码'] = '<a href="https://xueqiu.com/S/'+ k[:2] + debts.at[k[2:], '转债代码']+'">'+debts.at[k[2:], '转债代码']+'</a>'
         debts.sort_values(by=['距强赎价'], inplace=True)
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
@@ -441,9 +444,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
                 renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
         if mkt == 'cn':
-            deb = debts[debts['正股代码']== k[2:]]
+            deb = debts[debts.index == k[2:]]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
+                rowtitle += '[%s](%s)' % ('债:距强赎价'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', deb['转债代码'].values[0])
                 # rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
@@ -504,8 +507,8 @@ def renderHtml(df,filename:str,title:str):
     html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%title
     html_string = html_string.format(
         table=df.to_html(render_links=True, escape=False, index=False),
-        style='<link rel="stylesheet" type="text/css" href="./fund.css"/>',
-        tablesort='<script src="tablesort.min.js"></script><script src="tablesort.number.min.js"></script><script>new Tablesort(document.getElementById("container"));</script>',
+        style='<link rel="stylesheet" type="text/css" href="../link/table.css"/>',
+        tablesort='<script src="../link/tablesort.min.js"></script><script src="../link/tablesort.number.min.js"></script><script>new Tablesort(document.getElementById("container"));</script>',
         gAds='<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     )
     with open(filename, 'w') as f:

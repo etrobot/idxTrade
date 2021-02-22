@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="Hexo cms">
-      <change beforePath="$PROJECT_DIR$/.idea/idxTrade.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/idxTrade.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update debts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bash/daily.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Bash/daily.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bash/push.sh" beforeDir="false" afterPath="$PROJECT_DIR$/Bash/push.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/idxTrade.py" beforeDir="false" afterPath="$PROJECT_DIR$/idxTrade.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="388" column="68" selection-start-line="388" selection-start-column="68" selection-end-line="388" selection-end-column="68" />
+            <state relative-caret-position="1626">
+              <caret line="501" lean-forward="true" selection-start-line="501" selection-end-line="501" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -31,22 +26,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1050">
-              <caret line="72" column="48" selection-start-line="72" selection-start-column="48" selection-end-line="72" selection-end-column="48" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="42" column="17" lean-forward="true" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+            <state relative-caret-position="311">
+              <caret line="522" column="100" lean-forward="true" selection-start-line="521" selection-start-column="3" selection-end-line="522" selection-end-column="100" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -55,27 +38,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/idxTrade.py">
+        <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="43" column="57" lean-forward="true" selection-start-line="43" selection-start-column="57" selection-end-line="43" selection-end-column="57" />
+            <state relative-caret-position="258">
+              <caret line="115" column="120" selection-start-line="115" selection-start-column="120" selection-end-line="115" selection-end-column="120" />
               <folding>
-                <element signature="e#9#19#0" expanded="true" />
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Bash/daily.sh">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Bash/push.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="49" lean-forward="true" selection-start-line="6" selection-start-column="49" selection-end-line="6" selection-end-column="49" />
+            <state relative-caret-position="240">
+              <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Bash/daily.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -84,36 +71,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>title</find>
-      <find>SH688</find>
-      <find>.date</find>
-      <find>getXueqiuCookie</find>
-      <find>机构</find>
-      <find>quota</find>
-      <find>to_csv</find>
-      <find>getK</find>
-      <find>,</find>
-      <find>cmsK</find>
-      <find>603602</find>
-      <find>toBuy['symbol'].values[0]</find>
-      <find>CAU</find>
-      <find>cauc</find>
-      <find>U</find>
-      <find>_J</find>
-      <find>_U</find>
-      <find>board</find>
-      <find>002670</find>
-      <find>000713</find>
-      <find>002100</find>
-      <find>../html</find>
-      <find>stealth</find>
-      <find>headless</find>
-      <find>dragon</find>
-      <find>source</find>
-      <find>cau</find>
-      <find>getlimit</find>
-      <find>振幅</find>
       <find>limit</find>
+      <find>caucu</find>
+      <find>getlimit</find>
+      <find>getK</find>
+      <find>dragon</find>
+      <find>mlog</find>
+      <find>days</find>
+      <find>fund</find>
+      <find>branch_name</find>
+      <find>bgc</find>
+      <find>html</find>
+      <find>href</find>
+      <find>&quot;sort&quot;</find>
+      <find>gAds</find>
+      <find>jisilu</find>
+      <find>deb</find>
+      <find>debt</find>
+      <find>row</find>
+      <find>lower</find>
+      <find>render</find>
+      <find>renderHtml</find>
+      <find>read_csv</find>
+      <find>.at</find>
+      <find>indDf = pd.re</find>
+      <find>debts</find>
+      <find>current</find>
+      <find>numeric</find>
+      <find>fillna</find>
+      <find>正股代</find>
+      <find>to</find>
     </findStrings>
     <replaceStrings>
       <replace>_M</replace>
@@ -144,20 +131,20 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/XueqiuPortfolio.py" />
         <option value="$PROJECT_DIR$/md/cn20210108.txt" />
-        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/Bash/daily.sh" />
         <option value="$PROJECT_DIR$/Bash/push.sh" />
+        <option value="$PROJECT_DIR$/idxTrade.py" />
+        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/QuotaUtilities.py" />
         <option value="$PROJECT_DIR$/xq_backup_lite.py" />
-        <option value="$PROJECT_DIR$/idxTrade.py" />
-        <option value="$PROJECT_DIR$/Bash/daily.sh" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="718" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="313" />
     <option name="y" value="23" />
-    <option name="width" value="1511" />
-    <option name="height" value="1417" />
+    <option name="width" value="2172" />
+    <option name="height" value="1355" />
   </component>
   <component name="ProjectId" id="1j6EwA7e34kzlw6sNvklQYKirBa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -166,6 +153,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -181,13 +169,22 @@
             <path>
               <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
               <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
+              <item name="fund" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
+              <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
+              <item name="md" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
+              <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
               <item name="plotimage" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -212,7 +209,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.xq_backup_lite">
     <configuration name="Research" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -247,7 +244,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/idxTrade.py" />
-      <option name="PARAMETERS" value="hk 1" />
+      <option name="PARAMETERS" value="cn 0" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -268,7 +265,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
-      <option name="PARAMETERS" value="cn 0" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -289,7 +286,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xq_backup_lite.py" />
-      <option name="PARAMETERS" value="cn 0" />
+      <option name="PARAMETERS" value="cn 1" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -298,10 +295,10 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.Research" />
       <item itemvalue="Python.idxTrade" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python.xq_backup_lite" />
     </list>
     <recent_temporary>
       <list>
@@ -321,174 +318,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00044" summary="remove some bak action">
-      <created>1605502281401</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1605502281401</updated>
-    </task>
-    <task id="LOCAL-00045" summary="update timestamp for png">
-      <created>1605530099987</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1605530099987</updated>
-    </task>
-    <task id="LOCAL-00046" summary="update">
-      <created>1605530176717</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1605530176717</updated>
-    </task>
-    <task id="LOCAL-00047" summary="remove some bak action">
-      <created>1605577065147</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1605577065147</updated>
-    </task>
-    <task id="LOCAL-00048" summary="update">
-      <created>1605587728624</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1605587728624</updated>
-    </task>
-    <task id="LOCAL-00049" summary="update">
-      <created>1605588120381</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1605588120381</updated>
-    </task>
-    <task id="LOCAL-00050" summary="update">
-      <created>1605588299506</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1605588299512</updated>
-    </task>
-    <task id="LOCAL-00051" summary="fix calling idxtrade bug">
-      <created>1605590282689</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1605590282689</updated>
-    </task>
-    <task id="LOCAL-00052" summary="remove some bak action">
-      <created>1605590530113</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1605590530113</updated>
-    </task>
-    <task id="LOCAL-00053" summary="format code">
-      <created>1605590993186</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1605590993186</updated>
-    </task>
-    <task id="LOCAL-00054" summary="fix bug">
-      <created>1605600437115</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1605600437115</updated>
-    </task>
-    <task id="LOCAL-00055" summary="fix bug">
-      <created>1605607357183</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1605607357185</updated>
-    </task>
-    <task id="LOCAL-00056" summary="update">
-      <created>1605609159012</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1605609159014</updated>
-    </task>
-    <task id="LOCAL-00057" summary="update">
-      <created>1605612689432</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1605612689432</updated>
-    </task>
-    <task id="LOCAL-00058" summary="fix bug">
-      <created>1605615534518</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1605615534521</updated>
-    </task>
-    <task id="LOCAL-00059" summary="fix bug">
-      <created>1605665476484</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1605665476484</updated>
-    </task>
-    <task id="LOCAL-00060" summary="fix bug">
-      <created>1605676384348</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1605676384348</updated>
-    </task>
-    <task id="LOCAL-00061" summary="update">
-      <created>1605703590848</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1605703590848</updated>
-    </task>
-    <task id="LOCAL-00062" summary="update">
-      <created>1605756788157</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1605756788157</updated>
-    </task>
-    <task id="LOCAL-00063" summary="update">
-      <created>1605764474944</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1605764474944</updated>
-    </task>
-    <task id="LOCAL-00064" summary="fix bug">
-      <created>1606103586024</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1606103586024</updated>
-    </task>
-    <task id="LOCAL-00065" summary="update">
-      <created>1606103802722</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1606103802722</updated>
-    </task>
-    <task id="LOCAL-00066" summary="update">
-      <created>1606119111369</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1606119111369</updated>
-    </task>
-    <task id="LOCAL-00067" summary="add to_csv datetime format">
-      <created>1606216261597</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1606216261597</updated>
     </task>
     <task id="LOCAL-00068" summary="update">
       <created>1606390400285</created>
@@ -665,50 +494,199 @@
       <option name="project" value="LOCAL" />
       <updated>1611569998213</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="fix symbolic link">
+      <created>1611888186999</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1611888187001</updated>
+    </task>
+    <task id="LOCAL-00094" summary="update idxtrade">
+      <created>1611922238899</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1611922238899</updated>
+    </task>
+    <task id="LOCAL-00095" summary="update bash script">
+      <created>1612231738095</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1612231738097</updated>
+    </task>
+    <task id="LOCAL-00096" summary="update bash script">
+      <created>1612241699976</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1612241699976</updated>
+    </task>
+    <task id="LOCAL-00097" summary="update algo">
+      <created>1612253234432</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1612253234433</updated>
+    </task>
+    <task id="LOCAL-00098" summary="update algo">
+      <created>1612259007679</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1612259007680</updated>
+    </task>
+    <task id="LOCAL-00099" summary="update algo">
+      <created>1612359647488</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1612359647488</updated>
+    </task>
+    <task id="LOCAL-00100" summary="update algo">
+      <created>1612361351179</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1612361351179</updated>
+    </task>
+    <task id="LOCAL-00101" summary="update algo">
+      <created>1612460679520</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1612460679520</updated>
+    </task>
+    <task id="LOCAL-00102" summary="update algo">
+      <created>1612751577212</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1612751577213</updated>
+    </task>
+    <task id="LOCAL-00103" summary="update algo">
+      <created>1612756117033</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1612756117036</updated>
+    </task>
+    <task id="LOCAL-00104" summary="update algo">
+      <created>1612929324973</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1612929324976</updated>
+    </task>
+    <task id="LOCAL-00105" summary="update algo">
+      <created>1612929402289</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1612929402289</updated>
+    </task>
+    <task id="LOCAL-00106" summary="update bash">
+      <created>1613617441618</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1613617441618</updated>
+    </task>
+    <task id="LOCAL-00107" summary="fix relative path">
+      <created>1613626337414</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1613626337414</updated>
+    </task>
+    <task id="LOCAL-00108" summary="fix fund bug">
+      <created>1613645057527</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1613645057528</updated>
+    </task>
+    <task id="LOCAL-00109" summary="add table style">
+      <created>1613739856154</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1613739856158</updated>
+    </task>
+    <task id="LOCAL-00110" summary="fix fund bug">
+      <created>1613742684382</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1613742684382</updated>
+    </task>
+    <task id="LOCAL-00111" summary="update debt algo">
+      <created>1613792345046</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1613792345047</updated>
+    </task>
+    <task id="LOCAL-00112" summary="fix debt bug">
+      <created>1613792814893</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1613792814893</updated>
+    </task>
+    <task id="LOCAL-00113" summary="update debt">
+      <created>1613800545138</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1613800545138</updated>
+    </task>
+    <task id="LOCAL-00114" summary="update">
+      <created>1613816815753</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1613816815753</updated>
+    </task>
+    <task id="LOCAL-00115" summary="gen debt html">
+      <created>1613961917905</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1613961917905</updated>
+    </task>
+    <task id="LOCAL-00116" summary="update fund">
+      <created>1613962788355</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1613962788356</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="2560" height="1417" extended-state="6" />
+    <frame x="313" y="23" width="2172" height="1355" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10634108" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12552302" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.82363635" weight="0.31320754" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.82138443" visible="true" weight="0.45051464" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.5100942" weight="0.2" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49940923" weight="0.329927" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.17636363" side_tool="true" weight="0.30339622" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.17861557" side_tool="true" weight="0.31320754" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49901536" weight="0.329927" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
-    <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18120806" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.82363635" visible="true" weight="0.31320754" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.5100942" weight="0.2" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49940923" weight="0.329927" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.17636363" side_tool="true" weight="0.30339622" />
-      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49901536" weight="0.329927" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout-to-restore>
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
@@ -769,19 +747,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="update xq_backup_lite" />
-    <MESSAGE value="update cup mtm algorithm" />
-    <MESSAGE value="update backup logic" />
-    <MESSAGE value="backup mtm as txt" />
-    <MESSAGE value="tqdm ljust" />
-    <MESSAGE value="update bak" />
-    <MESSAGE value="remove 688" />
-    <MESSAGE value="update bash" />
-    <MESSAGE value="fix idxtrade bug" />
-    <MESSAGE value="fix backup, only daily" />
-    <MESSAGE value="update format" />
-    <MESSAGE value="backup" />
-    <MESSAGE value="chromedriver" />
     <MESSAGE value="bak" />
     <MESSAGE value="update timestamp for png" />
     <MESSAGE value="fix calling idxtrade bug" />
@@ -793,8 +758,21 @@
     <MESSAGE value="Hexo cms" />
     <MESSAGE value="selenium fake" />
     <MESSAGE value="Hexo bash" />
+    <MESSAGE value="fix symbolic link" />
+    <MESSAGE value="update idxtrade" />
+    <MESSAGE value="update bash script" />
+    <MESSAGE value="update algo" />
+    <MESSAGE value="update bash" />
+    <MESSAGE value="fix relative path" />
+    <MESSAGE value="add table style" />
+    <MESSAGE value="fix fund bug" />
+    <MESSAGE value="update debt algo" />
+    <MESSAGE value="fix debt bug" />
+    <MESSAGE value="update debt" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="gen debt html" />
+    <MESSAGE value="update fund" />
+    <option name="LAST_COMMIT_MESSAGE" value="update fund" />
   </component>
   <component name="WindowStateProjectService">
     <state x="140" y="0" key="#Notifications" timestamp="1603116596849">
@@ -863,77 +841,6 @@
     <state x="398" y="160" key="git4idea.merge.GitMergeDialog/0.0.1280.800@0.0.1280.800" timestamp="1603561046469" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Quotation/00005.csv" />
-    <entry file="file://$PROJECT_DIR$/Quotation/SH600183.csv">
-      <provider selected="true" editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
-          <column index="0" width="100" />
-          <column index="1" width="100" />
-          <column index="2" width="100" />
-          <column index="3" width="100" />
-          <column index="4" width="100" />
-          <column index="5" width="100" />
-          <column index="6" width="100" />
-          <column index="7" width="100" />
-          <column index="8" width="100" />
-          <column index="9" width="100" />
-          <column index="10" width="100" />
-          <column index="11" width="100" />
-          <column index="12" width="100" />
-          <column index="13" width="100" />
-          <column index="14" width="100" />
-          <column index="15" width="100" />
-          <column index="16" width="100" />
-          <column index="17" width="100" />
-        </state>
-      </provider>
-      <provider editor-type-id="csv-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/cn20201109_Bak.csv">
-      <provider selected="true" editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
-          <column index="0" width="100" />
-          <column index="1" width="100" />
-          <column index="2" width="100" />
-          <column index="3" width="100" />
-          <column index="4" width="100" />
-          <column index="5" width="100" />
-          <column index="6" width="100" />
-          <column index="7" width="100" />
-          <column index="8" width="100" />
-          <column index="9" width="100" />
-          <column index="10" width="100" />
-          <column index="11" width="100" />
-          <column index="12" width="100" />
-          <column index="13" width="100" />
-          <column index="14" width="100" />
-        </state>
-      </provider>
-      <provider editor-type-id="csv-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.ini">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/cn20201112.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/hk20201109.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/hk20201113.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/us20201111.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-678" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/hk20201112.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/md/cn20201110.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/md/cn20201111.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1475,53 +1382,291 @@
     <entry file="file://$PROJECT_DIR$/md/xueqiucn20201109_17 ：31.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1050">
-          <caret line="72" column="48" selection-start-line="72" selection-start-column="48" selection-end-line="72" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="388" column="68" selection-start-line="388" selection-start-column="68" selection-end-line="388" selection-end-column="68" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="42" column="17" lean-forward="true" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/.idea/idxTrade.iml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/idxTrade.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="43" column="57" lean-forward="true" selection-start-line="43" selection-start-column="57" selection-end-line="43" selection-end-column="57" />
+        <state relative-caret-position="288">
+          <caret line="24" column="21" lean-forward="true" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
           <folding>
             <element signature="e#9#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Bash/daily.sh">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/fund/20210218.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor">
+        <state>
+          <caret column="68" selection-start-column="14" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/us20210219_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+          <column index="28" width="100" />
+          <column index="29" width="100" />
+          <column index="30" width="100" />
+          <column index="31" width="100" />
+          <column index="32" width="100" />
+          <column index="33" width="100" />
+          <column index="34" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/hk20210104_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+          <column index="28" width="100" />
+          <column index="29" width="100" />
+          <column index="30" width="100" />
+          <column index="31" width="100" />
+          <column index="32" width="100" />
+          <column index="33" width="100" />
+          <column index="34" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/hk20210219_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+          <column index="28" width="100" />
+          <column index="29" width="100" />
+          <column index="30" width="100" />
+          <column index="31" width="100" />
+          <column index="32" width="100" />
+          <column index="33" width="100" />
+          <column index="34" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/cn20210208_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Bash/push.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="49" lean-forward="true" selection-start-line="6" selection-start-column="49" selection-end-line="6" selection-end-column="49" />
+        <state relative-caret-position="240">
+          <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Bash/daily.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/cn20210219_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="115" column="120" selection-start-line="115" selection-start-column="120" selection-end-line="115" selection-end-column="120" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/cn20210222_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="58" lean-forward="true" selection-start-line="21" selection-start-column="58" selection-end-line="21" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="522" column="100" lean-forward="true" selection-start-line="521" selection-start-column="3" selection-end-line="522" selection-end-column="100" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1626">
+          <caret line="501" lean-forward="true" selection-start-line="501" selection-end-line="501" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
