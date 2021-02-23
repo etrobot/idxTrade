@@ -53,10 +53,10 @@ def updateFund(pdate:dt):
                             df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
                             for k in df['基金代码']:
                                 idx=fundDf.index[fundDf['基金代码'] == k][0]
-                                fundDf.at[idx,'weekday']='<a href="%s.html">%s</a>'%(weekday,weekday)
                                 stockSymbol=re.findall('/Fund/(.*)\.html',fname)[0]
                                 stockName=quote.loc[quote['symbol']==stockSymbol]['name'].values[0]
                                 fundDf.at[idx,'stock']='<a href="https://xueqiu.com/S/%s">%s%s</a>'%(stockSymbol,stockSymbol,stockName)
+                                fundDf.at[idx,'weekday']='<a href="%s.html#%s">%s</a>'%(weekday,stockSymbol,weekday)
     fundDf.dropna(subset=['weekday'],inplace=True)
     fundDf.sort_values('weekday',inplace=True)
     renderHtml(fundDf,'../CMS/source/Quant/fund.html','含量化选股的内地基金')
@@ -459,7 +459,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             draw(qdf, v['filename'], vlines)
         cur_year_perc = {k: v['current_year_percent'], dfmax.name: dfmax['current_year_percent']}
 
-        rowtitle='[%s(%s)](https://xueqiu.com/S/%s)'%(v['name'], k,k)
+        rowtitle='[](#%s)[%s(%s)](https://xueqiu.com/S/%s)'%(k,v['name'], k,k)
         if mkt == 'cn':
             for cnstock in cur_year_perc.keys():
                 mK = cmsK(cnstock, 'monthly')
