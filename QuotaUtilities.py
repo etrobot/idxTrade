@@ -546,20 +546,20 @@ def getFundListSorted():
     result = html.xpath('//td[position()=2]/a/text()')
     return result
 
-def getFundHolding(fundCode:str):
-    '''
-    基金持仓
-    :param fundCode:
-    :return:
-    '''
-    furl='http://datainterface3.eastmoney.com/EM_DataCenter_V3/api/ZLCCMX/GetZLCCMX?tkn=eastmoney&SHType=1&SHCode=%s&SCode=&ReportDate=%s&sortField=SCode&sortDirec=1&pageNum=1&pageSize=1000&cfg=ZLCCMX'%(fundCode,reportDate())
-    response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
-    cols='SCode,SName,RDate,SHCode,SHName,IndtCode,InstSName,TypeCode,Type,ShareHDNum,Vposition,TabRate,TabProRate'.split(',')
-    rawdata = [x.split('|') for x in json.loads(response.text)['Data'][0]['Data']]
-    df = pd.DataFrame(rawdata,columns=cols)
-    df['SCode']=[x[7:]+x[:6] for x in df['SCode']]
-    df.set_index('SCode',inplace=True)
-    return df
+# def getFundHolding(fundCode:str):
+#     '''
+#     基金持仓,数据不全，估计api已无人维护
+#     :param fundCode:
+#     :return:
+#     '''
+#     furl='http://datainterface3.eastmoney.com/EM_DataCenter_V3/api/ZLCCMX/GetZLCCMX?tkn=eastmoney&SHType=1&SHCode=%s&SCode=&ReportDate=%s&sortField=SCode&sortDirec=1&pageNum=1&pageSize=1000&cfg=ZLCCMX'%(fundCode,reportDate())
+#     response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
+#     cols='SCode,SName,RDate,SHCode,SHName,IndtCode,InstSName,TypeCode,Type,ShareHDNum,Vposition,TabRate,TabProRate'.split(',')
+#     rawdata = [x.split('|') for x in json.loads(response.text)['Data'][0]['Data']]
+#     df = pd.DataFrame(rawdata,columns=cols)
+#     df['SCode']=[x[7:]+x[:6] for x in df['SCode']]
+#     df.set_index('SCode',inplace=True)
+#     return df
 
 def getFundHoldingHK(pdate:dt):
     '''

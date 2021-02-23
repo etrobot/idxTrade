@@ -458,7 +458,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             fundDf = heldBy(dfmax.name, pdate,mkt)
             if fundDf is not None and len(fundDf)>0:
                 maxtxt += '[%s](../Fund/%s.html)'%('持股基金',dfmax.name)
-                renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
+                renderHtml(fundDf,'../CMS/source/Fund/' + dfmax.name + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
 
         artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t='+datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')

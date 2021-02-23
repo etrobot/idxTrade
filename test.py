@@ -121,16 +121,19 @@ if __name__=='__main__':
     # k='sh000001'
     # print(k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8)
     # print(getLimit(getK('SH000001', date(2021,1,22)).index[-2])['代码'].tolist())
-    # for f in os.listdir('../CMS/source/Fund'):
-    #     if '.html' in f:
-    #         symbol=f[:-5]
-    #         print(symbol)
-    #         fundDf = heldBy(symbol, datetime.now())
-    #         if fundDf is not None:
-    #             renderHtml(fundDf,'../CMS/source/Fund/%s.html'%symbol)
-    #             t.sleep(2)
+    for f in os.listdir('../CMS/source/Fund'):
+        if '.html' in f:
+            symbol=f[:-5]
+            print(symbol)
+            mkt='cn'
+            if len(symbol)==5:
+                mkt='hk'
+            fundDf = heldBy(symbol, datetime.now().date()-timedelta(days=1),mkt)
+            if fundDf is not None:
+                renderHtml(fundDf,'../CMS/source/Fund/%s.html'%symbol,symbol)
+                t.sleep(2)
     # df = ak.fund_em_open_fund_rank()
     # df = df[df['基金简称'].str.contains('港')]
     # print(df['基金简称'].values[0])
     # print(heldBy('00700',datetime(2021,2,19),'hk')['基金简称'])
-    getFundHoldingHK(datetime(2021,2,22))
+    # getFundHoldingHK(datetime(2021,2,22))
