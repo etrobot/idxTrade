@@ -518,9 +518,9 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
     df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
     df['基金简称'] = df.apply(
-        lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
+        lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
     df['基金代码'] = df['基金代码'].apply(
-        lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+        lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
     return df
 
 def renderHtml(df,filename:str,title:str):
@@ -572,10 +572,10 @@ def getFundHoldingHK(pdate:dt):
     df = df[df['基金简称'].str.contains('港')]
     df = df[~df['基金简称'].str.contains('沪|深')]
     df['基金简称'] = df.apply(
-        lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
+        lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
                                                                                      fundname=x['基金简称']), axis=1)
     df['基金代码'] = df['基金代码'].apply(
-        lambda x: "<a href='https://qieman.com/funds/{fundcode}'>{fundcode}</a>".format(fundcode=x))
+        lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
     renderHtml(df, '../CMS/source/Quant/fundhk.html', '持仓港股的内地基金' + rDate.strftime('%y%m%d'))
     fname='fund/hk'+rDate.strftime('%Y%m%d')+'.csv'
     if os.path.isfile(fname):
