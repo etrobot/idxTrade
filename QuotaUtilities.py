@@ -580,6 +580,13 @@ def getFundHoldingHK(pdate:dt):
                                                                                      fundname=x['基金简称']), axis=1)
     df['基金代码'] = df['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
+    df['weekday']=np.nan
+    for i in range(0, 5):
+        for calKey in ['_U','_J']:  # 加入url参数（小时），让浏览器不使用缓存
+            filename = '../etrobot.github.io/Quant/%s%s%s.html' % ('hk', i + 1, calKey)
+            if os.path.isfile(filename):
+                with open(filename, "r") as f:
+                    output = re.findall('\?t=.*"', f.read())
     renderHtml(df, '../CMS/source/Quant/fundhk.html', '持仓港股的内地基金' + rDate.strftime('%y%m%d'))
 
     fname='fund/hk'+rDate.strftime('%Y%m%d')+'.csv'

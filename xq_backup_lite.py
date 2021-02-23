@@ -9,7 +9,6 @@ from selenium import webdriver
 ENCODE_IN_USE = 'GBK'
 IMG_FOLDER = '../upknow/'
 
-
 def updateAllImg(mkt, pdate, calKeys):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
@@ -34,6 +33,33 @@ def updateAllImg(mkt, pdate, calKeys):
                     draw(qdf, imgfolder + filename,dragonTigerBoard(symbol,g.xq_a_token))
                     drawedSymbolList.append(symbol)
 
+
+def updateFund(pdate:dt):
+    fundDf = ak.fund_em_open_fund_rank()
+    fundDf.drop('序号',1,inplace=True)
+    fundDf['weekday']=None
+    fundDf['stock']=None
+    for mkt in ['cn','hk']:
+        quote = pd.read_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK',dtype={'symbol':str})
+        for i in range(0, 5):
+            for calKey in ['_U', '_J']:  # 加入url参数（小时），让浏览器不使用缓存
+                weekday='%s%s%s' % (mkt, i + 1, calKey)
+                filename = '../CMS/source/Quant/%s.html' % weekday
+                if os.path.isfile(filename):
+                    with open(filename, "r") as f:
+                        output = re.findall('\.\./Fund/.*\.html', f.read())
+                        for fname in output:
+                            converters = {c:lambda x: str(x) for c in fundDf.columns}
+                            df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
+                            for k in df['基金代码']:
+                                idx=fundDf.index[fundDf['基金代码'] == k][0]
+                                fundDf.at[idx,'weekday']='<a href="%s.html">%s</a>'%(weekday,weekday)
+                                stockSymbol=re.findall('/Fund/(.*)\.html',fname)[0]
+                                stockName=quote.loc[quote['symbol']==stockSymbol]['name'].values[0]
+                                fundDf.at[idx,'stock']='<a href="https://xueqiu.com/S/%s">%s%s</a>'%(stockSymbol,stockSymbol,stockName)
+    fundDf.dropna(subset=['weekday'],inplace=True)
+    fundDf.sort_values('weekday',inplace=True)
+    renderHtml(fundDf,'../CMS/source/Quant/fund.html','含量化选股的内地基金')
 
 def draw(df, info, boardDates=()):
     # 导入数据
@@ -380,6 +406,8 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     mtmDfBAK = indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '.txt', encoding=ENCODE_IN_USE, index_label='symbol')
     updateAllImg(mkt, pdate, cal.keys())
+    if mkt in ['cn','hk']:
+        updateFund(pdate)
     if len(sys.argv) == 2:
         idxtrade = idxTrade(mkt, 0)
         idxtrade.run()
