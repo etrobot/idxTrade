@@ -198,7 +198,7 @@ def dragonTigerBoard(symbol,xq_a_token):
     quoteData = json.loads(getUrl(url,xq_a_token))['data']['items']
     tdateList = []
     for q in quoteData:
-        if len(q)!=2:
+        if len(q)!=2 or '连续三个交易日内' in q[0]['info_type_name']:
             continue
         for branch in q[0]['branches']:
             if '股通' in branch['branch_name'] and branch['net_amt']>0:
