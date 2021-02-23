@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuotaUtilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuotaUtilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-328">
-              <caret line="409" column="55" lean-forward="true" selection-start-line="409" selection-start-column="55" selection-end-line="409" selection-end-column="55" />
+            <state relative-caret-position="575">
+              <caret line="250" column="27" lean-forward="true" selection-start-line="250" selection-start-column="27" selection-end-line="250" selection-end-column="27" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -25,11 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1320">
-              <caret line="570" column="34" lean-forward="true" selection-start-line="570" selection-start-column="34" selection-end-line="570" selection-end-column="34" />
+              <caret line="570" column="34" selection-start-line="570" selection-start-column="34" selection-end-line="570" selection-end-column="34" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -40,8 +40,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="902">
-              <caret line="124" column="24" selection-start-line="124" selection-start-column="24" selection-end-line="124" selection-end-column="24" />
+            <state relative-caret-position="393">
+              <caret line="128" column="30" selection-start-line="128" selection-start-column="30" selection-end-line="128" selection-end-column="30" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -136,14 +136,14 @@
         <option value="$PROJECT_DIR$/Bash/push.sh" />
         <option value="$PROJECT_DIR$/idxTrade.py" />
         <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/xq_backup_lite.py" />
         <option value="$PROJECT_DIR$/QuotaUtilities.py" />
+        <option value="$PROJECT_DIR$/xq_backup_lite.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="134" />
-    <option name="y" value="25" />
+    <option name="x" value="313" />
+    <option name="y" value="23" />
     <option name="width" value="2172" />
     <option name="height" value="1355" />
   </component>
@@ -196,7 +196,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="http.proxy" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -210,7 +210,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.xq_backup_lite">
     <configuration name="Research" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -287,7 +287,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xq_backup_lite.py" />
-      <option name="PARAMETERS" value="cn 1" />
+      <option name="PARAMETERS" value="cn" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -296,10 +296,10 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.Research" />
       <item itemvalue="Python.idxTrade" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python.xq_backup_lite" />
     </list>
     <recent_temporary>
       <list>
@@ -319,13 +319,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00071" summary="update">
-      <created>1607327281223</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1607327281224</updated>
     </task>
     <task id="LOCAL-00072" summary="update">
       <created>1607928893433</created>
@@ -663,19 +656,26 @@
       <option name="project" value="LOCAL" />
       <updated>1614046652987</updated>
     </task>
-    <option name="localTasksCounter" value="120" />
+    <task id="LOCAL-00120" summary="update funds">
+      <created>1614059761605</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1614059761606</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="134" y="25" width="2172" height="1355" extended-state="0" />
+    <frame x="313" y="23" width="2172" height="1355" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12552302" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12552302" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.82138443" weight="0.45051464" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.82138443" visible="true" weight="0.45051464" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -771,9 +771,9 @@
     <MESSAGE value="gen debt html" />
     <MESSAGE value="update fund" />
     <MESSAGE value="update debts" />
-    <MESSAGE value="update funds" />
     <MESSAGE value="fix fund bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix fund bug" />
+    <MESSAGE value="update funds" />
+    <option name="LAST_COMMIT_MESSAGE" value="update funds" />
   </component>
   <component name="WindowStateProjectService">
     <state x="140" y="0" key="#Notifications" timestamp="1603116596849">
@@ -1679,32 +1679,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
+    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-328">
-          <caret line="409" column="55" lean-forward="true" selection-start-line="409" selection-start-column="55" selection-end-line="409" selection-end-column="55" />
+        <state relative-caret-position="1320">
+          <caret line="570" column="34" selection-start-line="570" selection-start-column="34" selection-end-line="570" selection-end-column="34" />
           <folding>
-            <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="902">
-          <caret line="124" column="24" selection-start-line="124" selection-start-column="24" selection-end-line="124" selection-end-column="24" />
+        <state relative-caret-position="393">
+          <caret line="128" column="30" selection-start-line="128" selection-start-column="30" selection-end-line="128" selection-end-column="30" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
+    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="570" column="34" lean-forward="true" selection-start-line="570" selection-start-column="34" selection-end-line="570" selection-end-column="34" />
+        <state relative-caret-position="575">
+          <caret line="250" column="27" lean-forward="true" selection-start-line="250" selection-start-column="27" selection-end-line="250" selection-end-column="27" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>

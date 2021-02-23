@@ -247,7 +247,7 @@ def thsIndustry(mkt='cn', pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
     options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
+    options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -309,7 +309,8 @@ def thsIndustry(mkt='cn', pdate=None):
                 if 'forbidden.' in content:
                     t.sleep(60)
                     continue
-                headers["Cookie"] = "v={}".format(driver.get_cookies()[0]["value"])
+                if len(driver.get_cookies())>0:
+                    headers["Cookie"] = "v={}".format(driver.get_cookies()[0]["value"])
                 continue
             for i in range(14, len(tr) + 14, 14):
                 # if str(tr[i-13]).startswith('688'):
