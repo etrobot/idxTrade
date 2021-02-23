@@ -581,6 +581,7 @@ def getFundHoldingHK(pdate:dt):
     df['基金代码'] = df['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
     renderHtml(df, '../CMS/source/Quant/fundhk.html', '持仓港股的内地基金' + rDate.strftime('%y%m%d'))
+
     fname='fund/hk'+rDate.strftime('%Y%m%d')+'.csv'
     if os.path.isfile(fname):
         return pd.read_csv(fname,dtype={'fundCode':str})

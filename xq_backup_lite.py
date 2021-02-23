@@ -410,7 +410,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 debts.at[k[2:], '距强赎价'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
                 if '<a' not in debts.at[k[2:], '转债代码']:
                     debts.at[k[2:], '转债名称'] = '<a href="https://xueqiu.com/S/'+ k[:2] + debts.at[k[2:], '转债代码']+'">'+debts.at[k[2:], '转债名称']+'</a>'
-        debts.sort_values(by=['距强赎价'], inplace=True)
+        debts.sort_values(by=['距强赎价%'], inplace=True)
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
