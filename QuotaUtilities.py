@@ -1,6 +1,7 @@
 import requests,datetime,json,demjson,os,re
 import time as t
 import pandas as pd
+import numpy as np
 import logging
 import datetime as dt
 from datetime import *
@@ -513,7 +514,7 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     else:
         df=ak.fund_em_open_fund_rank()
         df.drop('序号',1,inplace=True)
-        df.to_csv(fname)
+        df.to_csv(fname,index=False)
     cols=['单位净值','累计净值','日增长率','近1周','近1月','近3月','近6月','近1年','近2年','近3年','今年来','成立来','自定义']
     df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
     df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
@@ -524,6 +525,9 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     return df
 
 def renderHtml(df,filename:str,title:str):
+    df.index = np.arange(1, len(df) + 1)
+    df.index.name='序号'
+    df.reset_index(inplace=True)
     pd.set_option('colheader_justify', 'center')
     html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%title
     html_string = html_string.format(
