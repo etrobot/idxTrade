@@ -53,12 +53,10 @@ def updateFund(pdate:dt):
                         output = re.findall('\.\./Fund/.*\.html', f.read())
                         for fname in output:
                             converters = {c:lambda x: str(x) for c in fundDf.columns}
-                            print(fname.replace('Fund','CMS/source/Fund'))
                             try:
                                 df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
                             except:
                                 continue
-                            print(df['基金代码'],fundDf['基金代码'])
                             for k in df['基金代码']:
                                 if k not in fundDf['基金代码']:
                                     continue
