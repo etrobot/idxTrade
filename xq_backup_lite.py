@@ -50,15 +50,15 @@ def updateFund(pdate:dt):
                 filename = '../CMS/source/Quant/%s.html' % weekday
                 if os.path.isfile(filename):
                     with open(filename, "r") as f:
-                        output = re.findall('\.\./Fund/.*\.html', f.read())
-                        for fname in output:
+                        output = re.findall('id="(.*)"', f.read())
+                        for stockSymbol in output:
+                            stockSymbol=stockSymbol.replace('#','')
                             converters = {c:lambda x: str(x) for c in fundDf.columns}
                             try:
-                                df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
+                                df = pd.read_html('../CMS/source/Fund/%s.html'%stockSymbol,encoding='utf-8', converters=converters)[0]
                             except:
                                 continue
                             for k in df['基金代码'].values.tolist():
-                                stockSymbol = re.findall('/Fund/(.*)\.html', fname)[0]
                                 if k not in fundDf['基金代码'].values or stockSymbol not in quote['symbol'].values:
                                     continue
                                 idx=fundDf.index[fundDf['基金代码'] == k][0]
