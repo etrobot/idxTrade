@@ -57,11 +57,11 @@ def updateFund(pdate:dt):
                                 df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
                             except:
                                 continue
-                            for k in df['基金代码']:
-                                if k not in fundDf['基金代码']:
+                            for k in df['基金代码'].values.tolist():
+                                stockSymbol = re.findall('/Fund/(.*)\.html', fname)[0]
+                                if k not in fundDf['基金代码'].values or stockSymbol not in quote['symbol'].values:
                                     continue
                                 idx=fundDf.index[fundDf['基金代码'] == k][0]
-                                stockSymbol=re.findall('/Fund/(.*)\.html',fname)[0]
                                 stockName=quote.loc[quote['symbol']==stockSymbol]['name'].values[0]
                                 fundDf.at[idx,'stock']='<a href="https://xueqiu.com/S/%s">%s%s</a>'%(stockSymbol,stockSymbol,stockName)
                                 fundDf.at[idx,'weekday']='<a href="%s.html#%s">%s</a>'%(weekday,stockSymbol,weekday)
