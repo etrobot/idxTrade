@@ -496,6 +496,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     if mkt == 'cn' and calKey == '_U':
         txt='\n<br>高亮k线代表当天被港资大力买入，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
+        .replace('<a href="#','<a id="#')\
         .replace('<a href="https://xueqiu', '<a class="button is-black" href="https://xueqiu') \
         .replace('<a href="../Fund', '<a class="button is-dark" href="../Fund')\
         .replace('/a>', '/a><br>') \

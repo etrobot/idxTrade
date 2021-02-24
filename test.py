@@ -102,8 +102,8 @@ if __name__=='__main__':
     # in case the reproduced version is not "correct".
     # response = requests.get('https://hq.cmschina.com/market/json?funcno=20050&version=1&stock_list=SZ%3A300419&count=10000&type=1&field=1%3A2%3A3%3A4%3A5%3A6%3A7%3A8%3A9%3A10%3A11%3A12%3A13%3A14%3A15%3A16%3A18%3A19&date=20201020&FQType=1', headers=headers)
 
-    # idxtrade = idxTrade('us', 0)
-    # idxtrade.run()
+    idxtrade = idxTrade('us', 0)
+    idxtrade.run()
     # df=pd.read_csv('md/cn20201113.txt', dtype=str)
     # print(df.dropna(subset=['_U']).sort_values(by=['_U'], ascending=True).iloc[:10])
     # for symbol in df['symbol'][:10]:
@@ -137,8 +137,8 @@ if __name__=='__main__':
     # print(df['基金简称'].values[0])
     # print(heldBy('00700',datetime(2021,2,19),'hk')['基金简称'])
     # getFundHoldingHK(datetime(2021,2,22))
-    pdate=datetime(2021,2,19)
-    updateFund(pdate)
+    # pdate=datetime(2021,2,19)
+    # updateFund(pdate)
 
 
 

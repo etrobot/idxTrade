@@ -56,7 +56,8 @@ class idxTrade:#保存参数的类
                     if os.path.isfile(filename):
                         with open(filename, "r") as f:
                             html = etree.HTML(f.read())
-                            symbols=[x.split('/')[-1] for x in html.xpath('//a/@href')]
+                            symbols=[x.split('/')[-1] for x in html.xpath('//a[not(@id)]/@href')]
+                    print(symbols)
                     if symbols[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
