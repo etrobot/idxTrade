@@ -40,7 +40,10 @@ def updateFund(pdate:dt):
     fundDf['weekday']=None
     fundDf['stock']=None
     for mkt in ['cn','hk']:
-        quote = pd.read_csv('md/'+ mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK',dtype={'symbol':str})
+        quoteFile='md/'+ mkt + pdate.strftime('%Y%m%d') + '_Bak.csv'
+        if not os.path.isfile(quoteFile):
+            return
+        quote = pd.read_csv(quoteFile, encoding='GBK',dtype={'symbol':str})
         for i in range(0, 5):
             for calKey in ['_U', '_J']:  # 加入url参数（小时），让浏览器不使用缓存
                 weekday='%s%s%s' % (mkt, i + 1, calKey)
