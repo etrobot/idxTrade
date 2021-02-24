@@ -53,8 +53,15 @@ def updateFund(pdate:dt):
                         output = re.findall('\.\./Fund/.*\.html', f.read())
                         for fname in output:
                             converters = {c:lambda x: str(x) for c in fundDf.columns}
-                            df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
+                            print(fname.replace('Fund','CMS/source/Fund'))
+                            try:
+                                df = pd.read_html(fname.replace('Fund','CMS/source/Fund'),encoding='utf-8', converters=converters)[0]
+                            except:
+                                continue
+                            print(df['基金代码'],fundDf['基金代码'])
                             for k in df['基金代码']:
+                                if k not in fundDf['基金代码']:
+                                    continue
                                 idx=fundDf.index[fundDf['基金代码'] == k][0]
                                 stockSymbol=re.findall('/Fund/(.*)\.html',fname)[0]
                                 stockName=quote.loc[quote['symbol']==stockSymbol]['name'].values[0]
@@ -435,13 +442,13 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     if mkt=='cn':
         debts = ak.bond_cov_comparison()
         debts.set_index('正股代码', inplace=True)
-        debts['距强赎价'] = np.nan
+        debts['距强赎价比'] = np.nan
         for k, v in indDf.iterrows():
             if k[2:] in debts.index and v['current'] > 0:
-                debts.at[k[2:], '距强赎价'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
+                debts.at[k[2:], '距强赎价比'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
                 if '<a' not in debts.at[k[2:], '转债代码']:
                     debts.at[k[2:], '转债名称'] = '<a href="https://xueqiu.com/S/'+ k[:2] + debts.at[k[2:], '转债代码']+'">'+debts.at[k[2:], '转债名称']+'</a>'
-        debts.sort_values(by=['距强赎价%'], inplace=True)
+        debts.sort_values(by=['距强赎价比'], inplace=True)
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
@@ -478,8 +485,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         if mkt == 'cn':
             deb = debts[debts.index == k[2:]]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
-                # rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
+                # rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 

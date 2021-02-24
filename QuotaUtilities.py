@@ -491,8 +491,6 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     :param symbol:
     :return list:
     '''
-    if mkt not in ['cn','hk']:
-        return None
     if mkt == 'cn':
         symbol=symbol[-6:]
         furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate().strftime('%Y-%m-%d'))
@@ -502,12 +500,14 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
             flist = data[data['f6'].isin(getFundListSorted()[:30])]['f3'].to_list()
         else:
             return None
-    else:
+    elif mkt=='hk':
         data=getFundHoldingHK(pdate)
         if len(data) > 0:
             flist = data[data['股票代码']==symbol]['fundCode'].to_list()
         else:
             return None
+    else:
+        return None
     fname='./fund/'+pdate.strftime('%Y%m%d')+'.csv'
     if os.path.isfile(fname):
         df=pd.read_csv(fname,dtype={'基金代码':str})
@@ -575,6 +575,7 @@ def getFundHoldingHK(pdate:dt):
     df.drop('序号', 1, inplace=True)
     df = df[df['基金简称'].str.contains('港')]
     df = df[~df['基金简称'].str.contains('沪|深')]
+    fundlist = df[['基金代码','基金简称']].copy().set_index('基金代码')
     df['基金简称'] = df.apply(
         lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
                                                                                      fundname=x['基金简称']), axis=1)
@@ -594,14 +595,14 @@ def getFundHoldingHK(pdate:dt):
         return pd.read_csv(fname,dtype={'fundCode':str})
     mlog('港股基金爬取中...')
     df_hk_holding=pd.DataFrame()
-    for fundCode in df.index.values.tolist():
+    for fundCode in fundlist.index:
         df_holding=ak.fund_em_portfolio_hold(code=fundCode, year=str(rDate.year))
         if len(df_holding)==0:
             continue
         df_hk=df_holding[df_holding['股票名称'].isin(hkQuote['name'])]
         df_hk['股票代码'] = [x[1:] for x in df_hk['股票代码'].values]
         df_hk['fundCode']=fundCode
-        df_hk['fundName']=df.at[fundCode,'基金简称']
+        df_hk['fundName']=fundlist.at[fundCode,'基金简称']
         df_hk_holding=df_hk_holding.append(df_hk)
     df_hk_holding.to_csv(fname)
     return df_hk_holding
