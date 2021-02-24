@@ -273,7 +273,7 @@ def thsIndustry(mkt='cn', pdate=None):
     for i in range(len(gnbk)):
         thsgnbk.append((gnbk[i].text))
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
