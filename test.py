@@ -138,7 +138,7 @@ if __name__=='__main__':
     # print(df['基金简称'].values[0])
     # print(heldBy('00700',datetime(2021,2,19),'hk')['基金简称'])
     # getFundHoldingHK(datetime(2021,2,22))
-    pdate=datetime(2021,2,19)
+    pdate=datetime(2021,2,24)
     updateFund(pdate)
 
 

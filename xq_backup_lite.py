@@ -50,7 +50,7 @@ def updateFund(pdate:dt):
                 filename = '../CMS/source/Quant/%s.html' % weekday
                 if os.path.isfile(filename):
                     with open(filename, "r") as f:
-                        output = re.findall('id="(.*)"', f.read())
+                        output = re.findall('<a id="(.*)"></a>', f.read())
                         for stockSymbol in output:
                             stockSymbol=stockSymbol.replace('#','')
                             converters = {c:lambda x: str(x) for c in fundDf.columns}
