@@ -46,7 +46,8 @@ def updateFund(pdate:dt):
         quote = pd.read_csv(quoteFile, encoding='GBK',dtype={'symbol':str})
         for i in range(0, 5):
             for calKey in ['_U', '_J']:  # 加入url参数（小时），让浏览器不使用缓存
-                weekday='%s%s%s' % (mkt, i + 1, calKey)
+                weekday='%s%s%s' % (mkt, range(1,6)[i-pdate.weekday()-1], calKey)
+                print(weekday)
                 filename = '../CMS/source/Quant/%s.html' % weekday
                 if os.path.isfile(filename):
                     with open(filename, "r") as f:
