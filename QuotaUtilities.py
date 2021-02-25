@@ -573,8 +573,7 @@ def getFundHoldingHK(pdate:dt):
     hkQuote = pd.read_csv('md/hk' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK')
     df = ak.fund_em_open_fund_rank()
     df.drop('序号', 1, inplace=True)
-    df = df[df['基金简称'].str.contains('港')]
-    df = df[~df['基金简称'].str.contains('沪|深')]
+    df = df[df['基金简称'].str.contains('港股|香港')]
     fundlist = df[['基金代码','基金简称']].copy().set_index('基金代码')
     df['基金简称'] = df.apply(
         lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
