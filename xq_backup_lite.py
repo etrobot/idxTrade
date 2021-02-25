@@ -55,7 +55,7 @@ def updateFund(pdate:dt):
                             stockSymbol=stockSymbol.replace('#','')
                             converters = {c:lambda x: str(x) for c in fundDf.columns}
                             try:
-                                df = pd.read_html('../CMS/source/Fund/%s.html'%stockSymbol,encoding='utf-8', converters=converters)[0]
+                                df = pd.read_html('../CMS/source/Fund/%s.html'%stockSymbol,encoding='utf-8', converters=converters)[0][::-1]
                             except:
                                 continue
                             for k in df['基金代码'].values.tolist():
