@@ -69,7 +69,7 @@ def updateFund(pdate:dt):
     fundDf.dropna(subset=['weekday'],inplace=True)
     fundDf.sort_values('weekday',inplace=True)
     fundDf['基金简称'] = fundDf.apply(
-        lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
+        lambda x: '<a href="http://fund.eastmoney.com/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
                                                                                         fundname=x['基金简称']), axis=1)
     fundDf['基金代码'] = fundDf['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))

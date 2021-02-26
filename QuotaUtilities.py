@@ -519,7 +519,7 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
     df=df[df['基金代码'].isin(flist)].sort_values(by=['近1月', '近1周'], ascending=False)
     df['基金简称'] = df.apply(
-        lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
+        lambda x: '<a href="http://fund.eastmoney.com/{fundcode}.html">{fundname}</a>'.format(fundcode=x['基金代码'],fundname=x['基金简称']), axis=1)
     df['基金代码'] = df['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
     return df
@@ -576,7 +576,7 @@ def getFundHoldingHK(pdate:dt):
     df = df[df['基金简称'].str.contains('港股|香港')]
     fundlist = df[['基金代码','基金简称']].copy().set_index('基金代码')
     df['基金简称'] = df.apply(
-        lambda x: '<a href="https://qieman.com/funds/{fundcode}">{fundname}</a>'.format(fundcode=x['基金代码'],
+        lambda x: '<a href="http://fund.eastmoney.com/{fundcode}.html">{fundname}</a>'.format(fundcode=x['基金代码'],
                                                                                      fundname=x['基金简称']), axis=1)
     df['基金代码'] = df['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
