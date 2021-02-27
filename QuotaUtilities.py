@@ -190,23 +190,6 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
     df.to_csv(quoFile,encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
     return df
 
-def dragonTigerBoard(symbol,xq_a_token):
-    if symbol[:2] not in ['SZ', 'SH']:
-        return []
-    url = 'https://stock.xueqiu.com/v5/stock/capital/longhu.json?symbol=' + symbol + '&page=1&size=100'
-    mlog(url)
-    quoteData = json.loads(getUrl(url,xq_a_token))['data']['items']
-    tdateList = []
-    for q in quoteData:
-        if len(q)!=2 or '连续三个交易日内' in q[0]['info_type_name']:
-            continue
-        for branch in q[0]['branches']:
-            if '股通' in branch['branch_name'] and branch['net_amt']>0:
-                tdateList.append(q[0]['td_date'])
-                break
-    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
-    return tdateSeries
-
 def getTimestamp(dateString):
     d=[int(x) for x in str(dateString).split('-')]
     return int(t.mktime(datetime(d[0],d[1],d[2]).timetuple())) * 1000
@@ -216,7 +199,6 @@ def dragonTigerBoards(pdate,xq_a_token):
     stocks=[]
     stocksDict=dict()
     checked=[]
-    # print(klineSZZS.index[-60].date(),klineSZZS.index.date[-60])
     tqdmRange=tqdm(klineSZZS.index[-20:].date)
     for d in tqdmRange:
         timestampstr=str(int(t.mktime(d.timetuple())*1000))
@@ -238,16 +220,30 @@ def dragonTigerBoards(pdate,xq_a_token):
 
         for s in df['symbol'].to_list():
             tqdmRange.set_description(str(d)+'龙虎 '+s)
-            if s in checked or s.startswith('SH688'):
-                continue
             checked.append(s)
-            check = dragonTigerBoard(s, xq_a_token)
-            if len(check) == 0:
+            url = 'https://stock.xueqiu.com/v5/stock/capital/longhu.json?symbol=' + s + '&page=1&size=100'
+            quoteData = json.loads(getUrl(url, xq_a_token))['data']['items']
+            tdateList = []
+            noIns=True
+            for q in quoteData:
+                if not noIns:
+                    break
+                if len(q) != 2 or '连续三个交易日内' in q[0]['info_type_name']:
+                    continue
+                for branch in q[0]['branches']:
+                    if t.mktime(klineSZZS.index.date[-60].timetuple()) > t.mktime(datetime.fromtimestamp(q[0]['td_date']/1000).timetuple()):
+                        continue
+                    if '股通' in branch['branch_name']:
+                        if branch['net_amt'] > 0:
+                            tdateList.append(q[0]['td_date'])
+                    elif '机构' in branch['branch_name']:
+                        noIns=False
+                        break
+            if not noIns:
                 continue
-            elif t.mktime(klineSZZS.index.date[-60].timetuple())>t.mktime(check[0].timetuple()):
-                continue
-            else:
-                stocksDict[s] = check
+            tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms', utc=True).dt.tz_convert(
+                'Asia/Shanghai').dt.date
+            stocksDict[s] = tdateSeries
 
     mlog(len(checked),len(stocksDict.keys()))
     return stocksDict
@@ -580,7 +576,7 @@ def getFundHoldingHK(pdate:dt):
                                                                                      fundname=x['基金简称']), axis=1)
     df['基金代码'] = df['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
-    df['weekday']=np.nan
+    df['weekday']=None
     for i in range(0, 5):
         for calKey in ['_U','_J']:  # 加入url参数（小时），让浏览器不使用缓存
             filename = '../etrobot.github.io/Quant/%s%s%s.html' % ('hk', i + 1, calKey)

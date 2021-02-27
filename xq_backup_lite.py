@@ -19,7 +19,7 @@ def updateAllImg(mkt, pdate, calKeys):
                 if os.path.isfile(filename):
                     with open(filename, "r+") as f:
                         output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
-                        output=output.replace(IMG_FOLDER,'https://upknow.gitee.io/')
+                        # output=output.replace(IMG_FOLDER,'https://upknow.gitee.io/')
                         f.seek(0)
                         f.write(output)
                         f.truncate()
@@ -30,7 +30,7 @@ def updateAllImg(mkt, pdate, calKeys):
                     tqdmRange.set_description('update ' + imgfolder + filename)
                     symbol = filename.split('_')[2]
                     qdf = getK(symbol, pdate,g.xq_a_token,int(symbol in drawedSymbolList))
-                    draw(qdf, imgfolder + filename,dragonTigerBoard(symbol,g.xq_a_token))
+                    draw(qdf, imgfolder + filename,g.boardlist.get(symbol,[]))
                     drawedSymbolList.append(symbol)
 
 
@@ -47,7 +47,6 @@ def updateFund(pdate:dt):
         for i in range(0, 5):
             for calKey in ['_U', '_J']:  # 加入url参数（小时），让浏览器不使用缓存
                 weekday='%s%s%s' % (mkt, range(1,6)[i-pdate.weekday()-1], calKey)
-                print(weekday)
                 filename = '../CMS/source/Quant/%s.html' % weekday
                 if os.path.isfile(filename):
                     with open(filename, "r") as f:
@@ -142,7 +141,7 @@ def draw(df, info, boardDates=()):
         type='candle',
         volume=True,
         mav=(5, 10, 20),
-        title=info[len(IMG_FOLDER + '1/cn/'):-4] + '60天' + str(
+        title=info[len(IMG_FOLDER + '1/cn/'):-4] + '45天' + str(
             round(df['Close'][-1] / df['Close'][0] * 100 - 100, 2)) + '% 最新' + str(
             round(df['percent'][-1] * 100, 2)) + '% 额' + str(round(df['amount'][-1] / 100000000, 2)) + '亿',
         # ylabel='OHLCV Candles',
@@ -402,12 +401,12 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
     cal = {'_J': [], '_U': []}
     indDf['filename'] = None
-    indDf['past60Days'] = -999.0
+    indDf['past45Days'] = -999.0
     tqdmRange = tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s" % (mkt, v['行业'], k, v['name'])).ljust(25))
         qdf = getK(k, pdate,g.xq_a_token, test)
-        indDf.at[k, 'past60Days'] = round(qdf['close'][-1] / min(qdf['close'][-60:]) - 1, 4)
+        indDf.at[k, 'past45Days'] = round(qdf['close'][-1] / min(qdf['close'][-45:]) - 1, 4)
         info = [mkt, v['行业'], k, v['name']]
         indDf.at[k, 'filename'] = IMG_FOLDER + str(pdate.weekday() + 1) + '/' + mkt + '/' + '_'.join(
             info) + '.png'
@@ -419,7 +418,8 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         df2md(mkt, k, indDf.copy(), pdate, test)
     mtmDfBAK = indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '.txt', encoding=ENCODE_IN_USE, index_label='symbol')
-    updateAllImg(mkt, pdate, cal.keys())
+    if not g.testMode():
+        updateAllImg(mkt, pdate, cal.keys())
     if mkt in ['cn','hk']:
         updateFund(pdate)
     if len(sys.argv) == 2:
@@ -445,8 +445,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     drawedSymbolList = []
     if mkt=='cn':
         debts = ak.bond_cov_comparison()
+        debts = debts.loc[:, ~debts.columns.duplicated()]
         debts.set_index('正股代码', inplace=True)
-        debts['距强赎价比'] = np.nan
+        debts['距强赎价比'] = None
         for k, v in indDf.iterrows():
             if k[2:] in debts.index and v['current'] > 0:
                 debts.at[k[2:], '距强赎价比'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
@@ -458,12 +459,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description('【' + calKey + '】' + k + v['name'])
-        dfmax = indDf[indDf['行业'] == v['行业']].sort_values(by=['past60Days'], ascending=False).iloc[0]
-        vlines = []
-        if g.boardlist:
-            vlines = g.boardlist.get(k,[])
-        elif not g.testMode():
-            vlines = dragonTigerBoard(k, g.xq_a_token)
+        dfmax = indDf[indDf['行业'] == v['行业']].sort_values(by=['past45Days'], ascending=False).iloc[0]
+        vlines = g.boardlist.get(k,[])
         if not g.testMode() and k not in drawedSymbolList:
             qdf = getK(k, pdate,g.xq_a_token, 1)
             draw(qdf, v['filename'], vlines)
@@ -490,12 +487,12 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             deb = debts[debts.index == k[2:]]
             if len(deb) != 0:
                 rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
-                # rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
+                rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
-        maxtxt = v['行业'] + '板块近60日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 60日低点至今涨幅%d%% 今年%s%%' % (
-            dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm'],0), dfmax['past60Days'] * 100,
+        maxtxt = v['行业'] + '板块近45日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 45日低点至今涨幅%d%% 今年%s%%' % (
+            dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm'],0), dfmax['past45Days'] * 100,
             cur_year_perc[dfmax.name])
         if mkt=='cn' or mkt=='hk':
             fundDf = heldBy(dfmax.name, pdate,mkt)
@@ -520,6 +517,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
     if test == 0:
         html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
+    else:
+        html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm = '''
         <!-- toufu -->
@@ -561,10 +560,10 @@ class params:
         self.xq_a_token = cfg[mkt]['xq_a_token']
         self.paramSet = {'mkt': mkt, 'pdate': cfg[mkt]['date']}
         self.boardlist ={}
-        if market=='cn':
-            self.boardlist = dragonTigerBoards(self.paramSet['pdate'], self.xq_a_token)
 
     def go(self):
+        if self.paramSet['mkt']=='cn':
+            self.boardlist = dragonTigerBoards(self.paramSet['pdate'], self.xq_a_token)
         dailyCheck(test=self.test)
 
     def testMode(self):
@@ -579,7 +578,7 @@ if __name__ == '__main__':
     )
     if len(sys.argv) == 3:
         g = params(market=sys.argv[1], test=int(sys.argv[2]))
-    if len(sys.argv) == 4:
+    elif len(sys.argv) == 4:
         dateInts=[int(x) for x in sys.argv[3].split('-')]
         g = params(market=sys.argv[1], test=int(sys.argv[2]),pdate=date(dateInts[0],dateInts[1],dateInts[2]))
     else:
