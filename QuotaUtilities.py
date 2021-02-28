@@ -194,6 +194,23 @@ def getTimestamp(dateString):
     d=[int(x) for x in str(dateString).split('-')]
     return int(t.mktime(datetime(d[0],d[1],d[2]).timetuple())) * 1000
 
+def dragonTigerBoard(symbol,xq_a_token):
+    if symbol[:2] not in ['SZ', 'SH']:
+        return []
+    url = 'https://stock.xueqiu.com/v5/stock/capital/longhu.json?symbol=' + symbol + '&page=1&size=100'
+    mlog(url)
+    quoteData = json.loads(getUrl(url,xq_a_token))['data']['items']
+    tdateList = []
+    for q in quoteData:
+        if len(q)!=2 or '连续三个交易日内' in q[0]['info_type_name']:
+            continue
+        for branch in q[0]['branches']:
+            if '股通' in branch['branch_name'] and branch['net_amt']>0:
+                tdateList.append(q[0]['td_date'])
+                break
+    tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms',utc=True).dt.tz_convert('Asia/Shanghai').dt.date
+    return tdateSeries
+
 def dragonTigerBoards(pdate,xq_a_token):
     klineSZZS = xueqiuK('SH000001',pdate.strftime('%Y-%m-%d'),xq_a_token)
     stocks=[]

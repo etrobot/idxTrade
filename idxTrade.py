@@ -26,11 +26,13 @@ class idxTrade:#保存参数的类
                 for stock in position:
                     print(self.mkt,stock['stock_symbol'])
                     if market=='cn':
-                        cls=cmsK(stock['stock_symbol'])['close']
+                        dailyK=cmsK(stock['stock_symbol'])
+                        vol=dailyK['volume']
+                        cls=dailyK['close']
                     else:
                         cls=getK(stock['stock_symbol'],self.cfg['date'],self.xq_a_token)['close']
                     sellSignal=False
-                    if cls[-1]/cls[-6]<iCls[-1]/iCls[-6] and cls[-1]/cls[-2]<iCls[-1]/iCls[-2]:
+                    if cls[-1]/cls[-5]<iCls[-1]/iCls[-5] and cls[-1]<cls[-2] and vol[-1]>vol[-2]:
                         sellSignal = True
                     if stock['weight']>30:
                         sellSignal = True
