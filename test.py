@@ -140,9 +140,10 @@ if __name__=='__main__':
     # getFundHoldingHK(datetime(2021,2,22))
     # pdate=datetime(2021,2,24)
     # updateFund(pdate)
-    debts = ak.bond_cov_comparison()
-    debts.set_index('正股代码', inplace=True)
-    print(debts.columns)
+    # debts = ak.bond_cov_comparison()
+    # debts.set_index('正股代码', inplace=True)
+    # print(debts.columns)
+    thsIndustry('cn',datetime.now().date())
 
 
 
