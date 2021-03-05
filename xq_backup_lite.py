@@ -428,6 +428,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
 
 
 def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
+    upRatio=round(indDf['percent'][indDf['percent']>0].count()/len(indDf['percent'])*100,1)
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
     capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
     midMktCap = indDf[mCap].median()
@@ -444,15 +445,21 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     article = []
     drawedSymbolList = []
     if mkt=='cn':
-        debts = ak.bond_cov_comparison()
-        debts = debts.loc[:, ~debts.columns.duplicated()]
-        debts.set_index('正股代码', inplace=True)
+        debts = ak.bond_cov_jsl()
+        debts = debts[
+            ['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt', 'force_redeem_price', 'premium_rt']]
+        debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
+            debcode=x['stock_id'][:2] + x['bond_id'], debname=x['bond_nm']), axis=1)
+        debts[['force_redeem_price', 'orig_iss_amt']] = debts[['force_redeem_price', 'orig_iss_amt']].apply(
+            pd.to_numeric, errors='coerce')
+        debts.set_index('bond_id', inplace=True)
         debts['距强赎价比'] = None
         for k, v in indDf.iterrows():
-            if k[2:] in debts.index and v['current'] > 0:
-                debts.at[k[2:], '距强赎价比'] = debts.at[k[2:], '强赎触发价'] / v['current'] - 1
-                if len(debts.at[k[2:], '转债代码'])==4:
-                    debts.at[k[2:], '转债名称'] = '<a href="https://xueqiu.com/S/'+ k[:2] + debts.at[k[2:], '转债代码']+'">'+debts.at[k[2:], '转债名称']+'</a>'
+            if v['current'] <= 0:
+                continue
+            debInDf = debts[debts['stock_id'] == k.lower()]
+            for dK, dV in debInDf.iterrows():
+                debts.at[dK, '距强赎价比'] = debts.at[dK, 'force_redeem_price'] / v['current'] - 1
         debts.sort_values(by=['距强赎价比'], inplace=True)
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
@@ -486,7 +493,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         if mkt == 'cn':
             deb = debts[debts.index == k[2:]]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2]+deb['转债代码'].values[0])
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价比'+ str(round(deb['force_redeem_price'].values[0]/v['current']*100-100,2))+'% 溢价' + deb['premium_rt'].values[0], k[:2]+deb['转债代码'].values[0])
                 rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
@@ -502,9 +509,12 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
         artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t='+datetime.now().strftime("%m%d%H")), maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
-    txt = '\n<br>'.join(article)
+    upWarning='\n<br>上涨比例%s%%' % upRatio
+    if upRatio<13.5:
+        upWarning+='可能有系统性风险，警惕！'
+    txt = upWarning+'\n<br>'.join(article)
     title = ' '.join([mkt, pdate.strftime('%y/%m/%d'), datetime.now().strftime('%H:%M'), calKey])
-    if mkt == 'cn' and calKey == '_U':
+    if mkt == 'cn':
         txt='\n<br>高亮k线代表当天被港资大力买入，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
         .replace('<a href="#','<a id="')\
@@ -519,6 +529,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     else:
         html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
+    html = html.replace(IMG_FOLDER, '../../' + IMG_FOLDER)
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm = '''
         <!-- toufu -->
