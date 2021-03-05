@@ -373,7 +373,7 @@ def thsIndustry(mkt='cn', pdate=None):
     indDf = indDf.replace('--', np.nan)
     indDf['float_market_capital'] = indDf['float_market_capital'].str.rstrip('亿').astype('float')
     indDf['amount'] = indDf['amount'].str.rstrip('亿').astype('float')
-    indDf[['current']] = indDf[['current']].apply(pd.to_numeric, errors='coerce', axis=1)
+    indDf[['current','percent']] = indDf[['current','percent']].apply(pd.to_numeric, errors='coerce', axis=1)
     indDf['current_year_percent'] = np.nan
     indDf.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return indDf
@@ -529,7 +529,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     else:
         html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
-    html = html.replace(IMG_FOLDER, '../../' + IMG_FOLDER)
+    html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm = '''
         <!-- toufu -->
