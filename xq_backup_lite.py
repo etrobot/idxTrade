@@ -450,6 +450,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             ['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt', 'force_redeem_price', 'premium_rt']]
         debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
             debcode=x['stock_id'][:2] + x['bond_id'], debname=x['bond_nm']), axis=1)
+        debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
+            symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
         debts[['force_redeem_price', 'orig_iss_amt']] = debts[['force_redeem_price', 'orig_iss_amt']].apply(
             pd.to_numeric, errors='coerce')
         debts.set_index('bond_id', inplace=True)
