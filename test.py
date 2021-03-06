@@ -144,24 +144,21 @@ if __name__=='__main__':
     # debts.set_index('正股代码', inplace=True)
     # print(debts.columns)
     thsIndustry('cn',datetime.now().date())
-    # pdate=datetime(2021,3,5).date()
+    # pdate=datetime(2021,3,4).date()
     # indDf=pd.read_csv('md/cn' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK',dtype={'symbol':str},index_col='symbol')
     # debts = ak.bond_cov_jsl()
-    # debts = debts[
-    #     ['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'force_redeem_price','orig_iss_amt', 'premium_rt']]
-    # debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
-    #     debcode=x['stock_id'][:2] + x['bond_id'], debname=x['bond_nm']), axis=1)
-    # debts[['force_redeem_price', 'orig_iss_amt']] = debts[['force_redeem_price', 'orig_iss_amt']].apply(
-    #     pd.to_numeric, errors='coerce')
-    # debts.set_index('bond_id', inplace=True)
+    # debts = debts[['bond_id','bond_nm','stock_id','stock_nm','orig_iss_amt','force_redeem_price','premium_rt']]
+    # debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(debcode=x['stock_id'][:2]+x['bond_id'],debname=x['bond_nm']),axis=1)
+    # debts[['force_redeem_price','orig_iss_amt']] = debts[['force_redeem_price','orig_iss_amt']].apply(pd.to_numeric, errors='coerce')
+    # debts.set_index('bond_id',inplace=True)
     # debts['距强赎价比'] = None
     # for k, v in indDf.iterrows():
     #     if v['current'] <= 0:
     #         continue
     #     debInDf = debts[debts['stock_id'] == k.lower()]
-    #     for dK, dV in debInDf.iterrows():
+    #     for dK,dV in debInDf.iterrows():
     #         debts.at[dK, '距强赎价比'] = debts.at[dK, 'force_redeem_price'] / v['current'] - 1
-    # debts = debts[debts['距强赎价比'] < 0].copy().sort_values(by=['orig_iss_amt']).append(debts[debts['距强赎价比'] >= 0])
+    # debts.sort_values(by=['距强赎价比'], inplace=True)
     # renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
 
