@@ -460,7 +460,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             debInDf = debts[debts['stock_id'] == k.lower()]
             for dK, dV in debInDf.iterrows():
                 debts.at[dK, '距强赎价比'] = debts.at[dK, 'force_redeem_price'] / v['current'] - 1
-        debts=debts[debts['距强赎价比']<0].copy().sort_values(by=['orig_iss_amt']).append(debts[~debts['距强赎价比']<0])
+        debts = debts[debts['距强赎价比'] < 0].copy().sort_values(by=['orig_iss_amt']).append(debts[debts['距强赎价比'] >= 0])
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
