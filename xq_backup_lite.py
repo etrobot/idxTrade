@@ -446,8 +446,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     drawedSymbolList = []
     if mkt=='cn':
         debts = ak.bond_cov_jsl()
-        debts = debts[
-            ['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt', 'force_redeem_price', 'premium_rt']]
+        debts = debts[['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt','premium_rt','force_redeem_price']]
         debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
             debcode=x['stock_id'][:2] + x['bond_id'], debname=x['bond_nm']), axis=1)
         debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(

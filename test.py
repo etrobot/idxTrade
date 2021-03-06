@@ -143,12 +143,11 @@ if __name__=='__main__':
     # debts = ak.bond_cov_comparison()
     # debts.set_index('正股代码', inplace=True)
     # print(debts.columns)
-    # thsIndustry('cn',datetime.now().date())
-    pdate=datetime(2021,3,4).date()
+    thsIndustry('cn',datetime.now().date())
+    # pdate=datetime(2021,3,5).date()
     # indDf=pd.read_csv('md/cn' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK',dtype={'symbol':str},index_col='symbol')
     # debts = ak.bond_cov_jsl()
-    # debts = debts[
-    #     ['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt', 'force_redeem_price', 'premium_rt']]
+    # debts = debts[['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt', 'premium_rt', 'force_redeem_price']]
     # debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
     #     debcode=x['stock_id'][:2] + x['bond_id'], debname=x['bond_nm']), axis=1)
     # debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
