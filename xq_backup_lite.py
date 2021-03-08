@@ -446,7 +446,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     drawedSymbolList = []
     if mkt=='cn':
         debts = ak.bond_cov_jsl()
-        debts = debts[['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt','premium_rt','force_redeem_price']]
+        debts = debts[['bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'orig_iss_amt','premium_rt','force_redeem_price']].sort_values(by=['orig_iss_amt'])
         debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
             debcode=x['stock_id'][:2] + x['bond_id'], debname=x['bond_nm']), axis=1)
         debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
@@ -461,7 +461,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             debInDf = debts[debts['stock_id'] == k.lower()]
             for dK, dV in debInDf.iterrows():
                 debts.at[dK, '距强赎价比'] = debts.at[dK, 'force_redeem_price'] / v['current'] - 1
-        debts = debts[debts['距强赎价比'] < 0].copy().sort_values(by=['orig_iss_amt']).append(debts[debts['距强赎价比'] >= 0])
+        debts = debts[debts['距强赎价比'] < 0].copy().append(debts[debts['距强赎价比'] >= 0])
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
