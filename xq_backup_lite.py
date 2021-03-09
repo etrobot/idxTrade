@@ -450,7 +450,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             ['pre_bond_id', 'bond_nm', 'stock_id', 'stock_nm', 'convert_price_valid_from', 'premium_rt', 'year_left',
              'orig_iss_amt', 'force_redeem_price', 'sprice']]
         debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
-            debcode=x['pre_bond_id'], debname=x['bond_nm']), axis=1)
+            debcode=x['pre_bond_id'].upper(), debname=x['bond_nm']), axis=1)
         debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
             symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
         debts[['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']] = debts[
