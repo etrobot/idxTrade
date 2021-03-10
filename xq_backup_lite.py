@@ -494,7 +494,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         if mkt == 'cn':
             deb = debts[debts['stock_id'] == k.lower()]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:'+ str(round(deb['volume'].values[0]/10000,1))+'亿,溢' + deb['premium_rt'].values[0]+'触'+ deb['convert_price_valid_from'].values[0], debts['stock_id'].values[0])
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债溢' + deb['premium_rt'].values[0] + str(round(deb['volume'].values[0]/10000,1))+'亿触'+ deb['convert_price_valid_from'].values[0], debts['stock_id'].values[0].upper())
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
