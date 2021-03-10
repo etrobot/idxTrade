@@ -434,11 +434,14 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
     if mkt=='cn':
-        df = df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
-        # if calKey=='_U':
-        #     df=df[df.index.isin(g.boardlist.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
-        # else:
-        #     df = df[df.index.isin(getLimit(getK('SH000001', pdate).index[-2])['代码'])].sort_values(by=[calKey], ascending=True).iloc[:num]
+        if calKey=='_U':
+            boardhk=dict()
+            for b in g.boardlist.keys():
+                if len(g.boardlist[b])>0:
+                    boardhk[b]=g.boardlist[b]
+            df=df[df.index.isin(g.boardhk.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
+        else:
+            df = df[df.index.isin(getLimit(getK('SH000001', pdate).index[-2])['代码'])].sort_values(by=[calKey], ascending=True).iloc[:num]
     else:
         df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'
