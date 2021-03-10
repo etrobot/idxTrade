@@ -447,21 +447,21 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     if mkt=='cn':
         debts = ak.bond_cov_jsl()
         debts = debts[
-            ['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'premium_rt', 'year_left',
-             'orig_iss_amt', 'force_redeem_price', 'sprice']]
+            ['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt', 'volume',
+             'premium_rt', 'year_left', 'force_redeem_price', 'sprice']]
         debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
             debcode=x['pre_bond_id'].upper(), debname=x['bond_nm']), axis=1)
         debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
             symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
-        debts[['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']] = debts[
-            ['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']].apply(
+        debts[['orig_iss_amt', 'volume', 'year_left', 'force_redeem_price', 'sprice']] = debts[
+            ['orig_iss_amt', 'volume', 'year_left', 'force_redeem_price', 'sprice']].apply(
             pd.to_numeric, errors='coerce')
         debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
             symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
         debts['距强赎价比'] = debts.apply(lambda x: x['force_redeem_price'] / x['sprice'] - 1, axis=1)
         debtsNew = debts[debts['convert_price_valid_from'].isna()].copy().sort_values(by=['orig_iss_amt'])
         debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(
-            columns=['force_redeem_price', 'sprice', 'stock_id'])
+            columns=['force_redeem_price', 'sprice'])
         renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
@@ -492,10 +492,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
                 renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
         if mkt == 'cn':
-            deb = debts[debts.index == k[2:]]
+            deb = debts[debts['stock_id'] == k.lower()]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:距强赎价比'+ str(round(deb['force_redeem_price'].values[0]/v['current']*100-100,2))+'% 溢价' + deb['premium_rt'].values[0], k[:2]+deb['转债代码'].values[0])
-                rowtitle += '[%s](http://quote.eastmoney.com/bond/%s.html)' % ('债:距强赎价比'+ str(round(deb['强赎触发价'].values[0]/v['current']*100-100,2))+'% 溢价' + str(deb['转股溢价率'].values[0])+'%', k[:2].lower()+deb['转债代码'].values[0])
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债:'+ str(round(deb['volume'].values[0]/10000,1))+'亿,溢' + deb['premium_rt'].values[0]+'触'+ deb['convert_price_valid_from'].values[0], debts['stock_id'].values[0])
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 

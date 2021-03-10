@@ -102,7 +102,7 @@ if __name__=='__main__':
     # in case the reproduced version is not "correct".
     # response = requests.get('https://hq.cmschina.com/market/json?funcno=20050&version=1&stock_list=SZ%3A300419&count=10000&type=1&field=1%3A2%3A3%3A4%3A5%3A6%3A7%3A8%3A9%3A10%3A11%3A12%3A13%3A14%3A15%3A16%3A18%3A19&date=20201020&FQType=1', headers=headers)
     #
-    # idxtrade = idxTrade('hk', 0)
+    # idxtrade = idxTrade('cn', 0)
     # idxtrade.run()
     # df=pd.read_csv('md/cn20201113.txt', dtype=str)
     # print(df.dropna(subset=['_U']).sort_values(by=['_U'], ascending=True).iloc[:10])
@@ -138,28 +138,26 @@ if __name__=='__main__':
     # print(df['基金简称'].values[0])
     # print(heldBy('00700',datetime(2021,2,19),'hk')['基金简称'])
     # getFundHoldingHK(datetime(2021,2,22))
-    # pdate=datetime(2021,2,24)
     # updateFund(pdate)
     # debts = ak.bond_cov_comparison()
     # debts.set_index('正股代码', inplace=True)
     # print(debts.columns)
-    # thsIndustry('cn',datetime.now().date())
-    pdate=datetime(2021,3,9).date()
-    indDf=pd.read_csv('md/cn' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding='GBK',dtype={'symbol':str},index_col='symbol')
-    debts = ak.bond_cov_jsl()
-    debts = debts[['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt','volume','premium_rt','year_left','force_redeem_price','sprice']]
-    debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
-        debcode=x['pre_bond_id'].upper(), debname=x['bond_nm']), axis=1)
-    debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
-        symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
-    debts[['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']] = debts[
-        ['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']].apply(
-        pd.to_numeric, errors='coerce')
-    debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
-        symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
-    debts['距强赎价比'] = debts.apply(lambda x: x['force_redeem_price'] / x['sprice'] - 1, axis=1)
-    debtsNew = debts[debts['convert_price_valid_from'].isna()].copy().sort_values(by=['orig_iss_amt'])
-    debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(columns=['force_redeem_price', 'sprice', 'stock_id'])
-    renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
-
+    thsIndustry('cn',datetime.now().date())
+    # pdate=datetime(2021,3,10)
+    # debts = ak.bond_cov_jsl()
+    # debts = debts[['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt','volume','premium_rt','year_left','force_redeem_price','sprice']]
+    # debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
+    #     debcode=x['pre_bond_id'].upper(), debname=x['bond_nm']), axis=1)
+    # debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
+    #     symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
+    # debts[['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']] = debts[
+    #     ['orig_iss_amt', 'year_left', 'force_redeem_price', 'sprice']].apply(
+    #     pd.to_numeric, errors='coerce')
+    # debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
+    #     symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
+    # debts['距强赎价比'] = debts.apply(lambda x: x['force_redeem_price'] / x['sprice'] - 1, axis=1)
+    # debtsNew = debts[debts['convert_price_valid_from'].isna()].copy().sort_values(by=['orig_iss_amt'])
+    # debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(columns=['force_redeem_price', 'sprice', 'stock_id'])
+    # renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
+    #
 
