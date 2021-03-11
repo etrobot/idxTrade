@@ -175,7 +175,7 @@ def cauculate(dfk):
     closes = dfk['close']
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
-    mtm_1 = abs(closes[-1]-closes[-20:].mean())/(closes[-20]-closes[-1])*vol.argmax()*closes[-1]/closes[-2]
+    mtm_1 = abs(closes[-1]-closes[-20:].mean())/(closes[-20]-closes[-1])*vol.argmax()*vol[-10:].mean()/vol.mean()*closes[-1]/closes[-2]
     mtm_2 = (closes[-10:].mean()-closes.mean())/((max(closes[-5:])+min(closes[-5:]))/2-closes[-10:].mean())*vol.argmin()*closes[-2]/closes[-1]
     return {'_U': round(mtm_2, 12), '_J': round(mtm_1, 12)}
 
@@ -439,7 +439,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             for b in g.boardlist.keys():
                 if len(g.boardlist[b])>0:
                     boardhk[b]=g.boardlist[b]
-            df=df[df.index.isin(g.boardhk.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
+            df=df[df.index.isin(boardhk.keys())].sort_values(by=[calKey], ascending=True).iloc[:num]
         else:
             df = df[df.index.isin(getLimit(getK('SH000001', pdate).index[-2])['代码'])].sort_values(by=[calKey], ascending=True).iloc[:num]
     else:
@@ -528,11 +528,10 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         .replace('TTMnan', '亏损') \
         .replace('.0亿', '亿')
 
-    if test == 0:
+    if test >= 0:
         html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     else:
         html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
-    html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm = '''
         <!-- toufu -->
