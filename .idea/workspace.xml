@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update fund">
-      <change beforePath="$PROJECT_DIR$/.idea/idxTrade.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/idxTrade.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update debts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,12 +13,27 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+            <state relative-caret-position="321">
+              <caret line="177" column="135" selection-start-line="177" selection-start-column="135" selection-end-line="177" selection-end-column="135" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wechat.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -26,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="564" selection-start-line="564" selection-end-line="564" />
+            <state relative-caret-position="265">
+              <caret line="249" column="56" selection-start-line="249" selection-start-column="56" selection-end-line="249" selection-end-column="56" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -35,11 +50,159 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="268">
+              <caret line="105" column="18" selection-start-line="105" selection-start-column="18" selection-end-line="105" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/debt_jsl.csv">
+          <provider selected="true" editor-type-id="csv-table-editor">
+            <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+              <column index="0" width="100" />
+              <column index="1" width="100" />
+              <column index="2" width="100" />
+              <column index="3" width="100" />
+              <column index="4" width="100" />
+              <column index="5" width="100" />
+              <column index="6" width="100" />
+              <column index="7" width="100" />
+              <column index="8" width="100" />
+              <column index="9" width="100" />
+              <column index="10" width="100" />
+              <column index="11" width="100" />
+              <column index="12" width="100" />
+              <column index="13" width="100" />
+              <column index="14" width="100" />
+              <column index="15" width="100" />
+              <column index="16" width="100" />
+              <column index="17" width="100" />
+              <column index="18" width="100" />
+              <column index="19" width="100" />
+              <column index="20" width="100" />
+              <column index="21" width="100" />
+              <column index="22" width="100" />
+              <column index="23" width="100" />
+              <column index="24" width="100" />
+              <column index="25" width="100" />
+              <column index="26" width="100" />
+              <column index="27" width="100" />
+              <column index="28" width="100" />
+              <column index="29" width="100" />
+              <column index="30" width="100" />
+              <column index="31" width="100" />
+              <column index="32" width="100" />
+              <column index="33" width="100" />
+              <column index="34" width="100" />
+              <column index="35" width="100" />
+              <column index="36" width="100" />
+              <column index="37" width="100" />
+              <column index="38" width="100" />
+              <column index="39" width="100" />
+              <column index="40" width="100" />
+              <column index="41" width="100" />
+              <column index="42" width="100" />
+              <column index="43" width="100" />
+              <column index="44" width="100" />
+              <column index="45" width="100" />
+              <column index="46" width="100" />
+              <column index="47" width="100" />
+              <column index="48" width="100" />
+              <column index="49" width="100" />
+              <column index="50" width="100" />
+              <column index="51" width="100" />
+              <column index="52" width="100" />
+              <column index="53" width="100" />
+              <column index="54" width="100" />
+              <column index="55" width="100" />
+              <column index="56" width="100" />
+              <column index="57" width="100" />
+              <column index="58" width="100" />
+              <column index="59" width="100" />
+              <column index="60" width="100" />
+              <column index="61" width="100" />
+              <column index="62" width="100" />
+              <column index="63" width="100" />
+              <column index="64" width="100" />
+              <column index="65" width="100" />
+              <column index="66" width="100" />
+              <column index="67" width="100" />
+              <column index="68" width="100" />
+              <column index="69" width="100" />
+              <column index="70" width="100" />
+              <column index="71" width="100" />
+              <column index="72" width="100" />
+              <column index="73" width="100" />
+              <column index="74" width="100" />
+              <column index="75" width="100" />
+              <column index="76" width="100" />
+              <column index="77" width="100" />
+              <column index="78" width="100" />
+              <column index="79" width="100" />
+              <column index="80" width="100" />
+              <column index="81" width="100" />
+              <column index="82" width="100" />
+              <column index="83" width="100" />
+              <column index="84" width="100" />
+              <column index="85" width="100" />
+              <column index="86" width="100" />
+              <column index="87" width="100" />
+              <column index="88" width="100" />
+              <column index="89" width="100" />
+              <column index="90" width="100" />
+              <column index="91" width="100" />
+              <column index="92" width="100" />
+              <column index="93" width="100" />
+              <column index="94" width="100" />
+              <column index="95" width="100" />
+              <column index="96" width="100" />
+              <column index="97" width="100" />
+              <column index="98" width="100" />
+            </state>
+          </provider>
+          <provider editor-type-id="csv-text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="370" selection-start-line="1" selection-start-column="363" selection-end-line="1" selection-end-column="370" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>qieman</find>
+      <find>金陵</find>
+      <find>3.87</find>
+      <find>,3.87</find>
+      <find>联泰</find>
+      <find>普利转</find>
+      <find>year_left</find>
+      <find>pre_bond_id</find>
+      <find>bond</find>
+      <find>dropna</find>
+      <find>from</find>
+      <find>debts</find>
+      <find>8570.54</find>
+      <find>sort_</find>
+      <find>溢价</find>
+      <find>dragon</find>
+      <find>idxtr</find>
+      <find>IMG</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -49,24 +212,42 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/xq_backup_lite.py" />
         <option value="$PROJECT_DIR$/QuotaUtilities.py" />
+        <option value="$PROJECT_DIR$/wechat.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/xq_backup_lite.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="124" />
+    <option name="x" value="158" />
     <option name="y" value="23" />
-    <option name="width" value="1991" />
+    <option name="width" value="2084" />
     <option name="height" value="1355" />
   </component>
   <component name="ProjectId" id="1j6EwA7e34kzlw6sNvklQYKirBa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="md" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -82,13 +263,17 @@
             <path>
               <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
               <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
+              <item name="md" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
+              <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
               <item name="plotimage" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -114,7 +299,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.xq_backup_lite">
     <configuration name="Research" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -178,6 +363,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="wechat" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wechat.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="xq_backup_lite" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -191,7 +397,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xq_backup_lite.py" />
-      <option name="PARAMETERS" value="cn 0" />
+      <option name="PARAMETERS" value="cn 1" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -200,13 +406,15 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.Research" />
-      <item itemvalue="Python.idxTrade" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.xq_backup_lite" />
+      <item itemvalue="Python.Research" />
+      <item itemvalue="Python.idxTrade" />
+      <item itemvalue="Python.wechat" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.wechat" />
         <item itemvalue="Python.idxTrade" />
         <item itemvalue="Python.Research" />
       </list>
@@ -222,76 +430,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00086" summary="update">
-      <created>1610793201608</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1610793201609</updated>
-    </task>
-    <task id="LOCAL-00087" summary="update">
-      <created>1610816118771</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1610816118772</updated>
-    </task>
-    <task id="LOCAL-00088" summary="update">
-      <created>1611242920135</created>
-      <option name="number" value="00088" />
-      <option name="presentableId" value="LOCAL-00088" />
-      <option name="project" value="LOCAL" />
-      <updated>1611242920136</updated>
-    </task>
-    <task id="LOCAL-00089" summary="add us hot">
-      <created>1611336620575</created>
-      <option name="number" value="00089" />
-      <option name="presentableId" value="LOCAL-00089" />
-      <option name="project" value="LOCAL" />
-      <updated>1611336620576</updated>
-    </task>
-    <task id="LOCAL-00090" summary="bg color">
-      <created>1611339475424</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1611339475425</updated>
-    </task>
-    <task id="LOCAL-00091" summary="try catch">
-      <created>1611364722109</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1611364722111</updated>
-    </task>
-    <task id="LOCAL-00092" summary="update">
-      <created>1611417512721</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1611417512722</updated>
-    </task>
-    <task id="LOCAL-00093" summary="update">
-      <created>1611420226584</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1611420226584</updated>
-    </task>
-    <task id="LOCAL-00094" summary="update">
-      <created>1611511129442</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1611511129443</updated>
-    </task>
-    <task id="LOCAL-00095" summary="update">
-      <created>1611511789908</created>
-      <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
-      <option name="project" value="LOCAL" />
-      <updated>1611511789908</updated>
     </task>
     <task id="LOCAL-00096" summary="update">
       <created>1612534939594</created>
@@ -566,26 +704,96 @@
       <option name="project" value="LOCAL" />
       <updated>1614318128880</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="update debts">
+      <created>1614990198500</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1614990198500</updated>
+    </task>
+    <task id="LOCAL-00136" summary="update tests">
+      <created>1614990946464</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1614990946464</updated>
+    </task>
+    <task id="LOCAL-00137" summary="update debts">
+      <created>1615027889737</created>
+      <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1615027889737</updated>
+    </task>
+    <task id="LOCAL-00138" summary="update debts">
+      <created>1615181391521</created>
+      <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
+      <option name="project" value="LOCAL" />
+      <updated>1615181391521</updated>
+    </task>
+    <task id="LOCAL-00139" summary="update debts">
+      <created>1615256822833</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1615256822833</updated>
+    </task>
+    <task id="LOCAL-00140" summary="update debts">
+      <created>1615273137925</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1615273137926</updated>
+    </task>
+    <task id="LOCAL-00141" summary="update debts">
+      <created>1615275915290</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1615275915290</updated>
+    </task>
+    <task id="LOCAL-00142" summary="update debts">
+      <created>1615278584685</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1615278584685</updated>
+    </task>
+    <task id="LOCAL-00143" summary="update debts">
+      <created>1615299929874</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1615299929874</updated>
+    </task>
+    <task id="LOCAL-00144" summary="update debts">
+      <created>1615385390746</created>
+      <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
+      <option name="project" value="LOCAL" />
+      <updated>1615385390747</updated>
+    </task>
+    <option name="localTasksCounter" value="145" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="124" y="23" width="1991" height="1355" extended-state="0" />
+    <frame x="158" y="23" width="2084" height="1355" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13705584" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13087736" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.82138443" weight="0.45051464" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.81725645" visible="true" weight="0.45051464" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.5100942" weight="0.2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49898478" visible="true" weight="0.3293745" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50101525" side_tool="true" visible="true" weight="0.3293745" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49345613" weight="0.32858273" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.18274358" side_tool="true" visible="true" weight="0.45051464" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49901536" weight="0.329927" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -644,8 +852,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="backup mtm as txt" />
-    <MESSAGE value="tqdm ljust" />
     <MESSAGE value="update bak" />
     <MESSAGE value="remove 688" />
     <MESSAGE value="update bash" />
@@ -669,7 +875,9 @@
     <MESSAGE value="update longhu" />
     <MESSAGE value="update" />
     <MESSAGE value="update fund" />
-    <option name="LAST_COMMIT_MESSAGE" value="update fund" />
+    <MESSAGE value="update tests" />
+    <MESSAGE value="update debts" />
+    <option name="LAST_COMMIT_MESSAGE" value="update debts" />
   </component>
   <component name="WindowStateProjectService">
     <state x="104" y="82" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614171030727">
@@ -746,20 +954,175 @@
     <state x="221" y="0" width="838" height="1032" key="search.everywhere.popup/0.0.1280.800@0.0.1280.800" timestamp="1605983599469" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/debt_jsl.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+          <column index="28" width="100" />
+          <column index="29" width="100" />
+          <column index="30" width="100" />
+          <column index="31" width="100" />
+          <column index="32" width="100" />
+          <column index="33" width="100" />
+          <column index="34" width="100" />
+          <column index="35" width="100" />
+          <column index="36" width="100" />
+          <column index="37" width="100" />
+          <column index="38" width="100" />
+          <column index="39" width="100" />
+          <column index="40" width="100" />
+          <column index="41" width="100" />
+          <column index="42" width="100" />
+          <column index="43" width="100" />
+          <column index="44" width="100" />
+          <column index="45" width="100" />
+          <column index="46" width="100" />
+          <column index="47" width="100" />
+          <column index="48" width="100" />
+          <column index="49" width="100" />
+          <column index="50" width="100" />
+          <column index="51" width="100" />
+          <column index="52" width="100" />
+          <column index="53" width="100" />
+          <column index="54" width="100" />
+          <column index="55" width="100" />
+          <column index="56" width="100" />
+          <column index="57" width="100" />
+          <column index="58" width="100" />
+          <column index="59" width="100" />
+          <column index="60" width="100" />
+          <column index="61" width="100" />
+          <column index="62" width="100" />
+          <column index="63" width="100" />
+          <column index="64" width="100" />
+          <column index="65" width="100" />
+          <column index="66" width="100" />
+          <column index="67" width="100" />
+          <column index="68" width="100" />
+          <column index="69" width="100" />
+          <column index="70" width="100" />
+          <column index="71" width="100" />
+          <column index="72" width="100" />
+          <column index="73" width="100" />
+          <column index="74" width="100" />
+          <column index="75" width="100" />
+          <column index="76" width="100" />
+          <column index="77" width="100" />
+          <column index="78" width="100" />
+          <column index="79" width="100" />
+          <column index="80" width="100" />
+          <column index="81" width="100" />
+          <column index="82" width="100" />
+          <column index="83" width="100" />
+          <column index="84" width="100" />
+          <column index="85" width="100" />
+          <column index="86" width="100" />
+          <column index="87" width="100" />
+          <column index="88" width="100" />
+          <column index="89" width="100" />
+          <column index="90" width="100" />
+          <column index="91" width="100" />
+          <column index="92" width="100" />
+          <column index="93" width="100" />
+          <column index="94" width="100" />
+          <column index="95" width="100" />
+          <column index="96" width="100" />
+          <column index="97" width="100" />
+          <column index="98" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="370" selection-start-line="1" selection-start-column="363" selection-end-line="1" selection-end-column="370" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="564" selection-start-line="564" selection-end-line="564" />
+        <state relative-caret-position="265">
+          <caret line="249" column="56" selection-start-line="249" selection-start-column="56" selection-end-line="249" selection-end-column="56" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wechat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="105" column="18" selection-start-line="105" selection-start-column="18" selection-end-line="105" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="22" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+        <state relative-caret-position="321">
+          <caret line="177" column="135" selection-start-line="177" selection-start-column="135" selection-end-line="177" selection-end-column="135" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
