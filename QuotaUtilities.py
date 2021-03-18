@@ -247,7 +247,8 @@ def dragonTigerBoards(pdate,xq_a_token):
                     break
                 if len(q) != 2 or '连续三个交易日内' in q[0]['info_type_name']:
                     continue
-                if q[0]['buy_total']<=q[1]['sell_total']:
+                if q[0]['buy_total']<=q[1]['sell_total'] and q==quoteData[0]:
+                    noIns = False
                     break
                 for branch in q[0]['branches']:
                     if t.mktime(klineSZZS.index.date[-60].timetuple()) > t.mktime(datetime.fromtimestamp(q[0]['td_date']/1000).timetuple()):

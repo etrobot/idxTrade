@@ -142,7 +142,6 @@ if __name__=='__main__':
     # debts = ak.bond_cov_comparison()
     # debts.set_index('正股代码', inplace=True)
     # print(debts.columns)
-    # thsIndustry('cn',datetime.now().date())
     # pdate=datetime(2021,3,10)
     # debts = ak.bond_cov_jsl()
     # debts = debts[['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt','volume','premium_rt','year_left','force_redeem_price','sprice']]
@@ -159,5 +158,6 @@ if __name__=='__main__':
     # debtsNew = debts[debts['convert_price_valid_from'].isna()].copy().sort_values(by=['orig_iss_amt'])
     # debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(columns=['force_redeem_price', 'sprice', 'stock_id'])
     # renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
-    #
+    # thsIndustry('cn',datetime.now().date())
+
 

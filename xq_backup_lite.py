@@ -175,7 +175,7 @@ def cauculate(dfk):
     closes = dfk['close']
     vol = dfk['volume']
     # pct=dfk['percent'].round(2)
-    mtm_1 = abs(closes[-1]-closes[-20:].mean())/(closes[-20]-closes[-1])*vol.argmax()*closes[-1]/closes[-2]
+    mtm_1 = abs(closes[-1]-closes.mean())/(closes[-20]-closes[-1])*closes[-1]/closes[-2]
     mtm_2 = (closes[-10:].mean()-closes.mean())/((max(closes[-5:])+min(closes[-5:]))/2-closes[-10:].mean())*vol.argmin()*vol[-10:].mean()/vol.mean()
     return {'_U': round(mtm_2, 12), '_J': round(mtm_1, 12)}
 
@@ -346,7 +346,7 @@ def thsIndustry(mkt='cn', pdate=None):
                 driver.get(curl)
                 content = driver.page_source
                 if 'forbidden.' in content:
-                    t.sleep(60)
+                    t.sleep(120)
                     continue
                 if len(driver.get_cookies())>0:
                     headers["Cookie"] = "v={}".format(driver.get_cookies()[0]["value"])
@@ -497,7 +497,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         if mkt == 'cn':
             deb = debts[debts['stock_id'] == k.lower()]
             if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债溢' + deb['premium_rt'].values[0] + str(round(deb['volume'].values[0]/10000,1))+'亿触'+ deb['convert_price_valid_from'].values[0], debts['stock_id'].values[0].upper())
+                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债溢' + deb['premium_rt'].values[0] + str(round(deb['volume'].values[0]/10000,1))+'亿触'+ str(deb['convert_price_valid_from'].values[0]), debts['stock_id'].values[0].upper())
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
@@ -528,10 +528,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         .replace('TTMnan', '亏损') \
         .replace('.0亿', '亿')
 
-    if test >= 0:
-        html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
-    else:
-        html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
+    html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
+    # html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
     gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
     gAdBtm = '''
         <!-- toufu -->
