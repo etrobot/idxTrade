@@ -88,7 +88,7 @@ def draw(df, info, boardDates=()):
             'volume': 'Volume'
         },
         inplace=True)
-    df = df[-60:]
+    df = df[-90:]
     dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
     '''
     设置marketcolors
