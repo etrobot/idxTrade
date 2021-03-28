@@ -267,8 +267,8 @@ def usHot(pdate:date,xq_a_token:str):
     mktDf.to_csv('md/' + 'us' + pdate.strftime('%Y%m%d') + '_Bak.csv', encoding=ENCODE_IN_USE)
     return mktDf
 
-def thsIndustry(mkt='cn', pdate=None):
-    p_url = 'http://q.10jqka.com.cn/thshy'
+def thsIndustry(mkt='cn', pdate=datetime.now().date(),cptOrInd='thshy'):
+    p_url = 'http://q.10jqka.com.cn/'+cptOrInd
     start = t.time()
     # 爬取板块名称以及代码并且存在文件
     while True:
