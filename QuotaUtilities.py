@@ -253,12 +253,12 @@ def dragonTigerBoards(pdate,xq_a_token):
                 for branch in q[0]['branches']:
                     if t.mktime(klineSZZS.index.date[-60].timetuple()) > t.mktime(datetime.fromtimestamp(q[0]['td_date']/1000).timetuple()):
                         continue
-                    if '股通' in branch['branch_name']:
-                        if branch['net_amt'] > 0:
-                            tdateList.append(q[0]['td_date'])
-                    elif '机构' in branch['branch_name']:
+                    if '机构' in branch['branch_name']:
                         noIns=False
                         break
+                    elif '股通' in branch['branch_name']:
+                        if branch['net_amt'] > 0:
+                            tdateList.append(q[0]['td_date'])
             if not noIns:
                 continue
             tdateSeries = pd.to_datetime(pd.Series(data=tdateList, dtype='float64'), unit='ms', utc=True).dt.tz_convert(
