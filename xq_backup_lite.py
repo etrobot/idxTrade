@@ -434,7 +434,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
     if mkt=='cn':
-        if calKey=='_U':
+        if calKey=='_J':
             boardhk=dict()
             for b in g.boardlist.keys():
                 if len(g.boardlist[b])>0:
