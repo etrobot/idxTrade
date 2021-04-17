@@ -88,7 +88,7 @@ def draw(df, info, boardDates=()):
             'volume': 'Volume'
         },
         inplace=True)
-    df = df[-90:]
+    df = df[-75:]
     dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
     '''
     设置marketcolors
@@ -147,12 +147,12 @@ def draw(df, info, boardDates=()):
         # ylabel='OHLCV Candles',
         # ylabel_lower='Shares\nTraded Volume',
         savefig=info,
-        figratio=(8, 5),
+        figratio=(2, 1),
         figscale=1,
         tight_layout=True,
     )
     if len(dt)>0:
-        kwargs['vlines']=dict(vlines=dt, linewidths=8, alpha=0.2, colors='khaki')
+        kwargs['vlines']=dict(vlines=dt, linewidths=6, alpha=0.2, colors='khaki')
     # 设置均线颜色，配色表可见下图
     # 建议设置较深的颜色且与红色、绿色形成对比
     # 此处设置七条均线的颜色，也可应用默认设置
@@ -346,7 +346,7 @@ def thsIndustry(mkt='cn', pdate=datetime.now().date(),cptOrInd='thshy'):
                 driver.get(curl)
                 content = driver.page_source
                 if 'forbidden.' in content:
-                    t.sleep(120)
+                    t.sleep(180)
                     continue
                 if len(driver.get_cookies())>0:
                     headers["Cookie"] = "v={}".format(driver.get_cookies()[0]["value"])
