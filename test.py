@@ -89,7 +89,7 @@ def tencentQuotaAbu(mkt,symbol):
 
 if __name__=='__main__':
     # print(list({'abc':'cccc'}).values()[0])
-    # xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
+    xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
     # usHot(xq_a_token)
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
@@ -158,6 +158,7 @@ if __name__=='__main__':
     # debtsNew = debts[debts['convert_price_valid_from'].isna()].copy().sort_values(by=['orig_iss_amt'])
     # debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(columns=['force_redeem_price', 'sprice', 'stock_id'])
     # renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
-    thsIndustry('cn',datetime(2021,3,19))
+    # thsIndustry('cn',datetime(2021,3,19))
+    getK('sh603538',datetime(2021,3,19),xq_a_token)
 
 

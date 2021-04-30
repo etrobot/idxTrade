@@ -12,6 +12,8 @@ import lxml.html
 import akshare as ak
 from lxml import etree
 
+
+
 def getK(k:str, pdate,xq_a_token=None,test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])

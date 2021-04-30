@@ -9,6 +9,14 @@ from selenium import webdriver
 ENCODE_IN_USE = 'GBK'
 IMG_FOLDER = '../upknow/'
 
+def genEchartJson(qdf:pd.DataFrame,filename:str):
+    qdf['date']=qdf.index.strftime('%m-%d').tolist()
+    transdf = qdf[-75:][['date', 'open', 'close', 'low', 'high', 'volume']].copy()
+    transdf.T
+    with open('../CMS/source/Quant/q/%s.json' % filename, 'w', encoding='utf-8') as f:
+        json.dump(transdf.values.tolist(), f)
+
+
 def updateAllImg(mkt, pdate, calKeys):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
@@ -23,15 +31,6 @@ def updateAllImg(mkt, pdate, calKeys):
                         f.seek(0)
                         f.write(output)
                         f.truncate()
-            imgfolder = IMG_FOLDER + str(i + 1) + '/' + mkt + '/'
-            fileList = os.listdir(imgfolder)
-            for filename in fileList:
-                if filename[-4:] == '.png':
-                    tqdmRange.set_description('update ' + imgfolder + filename)
-                    symbol = filename.split('_')[2]
-                    qdf = getK(symbol, pdate,g.xq_a_token,int(symbol in drawedSymbolList))
-                    draw(qdf, imgfolder + filename,dragonTigerBoard(symbol,g.xq_a_token))
-                    drawedSymbolList.append(symbol)
 
 
 def updateFund(pdate:dt):
@@ -474,11 +473,9 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         vlines = g.boardlist.get(k,[])
         if not g.testMode() and k not in drawedSymbolList:
             qdf = getK(k, pdate,g.xq_a_token, 1)
-            draw(qdf, v['filename'], vlines)
+            genEchartJson(qdf,k)
             drawedSymbolList.append(k)
-        elif not os.path.isfile(v['filename']):
-            qdf = getK(k, pdate,g.xq_a_token, 1)
-            draw(qdf, v['filename'], vlines)
+
         cur_year_perc = {k: v['current_year_percent'], dfmax.name: dfmax['current_year_percent']}
 
         rowtitle='[](#%s)[%s(%s)](https://xueqiu.com/S/%s)'%(k,v['name'], k,k)
@@ -510,7 +507,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 maxtxt += '[%s](../Fund/%s.html)'%('持股基金',dfmax.name)
                 renderHtml(fundDf,'../CMS/source/Fund/' + dfmax.name + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
 
-        artxt = [rowtitle, '![](%s%s)' % (v['filename'], '?t='+datetime.now().strftime("%m%d%H")), maxtxt]
+        artxt = [rowtitle, '<div id="%s" style="height:25rem"></div>' % k, maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     upWarning='\n<br>上涨比例%s%%' % upRatio
     if upRatio<13.5:
@@ -520,7 +517,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     if mkt == 'cn':
         txt='\n<br>高亮k线代表当天被港资大力买入，入选标准为5日10日均线交缠\n<br>'+txt
     html = markdown.markdown('#' + title + '#' + txt) \
-        .replace('<a href="#','<a id="')\
         .replace('<a href="https://xueqiu', '<a class="button is-black" href="https://xueqiu') \
         .replace('<a href="../Fund', '<a class="button is-dark" href="../Fund')\
         .replace('/a>', '/a><br>') \
@@ -530,7 +526,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
     html = html.replace(IMG_FOLDER, 'https://upknow.gitee.io/')
     # html = html.replace(IMG_FOLDER, '../../'+IMG_FOLDER)
-    gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>'
+    gAds = '<script data-ad-client="ca-pub-7398757278741889" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>\n'
     gAdBtm = '''
         <!-- toufu -->
         <ins class="adsbygoogle"
@@ -544,12 +540,17 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         </script>'''
     css = '<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">\
     <meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title>\
-    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{style}</head>\
-        <body class="bgc has-text-white-ter"><div class="container">\
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"rel="stylesheet">{style}\
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>\
+    <script type ="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js" ></script >\
+        </head><body class="bgc has-text-white-ter"><div class="container">\
         <div class="columns is-centered"><div class="column is-two-thirds"><article class="section">'.format(
         title=title,style='<style>.bgc{background-color: #33363b;}</style>')
+
+    echartjs = '<script type="text/javascript">var names=' + str(df.index.tolist()) + ';for(var i=0;i<names.length;i++){getJSON(names[i])}function splitData(rawData){var categoryData=[];var values=[];var volumes=[];for(var i=0;i<rawData.length;i++){categoryData.push(rawData[i].splice(0,1)[0]);values.push(rawData[i]);volumes.push([i,rawData[i][4],rawData[i][0]>rawData[i][1]?1:-1])}return{categoryData:categoryData,values:values,volumes:volumes}}function calculateMA(dayCount,data){var result=[];for(var i=0,len=data.values.length;i<len;i++){if(i<dayCount){result.push("-");continue}var sum=0;for(var j=0;j<dayCount;j++){sum+=data.values[i-j][1]}result.push(+(sum/dayCount).toFixed(3))}return result}function getJSON(id){$.getJSON("./q/"+id+".json",function(result){var data=splitData(result);option={render:"svg",animation:false,visualMap:{show:false,seriesIndex:4,dimension:2,pieces:[{value:1,color:"seagreen"},{value:-1,color:"firebrick"}]},grid:[{left:0,top:"5%",height:"70%"},{left:0,top:"80%",height:"20%"}],xAxis:[{type:"category",data:data.categoryData,scale:true,boundaryGap:false,axisLine:{onZero:false},splitLine:{show:false},splitNumber:20,min:"dataMin",max:"dataMax",axisPointer:{z:100}},{type:"category",gridIndex:1,data:data.categoryData,scale:true,boundaryGap:false,axisLine:{onZero:false},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},splitNumber:20,min:"dataMin",max:"dataMax"}],yAxis:[{scale:true,splitLine:{lineStyle:{color:"#555"}}},{scale:true,gridIndex:1,splitNumber:2,axisLabel:{show:false},axisLine:{show:false},axisTick:{show:false},splitLine:{show:false}}],series:[{name:"Dow-Jones index",type:"candlestick",data:data.values,itemStyle:{color:"#f64769",color0:"mediumaquamarine",borderColor:null,borderColor0:null}},{name:"MA5",type:"line",data:calculateMA(5,data),smooth:false,showSymbol:false},{name:"MA10",type:"line",data:calculateMA(10,data),smooth:false,showSymbol:false},{name:"MA20",type:"line",data:calculateMA(20,data),smooth:false,showSymbol:false},{name:"Volume",type:"bar",xAxisIndex:1,yAxisIndex:1,data:data.volumes}]};echarts.init(document.getElementById(id)).setOption(option)})};</script>'
+
     with open('../CMS/source/Quant/' + mkt + str(pdate.weekday() + 1) + calKey + '.html', 'w') as f:
-        finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div>'+gAds+'</body></html>'
+        finalhtml = css + html + '<p><br>© Frank Lin 2020</p></ariticle></div>' + gAdBtm + '</div></div>'+gAds+'\n</body>'+echartjs+'\n</html>'
         f.write(finalhtml)
         mlog('complete' + title)
         # if g.testMode():
