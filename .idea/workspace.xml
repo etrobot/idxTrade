@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="update debts">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="change Algo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="177" column="135" selection-start-line="177" selection-start-column="135" selection-end-line="177" selection-end-column="135" />
+            <state relative-caret-position="154">
+              <caret line="509" column="57" selection-start-line="509" selection-start-column="57" selection-end-line="509" selection-end-column="57" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -27,9 +26,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/idxTrade.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="28" column="58" selection-start-line="28" selection-start-column="58" selection-end-line="28" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wechat.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
+            <state relative-caret-position="165">
               <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
@@ -41,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="249" column="56" selection-start-line="249" selection-start-column="56" selection-end-line="249" selection-end-column="56" />
+            <state relative-caret-position="191">
+              <caret line="22" column="110" selection-start-line="22" selection-start-column="110" selection-end-line="22" selection-end-column="110" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -51,125 +59,25 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
+        <entry file="file://$PROJECT_DIR$/XueqiuPortfolio.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="105" column="18" selection-start-line="105" selection-start-column="18" selection-end-line="105" selection-end-column="18" />
+            <state relative-caret-position="1425">
+              <caret line="103" column="9" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="9" />
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#0#23#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/debt_jsl.csv">
-          <provider selected="true" editor-type-id="csv-table-editor">
-            <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
-              <column index="0" width="100" />
-              <column index="1" width="100" />
-              <column index="2" width="100" />
-              <column index="3" width="100" />
-              <column index="4" width="100" />
-              <column index="5" width="100" />
-              <column index="6" width="100" />
-              <column index="7" width="100" />
-              <column index="8" width="100" />
-              <column index="9" width="100" />
-              <column index="10" width="100" />
-              <column index="11" width="100" />
-              <column index="12" width="100" />
-              <column index="13" width="100" />
-              <column index="14" width="100" />
-              <column index="15" width="100" />
-              <column index="16" width="100" />
-              <column index="17" width="100" />
-              <column index="18" width="100" />
-              <column index="19" width="100" />
-              <column index="20" width="100" />
-              <column index="21" width="100" />
-              <column index="22" width="100" />
-              <column index="23" width="100" />
-              <column index="24" width="100" />
-              <column index="25" width="100" />
-              <column index="26" width="100" />
-              <column index="27" width="100" />
-              <column index="28" width="100" />
-              <column index="29" width="100" />
-              <column index="30" width="100" />
-              <column index="31" width="100" />
-              <column index="32" width="100" />
-              <column index="33" width="100" />
-              <column index="34" width="100" />
-              <column index="35" width="100" />
-              <column index="36" width="100" />
-              <column index="37" width="100" />
-              <column index="38" width="100" />
-              <column index="39" width="100" />
-              <column index="40" width="100" />
-              <column index="41" width="100" />
-              <column index="42" width="100" />
-              <column index="43" width="100" />
-              <column index="44" width="100" />
-              <column index="45" width="100" />
-              <column index="46" width="100" />
-              <column index="47" width="100" />
-              <column index="48" width="100" />
-              <column index="49" width="100" />
-              <column index="50" width="100" />
-              <column index="51" width="100" />
-              <column index="52" width="100" />
-              <column index="53" width="100" />
-              <column index="54" width="100" />
-              <column index="55" width="100" />
-              <column index="56" width="100" />
-              <column index="57" width="100" />
-              <column index="58" width="100" />
-              <column index="59" width="100" />
-              <column index="60" width="100" />
-              <column index="61" width="100" />
-              <column index="62" width="100" />
-              <column index="63" width="100" />
-              <column index="64" width="100" />
-              <column index="65" width="100" />
-              <column index="66" width="100" />
-              <column index="67" width="100" />
-              <column index="68" width="100" />
-              <column index="69" width="100" />
-              <column index="70" width="100" />
-              <column index="71" width="100" />
-              <column index="72" width="100" />
-              <column index="73" width="100" />
-              <column index="74" width="100" />
-              <column index="75" width="100" />
-              <column index="76" width="100" />
-              <column index="77" width="100" />
-              <column index="78" width="100" />
-              <column index="79" width="100" />
-              <column index="80" width="100" />
-              <column index="81" width="100" />
-              <column index="82" width="100" />
-              <column index="83" width="100" />
-              <column index="84" width="100" />
-              <column index="85" width="100" />
-              <column index="86" width="100" />
-              <column index="87" width="100" />
-              <column index="88" width="100" />
-              <column index="89" width="100" />
-              <column index="90" width="100" />
-              <column index="91" width="100" />
-              <column index="92" width="100" />
-              <column index="93" width="100" />
-              <column index="94" width="100" />
-              <column index="95" width="100" />
-              <column index="96" width="100" />
-              <column index="97" width="100" />
-              <column index="98" width="100" />
-            </state>
-          </provider>
-          <provider editor-type-id="csv-text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="370" selection-start-line="1" selection-start-column="363" selection-end-line="1" selection-end-column="370" />
+        <entry file="file://$PROJECT_DIR$/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2265">
+              <caret line="153" column="41" selection-start-line="153" selection-start-column="41" selection-end-line="153" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -185,12 +93,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>qieman</find>
-      <find>金陵</find>
-      <find>3.87</find>
-      <find>,3.87</find>
-      <find>联泰</find>
-      <find>普利转</find>
       <find>year_left</find>
       <find>pre_bond_id</find>
       <find>bond</find>
@@ -200,9 +102,27 @@
       <find>8570.54</find>
       <find>sort_</find>
       <find>溢价</find>
-      <find>dragon</find>
-      <find>idxtr</find>
       <find>IMG</find>
+      <find>触</find>
+      <find>img_folder</find>
+      <find>idxtr</find>
+      <find>_U</find>
+      <find>dragon</find>
+      <find>boardlist</find>
+      <find>ths</find>
+      <find>90</find>
+      <find>.png</find>
+      <find>img</find>
+      <find>qdf</find>
+      <find>quant</find>
+      <find>.json</find>
+      <find>draw</find>
+      <find>png</find>
+      <find>#</find>
+      <find>names[i]</find>
+      <find>draw(</find>
+      <find>left:&quot;10%&quot;,right:&quot;8%&quot;,</find>
+      <find>rem</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -212,18 +132,18 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/QuotaUtilities.py" />
         <option value="$PROJECT_DIR$/wechat.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/QuotaUtilities.py" />
         <option value="$PROJECT_DIR$/xq_backup_lite.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="158" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="14" />
     <option name="y" value="23" />
-    <option name="width" value="2084" />
-    <option name="height" value="1355" />
+    <option name="width" value="1920" />
+    <option name="height" value="1057" />
   </component>
   <component name="ProjectId" id="1j6EwA7e34kzlw6sNvklQYKirBa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -242,7 +162,17 @@
             <path>
               <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="md" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name=".idea" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="Bash" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="Quotation" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -430,69 +360,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00096" summary="update">
-      <created>1612534939594</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1612534939595</updated>
-    </task>
-    <task id="LOCAL-00097" summary="update">
-      <created>1612875056812</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1612875056812</updated>
-    </task>
-    <task id="LOCAL-00098" summary="update">
-      <created>1612890858355</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1612890858355</updated>
-    </task>
-    <task id="LOCAL-00099" summary="update">
-      <created>1613053930744</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1613053930745</updated>
-    </task>
-    <task id="LOCAL-00100" summary="update">
-      <created>1613407517973</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1613407517974</updated>
-    </task>
-    <task id="LOCAL-00101" summary="update">
-      <created>1613407904749</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1613407904749</updated>
-    </task>
-    <task id="LOCAL-00102" summary="update">
-      <created>1613579691093</created>
-      <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1613579691093</updated>
-    </task>
-    <task id="LOCAL-00103" summary="update">
-      <created>1613579867038</created>
-      <option name="number" value="00103" />
-      <option name="presentableId" value="LOCAL-00103" />
-      <option name="project" value="LOCAL" />
-      <updated>1613579867039</updated>
-    </task>
-    <task id="LOCAL-00104" summary="update">
-      <created>1613579913923</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1613579913923</updated>
     </task>
     <task id="LOCAL-00105" summary="update">
       <created>1613579997737</created>
@@ -774,27 +641,100 @@
       <option name="project" value="LOCAL" />
       <updated>1615385390747</updated>
     </task>
-    <option name="localTasksCounter" value="145" />
+    <task id="LOCAL-00145" summary="update">
+      <created>1615464028078</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1615464028078</updated>
+    </task>
+    <task id="LOCAL-00146" summary="fix">
+      <created>1615464251678</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1615464251678</updated>
+    </task>
+    <task id="LOCAL-00147" summary="change Algo">
+      <created>1616037178259</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1616037178410</updated>
+    </task>
+    <task id="LOCAL-00148" summary="change Algo">
+      <created>1616407853765</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1616407853768</updated>
+    </task>
+    <task id="LOCAL-00149" summary="change Algo">
+      <created>1617008100735</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1617008100740</updated>
+    </task>
+    <task id="LOCAL-00150" summary="longhu reject ins">
+      <created>1617242558327</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1617242558331</updated>
+    </task>
+    <task id="LOCAL-00151" summary="change Algo">
+      <created>1618453302809</created>
+      <option name="number" value="00151" />
+      <option name="presentableId" value="LOCAL-00151" />
+      <option name="project" value="LOCAL" />
+      <updated>1618453302813</updated>
+    </task>
+    <task id="LOCAL-00152" summary="update">
+      <created>1618632051174</created>
+      <option name="number" value="00152" />
+      <option name="presentableId" value="LOCAL-00152" />
+      <option name="project" value="LOCAL" />
+      <updated>1618632051179</updated>
+    </task>
+    <task id="LOCAL-00153" summary="echart">
+      <created>1619798713419</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1619798713422</updated>
+    </task>
+    <option name="localTasksCounter" value="154" />
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="158" y="23" width="2084" height="1355" extended-state="0" />
+    <frame x="5" y="23" width="1920" height="1057" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13087736" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10584518" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.81725645" visible="true" weight="0.45051464" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8135861" visible="true" weight="0.42901555" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994076" weight="0.3293745" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.5100942" weight="0.2" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49345613" weight="0.32858273" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.18274358" side_tool="true" visible="true" weight="0.45051464" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.48755923" weight="0.32858273" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.1864139" side_tool="true" visible="true" weight="0.42901555" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49901536" weight="0.329927" />
+      <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -852,10 +792,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="update bak" />
-    <MESSAGE value="remove 688" />
-    <MESSAGE value="update bash" />
-    <MESSAGE value="fix idxtrade bug" />
     <MESSAGE value="fix backup, only daily" />
     <MESSAGE value="update format" />
     <MESSAGE value="backup" />
@@ -873,11 +809,15 @@
     <MESSAGE value="fix bug" />
     <MESSAGE value="update Anchor" />
     <MESSAGE value="update longhu" />
-    <MESSAGE value="update" />
     <MESSAGE value="update fund" />
     <MESSAGE value="update tests" />
     <MESSAGE value="update debts" />
-    <option name="LAST_COMMIT_MESSAGE" value="update debts" />
+    <MESSAGE value="fix" />
+    <MESSAGE value="longhu reject ins" />
+    <MESSAGE value="change Algo" />
+    <MESSAGE value="update" />
+    <MESSAGE value="echart" />
+    <option name="LAST_COMMIT_MESSAGE" value="echart" />
   </component>
   <component name="WindowStateProjectService">
     <state x="104" y="82" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614171030727">
@@ -975,6 +915,54 @@
         </state>
       </provider>
       <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/cn20210316_Bak.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/cn20210326_Bak.csv">
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="468">
+          <caret line="1109" column="75" selection-start-line="1109" selection-start-column="75" selection-end-line="1109" selection-end-column="75" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/debt_jsl.csv">
       <provider selected="true" editor-type-id="csv-table-editor">
@@ -1086,19 +1074,146 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
+    <entry file="file://$PROJECT_DIR$/Quotation/.DJI.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Quotation/00003.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Quotation/00017.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+          <column index="18" width="100" />
+          <column index="19" width="100" />
+          <column index="20" width="100" />
+          <column index="21" width="100" />
+          <column index="22" width="100" />
+          <column index="23" width="100" />
+          <column index="24" width="100" />
+          <column index="25" width="100" />
+          <column index="26" width="100" />
+          <column index="27" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Quotation/SZ300485.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/idxTrade.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="249" column="56" selection-start-line="249" selection-start-column="56" selection-end-line="249" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="360">
+          <caret line="28" column="58" selection-start-line="28" selection-start-column="58" selection-end-line="28" selection-end-column="58" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wechat.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
+        <state relative-caret-position="165">
           <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
@@ -1106,20 +1221,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/XueqiuPortfolio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="103" column="9" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="105" column="18" selection-start-line="105" selection-start-column="18" selection-end-line="105" selection-end-column="18" />
+        <state relative-caret-position="2265">
+          <caret line="153" column="41" selection-start-line="153" selection-start-column="41" selection-end-line="153" selection-end-column="41" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="22" column="110" selection-start-line="22" selection-start-column="110" selection-end-line="22" selection-end-column="110" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="177" column="135" selection-start-line="177" selection-start-column="135" selection-end-line="177" selection-end-column="135" />
+        <state relative-caret-position="154">
+          <caret line="509" column="57" selection-start-line="509" selection-start-column="57" selection-end-line="509" selection-end-column="57" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>

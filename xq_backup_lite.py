@@ -507,7 +507,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 maxtxt += '[%s](../Fund/%s.html)'%('持股基金',dfmax.name)
                 renderHtml(fundDf,'../CMS/source/Fund/' + dfmax.name + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
 
-        artxt = [rowtitle, '<div id="%s" style="height:25rem"></div>' % k, maxtxt]
+        artxt = [rowtitle, '<div id="%s" style="height:16rem"></div>' % k, maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     upWarning='\n<br>上涨比例%s%%' % upRatio
     if upRatio<13.5:
