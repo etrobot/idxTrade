@@ -159,6 +159,6 @@ if __name__=='__main__':
     # debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(columns=['force_redeem_price', 'sprice', 'stock_id'])
     # renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
     # thsIndustry('cn',datetime(2021,3,19))
-    getK('sh603538',datetime(2021,3,19),xq_a_token)
+    updateAllImg('cn',datetime(2021,4,30), ['_J','_U'], xq_a_token)
 
 

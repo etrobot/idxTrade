@@ -17,20 +17,21 @@ def genEchartJson(qdf:pd.DataFrame,filename:str):
         json.dump(transdf.values.tolist(), f)
 
 
-def updateAllImg(mkt, pdate, calKeys):
+def updateAllImg(mkt, pdate, calKeys, cookie=''):
     tqdmRange = tqdm(range(0, 5))
     drawedSymbolList = []
     for i in tqdmRange:
         if pdate.weekday() != i:
             for calKey in calKeys:  # 加入url参数（小时），让浏览器不使用缓存
-                filename = '../etrobot.github.io/Quant/%s%s%s.html' % (mkt, i + 1, calKey)
+                filename = '../CMS/source/Quant/%s%s%s.html' % (mkt,pdate.weekday()+1,calKey)
                 if os.path.isfile(filename):
-                    with open(filename, "r+") as f:
-                        output = re.sub('\?t=.*"', '?t=%s"' % datetime.now().strftime("%m%d%H"), f.read())
-                        # output=output.replace(IMG_FOLDER,'https://upknow.gitee.io/')
-                        f.seek(0)
-                        f.write(output)
-                        f.truncate()
+                    with open(filename, "r") as f:
+                        html = etree.HTML(f.read())
+                        symbols = [x.split('/')[-1] for x in html.xpath('//div[(@id)]/@id')]
+                        for k in symbols:
+                            if k not in drawedSymbolList:
+                                genEchartJson(getK(k,pdate,cookie), k)
+                                drawedSymbolList.append(k)
 
 
 def updateFund(pdate:dt):
@@ -72,6 +73,7 @@ def updateFund(pdate:dt):
     fundDf['基金代码'] = fundDf['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
     renderHtml(fundDf,'../CMS/source/Quant/fund.html','含量化选股的内地基金')
+
 
 def draw(df, info, boardDates=()):
     # 导入数据
@@ -418,7 +420,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     mtmDfBAK = indDf[list(cal.keys())].copy()
     mtmDfBAK.to_csv('md/' + mkt + pdate.strftime('%Y%m%d') + '.txt', encoding=ENCODE_IN_USE, index_label='symbol')
     if not g.testMode():
-        updateAllImg(mkt, pdate, cal.keys())
+        updateAllImg(mkt, pdate, cal.keys(), g.xq_a_token)
     if mkt in ['cn','hk']:
         updateFund(pdate)
     if len(sys.argv) == 2:
@@ -478,7 +480,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
 
         cur_year_perc = {k: v['current_year_percent'], dfmax.name: dfmax['current_year_percent']}
 
-        rowtitle='[](#%s)[%s(%s)](https://xueqiu.com/S/%s)'%(k,v['name'], k,k)
+        rowtitle='[%s(%s)](https://xueqiu.com/S/%s)'%(v['name'], k,k)
         if mkt == 'cn':
             for cnstock in cur_year_perc.keys():
                 mK = cmsK(cnstock, 'monthly')
@@ -507,7 +509,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 maxtxt += '[%s](../Fund/%s.html)'%('持股基金',dfmax.name)
                 renderHtml(fundDf,'../CMS/source/Fund/' + dfmax.name + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
 
-        artxt = [rowtitle, '<div id="%s" style="height:16rem"></div>' % k, maxtxt]
+        artxt = [rowtitle, '<div id="%s" style="height:10rem"></div>' % k, maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
     upWarning='\n<br>上涨比例%s%%' % upRatio
     if upRatio<13.5:
