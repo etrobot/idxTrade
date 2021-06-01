@@ -14,13 +14,13 @@ from lxml import etree
 
 
 
-def getK(k:str, pdate,xq_a_token=None,test=0):
+def getK(k:str, pdate=None,xq_a_token=None,test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
         qdf = pd.read_csv('Quotation/' + k + '.csv', index_col='date',parse_dates=['date'])
     elif k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8:
         qdf = cmsK(k)
     elif xq_a_token is not None:
-        qdf = xueqiuK(symbol=k, startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
+        qdf = xueqiuK(symbol=k, startDate=pdate, cookie=xq_a_token)#pdate - timedelta(days=250)).strftime('%Y%m%d')
     return qdf
 
 def getLimit(pdate:date=None,fname=None,mode=None):
