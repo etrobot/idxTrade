@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FactorBuilder.py" beforeDir="false" afterPath="$PROJECT_DIR$/FactorBuilder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xq_backup_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/xq_backup_lite.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1539">
-              <caret line="588" column="29" selection-start-line="588" selection-start-column="29" selection-end-line="588" selection-end-column="29" />
+            <state relative-caret-position="670">
+              <caret line="178" column="94" selection-start-line="178" selection-start-column="94" selection-end-line="178" selection-end-column="94" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -27,19 +29,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/idxTrade.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1230">
-              <caret line="86" column="11" selection-start-line="86" selection-start-column="11" selection-end-line="86" selection-end-column="11" />
+            <state relative-caret-position="-301">
+              <caret line="12" column="26" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="26" />
+              <folding>
+                <element signature="e#9#19#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wechat.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/FactorBuilder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
+            <state relative-caret-position="495">
+              <caret line="33" column="23" lean-forward="true" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
               <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#0#28#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -48,34 +53,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
+            <state relative-caret-position="2310">
+              <caret line="154" column="4" selection-start-line="154" selection-start-column="4" selection-end-line="154" selection-end-column="4" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/XueqiuPortfolio.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1425">
-              <caret line="103" column="9" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="9" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2235">
-              <caret line="151" column="39" selection-start-line="151" selection-start-column="35" selection-end-line="151" selection-end-column="39" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -92,21 +73,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>img_folder</find>
-      <find>idxtr</find>
-      <find>_U</find>
-      <find>dragon</find>
-      <find>boardlist</find>
-      <find>ths</find>
-      <find>90</find>
-      <find>.png</find>
-      <find>img</find>
-      <find>qdf</find>
-      <find>quant</find>
-      <find>.json</find>
-      <find>draw</find>
-      <find>png</find>
-      <find>#</find>
       <find>names[i]</find>
       <find>draw(</find>
       <find>left:&quot;10%&quot;,right:&quot;8%&quot;,</find>
@@ -122,6 +88,21 @@
       <find>leg</find>
       <find>title</find>
       <find>title:</find>
+      <find>isin</find>
+      <find>set_index</find>
+      <find>getLimit</find>
+      <find>contains</find>
+      <find>limit</find>
+      <find>cms</find>
+      <find>astype</find>
+      <find>dealed</find>
+      <find>print</find>
+      <find>read_csv</find>
+      <find>[[</find>
+      <find>cauc</find>
+      <find>ramKMin</find>
+      <find>to_csv</find>
+      <find>getK</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -132,17 +113,19 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/wechat.py" />
-        <option value="$PROJECT_DIR$/QuotaUtilities.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/idxTrade.py" />
+        <option value="$PROJECT_DIR$/QuotaUtilities.py" />
         <option value="$PROJECT_DIR$/xq_backup_lite.py" />
+        <option value="$PROJECT_DIR$/FactorBuilder.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="380" />
-    <option name="y" value="198" />
-    <option name="width" value="1603" />
-    <option name="height" value="1057" />
+    <option name="x" value="108" />
+    <option name="y" value="32" />
+    <option name="width" value="2348" />
+    <option name="height" value="1418" />
   </component>
   <component name="ProjectId" id="1j6EwA7e34kzlw6sNvklQYKirBa" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -151,6 +134,17 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -172,32 +166,6 @@
               <item name="idxTrade" type="b2602c69:ProjectViewProjectNode" />
               <item name="idxTrade" type="462c0819:PsiDirectoryNode" />
               <item name="plotimage" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-            <path>
-              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name=".idea" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="Bash" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="idxTrade" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="~/Documents/DEV/PY/idxTrade" type="442cc68d:ScopeViewTreeModel$RootNode" />
-              <item name="Quotation" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -228,7 +196,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.xq_backup_lite">
+  <component name="RunManager" selected="Python.FactorBuilder">
+    <configuration name="FactorBuilder" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FactorBuilder.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Research" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -335,14 +324,16 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.test" />
+      <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.Research" />
       <item itemvalue="Python.idxTrade" />
-      <item itemvalue="Python.test" />
       <item itemvalue="Python.wechat" />
-      <item itemvalue="Python.xq_backup_lite" />
+      <item itemvalue="Python.FactorBuilder" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.FactorBuilder" />
         <item itemvalue="Python.idxTrade" />
         <item itemvalue="Python.wechat" />
         <item itemvalue="Python.Research" />
@@ -359,20 +350,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00108" summary="fix bug">
-      <created>1613662094956</created>
-      <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
-      <option name="project" value="LOCAL" />
-      <updated>1613662094956</updated>
-    </task>
-    <task id="LOCAL-00109" summary="update style">
-      <created>1613664999222</created>
-      <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
-      <option name="project" value="LOCAL" />
-      <updated>1613664999222</updated>
     </task>
     <task id="LOCAL-00110" summary="update">
       <created>1613742627172</created>
@@ -703,7 +680,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620978235133</updated>
     </task>
-    <option name="localTasksCounter" value="157" />
+    <task id="LOCAL-00157" summary="idxtrade">
+      <created>1621497730919</created>
+      <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
+      <option name="project" value="LOCAL" />
+      <updated>1621497730919</updated>
+    </task>
+    <task id="LOCAL-00158" summary="factorBuilder">
+      <created>1622560041634</created>
+      <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
+      <option name="project" value="LOCAL" />
+      <updated>1622560041637</updated>
+    </task>
+    <option name="localTasksCounter" value="159" />
     <servers />
   </component>
   <component name="TodoView">
@@ -716,14 +707,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="92" y="23" width="1474" height="988" extended-state="0" />
+    <frame x="0" y="23" width="2560" height="1417" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13833448" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09216227" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8128011" visible="true" weight="0.40513393" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8128011" visible="true" weight="0.4045283" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -790,8 +782,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="fix backup, only daily" />
-    <MESSAGE value="update format" />
     <MESSAGE value="backup" />
     <MESSAGE value="chromedriver" />
     <MESSAGE value="bak" />
@@ -815,7 +805,9 @@
     <MESSAGE value="change Algo" />
     <MESSAGE value="update" />
     <MESSAGE value="echart" />
-    <option name="LAST_COMMIT_MESSAGE" value="echart" />
+    <MESSAGE value="idxtrade" />
+    <MESSAGE value="factorBuilder" />
+    <option name="LAST_COMMIT_MESSAGE" value="factorBuilder" />
   </component>
   <component name="WindowStateProjectService">
     <state x="104" y="82" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614171030727">
@@ -1202,43 +1194,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1539">
-          <caret line="588" column="29" selection-start-line="588" selection-start-column="29" selection-end-line="588" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/idxTrade.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="86" column="11" selection-start-line="86" selection-start-column="11" selection-end-line="86" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wechat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/XueqiuPortfolio.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1425">
@@ -1249,12 +1204,156 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
+    <entry file="file://$PROJECT_DIR$/wechat.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2235">
-          <caret line="151" column="39" selection-start-line="151" selection-start-column="35" selection-end-line="151" selection-end-column="39" />
+        <state relative-caret-position="180">
+          <caret line="12" column="47" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Selectors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="172" column="44" lean-forward="true" selection-start-line="172" selection-start-column="44" selection-end-line="172" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Research.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="14" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+          <folding>
+            <element signature="e#7#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Quotation/SH600606.csv">
+      <provider editor-type-id="csv-text-editor" />
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+          <column index="13" width="100" />
+          <column index="14" width="100" />
+          <column index="15" width="100" />
+          <column index="16" width="100" />
+          <column index="17" width="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1361">
+          <caret line="92" column="4" selection-start-line="89" selection-end-line="92" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotimage/testf01.csv">
+      <provider editor-type-id="csv-text-editor" />
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/md/limit20210309.csv">
+      <provider editor-type-id="csv-text-editor" />
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+          <column index="12" width="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotimage/test2021n.csv">
+      <provider editor-type-id="csv-text-editor" />
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/idxTrade.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-301">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="26" />
+          <folding>
+            <element signature="e#9#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Quotation/minute/SH600006.csv">
+      <provider editor-type-id="csv-text-editor" />
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/QuotaUtilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2310">
+          <caret line="154" column="4" selection-start-line="154" selection-start-column="4" selection-end-line="154" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xq_backup_lite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="670">
+          <caret line="178" column="94" selection-start-line="178" selection-start-column="94" selection-end-line="178" selection-end-column="94" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FactorBuilder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" column="23" lean-forward="true" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
