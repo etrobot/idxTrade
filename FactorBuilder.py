@@ -10,12 +10,12 @@ class fatcor01:
         self.rK={}
         self.rKm={}
 
-    def ramK(self,symbol:str):
+    def ramK(self,symbol:str)->pd.DataFrame:
         if symbol not in self.rK.keys():
             self.rK[symbol] = getK(symbol, test=self.test, xq_a_token=self.xq_a_token)
         return self.rK[symbol]
 
-    def ramKMin(self,symbol:str):
+    def ramKMin(self,symbol:str)->pd.DataFrame:
         if symbol not in self.rKm.keys():
             filename = 'Quotation/minute/' + symbol + '.csv'
             if os.path.isfile(filename) and self.test==1:
@@ -30,21 +30,28 @@ class fatcor01:
 
     def checkMinute(self,k:pd.DataFrame,pdate:datetime):
         c=k[k.index.date==pdate]['close'].values
-        if len(c)>0 and min(c[-60:])>c[-238:].mean() and max(c)>max(c[10:120]):
-            return True
-        return False
+        c=c[30:len(c)-30]
+        if len(c)>0 and c[-1]!=c[0]:
+            return max(c)/min(c)-max(c[-1],c[0])/min(c[-1],c[0])
+        return np.nan
 
     def signal(self)->dict:
         result=dict()
-        flist=[x for x in os.listdir('md') if 'limit' in x]
+        flist=['limit'+x.strftime("%Y%m%d")+'.csv' for x in getK('SH000001').index[-7:]]
         limit=pd.DataFrame()
         dealed=[]
         for f in flist:
+            fdate=datetime.strptime(f[-12:-4],"%Y%m%d").date()
+            if not os.path.isfile(f):
+                getLimit(fdate)
             lmdf=pd.read_csv('md/' + f)
-            lmdf['date']=datetime.strptime(f[-12:-4],"%Y%m%d")
+            lmdf['date']=fdate
             limit=limit.append(lmdf)
+        # dealed=limit.drop_duplicates(subset='代码')['代码'].to_list()[:-2]
         limit=limit[~limit['名称'].str.contains("N|ST", na=False)]
-        for s in tqdm(limit['代码']):
+        tqdmRange = tqdm(limit.iterrows(), total=limit.shape[0])
+        for k,v in tqdmRange:
+            s=v['代码']
             if s in dealed:
                 continue
             kLmDates=limit[limit['代码']==s]['date']
@@ -55,31 +62,37 @@ class fatcor01:
                     if x+i not in idxs and x+i<len(k):
                         idxs.append(x+i)
             mk=self.ramKMin(s)
-            result[s]=[k['date'][x].date() for x in idxs if self.checkMinute(mk,k['date'][x].date())]
+            data=np.transpose([[k['date'][x].date(),self.checkMinute(mk,k['date'][x].date())] for x in idxs])
+            if len(data)==0:
+                continue
+            df=pd.DataFrame({'date':data[0],'value':data[1]})
+            df['symbol'] = s
+            df['name'] = v['名称']
+            result[s]=df[~df['date'].isin(kLmDates)]
+            print(result[s])
             dealed.append(s)
         return result
 
-    def test(self,symbol:str,datesByfactor:list):
-        k=self.ramK(symbol).reset_index()
-        idxs=k.loc[k['date'].isin(datesByfactor)].index.to_list()
-        idxs=[x+1 for x in idxs]
-        result=k.loc[k.index.isin(idxs)][['date','percent']]
-        if idxs[-1]>k.index[-1]:
-            result.loc[len(result)]=[datetime.now(),np.nan]
-        result['symbol']=symbol
+    def backtest(self,symbol:str,data:pd.DataFrame):
+        print(symbol)
+        data.set_index('date',inplace=True)
+        k=self.ramK(symbol)
+        k['percent']=k['percent'].shift(-1)
+        k=k[['percent']]
+        result = data.join(k)
+        result = result[['value','percent','symbol','name']]
+        result=result[~result.index.duplicated(keep='first')]
         print(result)
         return result
 
     def run(self):
         result=pd.DataFrame()
         for k,v in self.signal().items():
-            result = result.append(self.test(k,v))
-        result[['symbol', 'date', 'percent']].to_csv('plotimage/%s.csv' % self.fname)
+            result = result.append(self.backtest(k,v))
+        result[['symbol','name', 'value', 'percent']].to_csv('plotimage/%s.csv' % self.fname)
 
 
 
 if __name__ == '__main__':
-    # test=test('SH603348',[date(2021,5,13),date(2021,5,20)])
-    g=fatcor01('test2021n',0)
+    g=fatcor01('test2021ttt')
     g.run()
-
