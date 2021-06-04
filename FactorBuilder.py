@@ -1,5 +1,5 @@
 from QuotaUtilities import *
-import os
+import os,sys
 
 class fatcor01:
     def __init__(self,fname:str,test=1):
@@ -18,7 +18,7 @@ class fatcor01:
     def ramKMin(self,symbol:str)->pd.DataFrame:
         if symbol not in self.rKm.keys():
             filename = 'Quotation/minute/' + symbol + '.csv'
-            if os.path.isfile(filename) and self.test==1:
+            if os.path.isfile(filename) and self.test>0:
                 minDf = pd.read_csv(filename, parse_dates=['day'])
                 minDf.set_index('day', inplace=True)
             else:
@@ -37,7 +37,8 @@ class fatcor01:
 
     def signal(self)->dict:
         result=dict()
-        flist=['limit'+x.strftime("%Y%m%d")+'.csv' for x in getK('SH000001').index[-7:]]
+        idxDates=getK('SH000001').index[-7:]
+        flist=['limit'+x.strftime("%Y%m%d")+'.csv' for x in idxDates]
         limit=pd.DataFrame()
         dealed=[]
         for f in flist:
@@ -55,12 +56,15 @@ class fatcor01:
             if s in dealed:
                 continue
             kLmDates=limit[limit['代码']==s]['date']
-            k = getK(s, test=1, xq_a_token=self.xq_a_token).reset_index()
+            k = getK(s, test=self.test, xq_a_token=self.xq_a_token).reset_index()
             idxs=[]
-            for x in k.loc[k['date'].isin(kLmDates)].index.to_list():
-                for i in range(1,7):
-                    if x+i not in idxs and x+i<len(k):
-                        idxs.append(x+i)
+            if self.test==0:
+                idxs=[len(k)-1]
+            else:
+                for x in k.loc[k['date'].isin(kLmDates)].index.to_list():
+                    for i in range(1, 7):
+                        if x + i not in idxs and x + i < len(k):
+                            idxs.append(x + i)
             mk=self.ramKMin(s)
             data=np.transpose([[k['date'][x].date(),self.checkMinute(mk,k['date'][x].date())] for x in idxs])
             if len(data)==0:
@@ -94,5 +98,6 @@ class fatcor01:
 
 
 if __name__ == '__main__':
-    g=fatcor01('test2021ttt')
+    len(sys.argv) == 3
+    g=fatcor01('test2021ttt',0)
     g.run()
