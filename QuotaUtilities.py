@@ -83,7 +83,8 @@ def getLimit(pdate:date=None,fname=None,mode=None):
                     df = pd.DataFrame(t2, columns=zdt_indexx)
                     df.to_csv('md/limit'+pdate.strftime("%Y%m%d")+'.csv')
                     if mode is None:
-                        return df[~df['代码'].astype(str).str.startswith('SH688') & ~df['代码'].astype(str).str.startswith('SZ3')]
+                        return df[~df['代码'].astype(str).str.startswith('SH688')]
+                        # return df[~df['代码'].astype(str).str.startswith('SH688') & ~df['代码'].astype(str).str.startswith('SZ3')]
                 except Exception as e:
                     mlog(e)
         else:
