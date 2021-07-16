@@ -168,7 +168,7 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
         df = df.iloc[0:0]
         df.drop(['volume_post', 'amount_post'], axis=1, inplace=True)
     else:
-        startYear=int(startDate[:4])
+        startYear=startDate.year
         df=pd.DataFrame()
     while datetime.utcfromtimestamp(latestDay/1000).date().year>=startYear:
         mlog('latestDay:', latestDay,datetime.utcfromtimestamp(int(latestDay)/1000).date().year)
@@ -215,7 +215,7 @@ def dragonTigerBoard(symbol,xq_a_token):
     return tdateSeries
 
 def dragonTigerBoards(pdate,xq_a_token):
-    klineSZZS = xueqiuK('SH000001',pdate.strftime('%Y-%m-%d'),xq_a_token)
+    klineSZZS = xueqiuK('SH000001',pdate,xq_a_token)
     stocks=[]
     stocksDict=dict()
     checked=[]
@@ -624,3 +624,35 @@ def getFundHoldingHK(pdate:dt):
         df_hk_holding=df_hk_holding.append(df_hk)
     df_hk_holding.to_csv(fname)
     return df_hk_holding
+
+def getNews(mkt:str,symbol:str,startDate:datetime,midDate:datetime):
+    newsDf=pd.DataFrame()
+    i=0
+    while i<2:
+        i+=1
+        params = (
+            ('_appver', '1.0'),
+            ('page', i),
+            ('symbol', mkt+symbol),
+            ('n', '51'),
+            ('_var', 'finance_news'),
+            ('type', '2'),
+            ('_', int(datetime.now().timestamp() * 10000)),
+        )
+
+        response = requests.get('https://proxy.finance.qq.com/ifzqgtimg/appstock/news/info/search',
+                                headers={"user-agent": "Mozilla", 'Connection': 'close'}, params=params)
+        news = (json.loads(response.text[len('finance_news='):])['data']['data'])
+        df=pd.DataFrame(news)
+        df['time'] = df['time'].astype('datetime64[ns]').dt.date
+        newsDf=newsDf.append(df)
+        if df['time'].values[-1]<startDate.date():
+            break
+    df1=newsDf[newsDf['time']<midDate]
+    return len(newsDf)-len(df1)
+
+def xueqiuConcerned(mkt:str,xq_a_token:str)->pd.DataFrame:
+    url='https://xueqiu.com/service/screener/screen?category=%s&indcode=&order_by=follow7dpct&order=desc&page=1&size=100&only_count=0&current=&pct=&follow7dpct=0_471.43&_=%s'%(mkt.upper(),int(datetime.now().timestamp() * 10000))
+    response = requests.get(url,headers={"user-agent": "Mozilla", 'Connection': 'close',"cookie": xq_a_token})
+    result=pd.DataFrame(json.loads(response.text)['data']['list'])
+    return result

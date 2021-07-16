@@ -30,15 +30,17 @@ class fatcor01:
 
     def checkMinute(self,k:pd.DataFrame,pdate:datetime):
         c=k[k.index.date==pdate]['close'].values
-        c=c[30:len(c)-30]
+        # c=c[30:len(c)-30]
         if len(c)>0 and c[-1]!=c[0]:
-            return max(c)/min(c)-max(c[-1],c[0])/min(c[-1],c[0])
+            return 1-min(c[0],c[-1])/max(c[0],c[-1])#*[1, -1][c[-1]-c[0]<0]
+        # print(c)
         return np.nan
 
     def signal(self)->dict:
         result=dict()
-        idxDates=getK('SH000001').index[-7:]
+        idxDates=getK('SH000001').index[-self.test:]
         flist=['limit'+x.strftime("%Y%m%d")+'.csv' for x in idxDates]
+        flist.reverse()
         limit=pd.DataFrame()
         dealed=[]
         for f in flist:
@@ -47,33 +49,24 @@ class fatcor01:
                 getLimit(fdate)
             lmdf=pd.read_csv('md/' + f)
             lmdf['date']=fdate
-            limit=limit.append(lmdf)
-        # dealed=limit.drop_duplicates(subset='代码')['代码'].to_list()[:-2]
-        limit=limit[~limit['名称'].str.contains("N|ST", na=False)]
-        tqdmRange = tqdm(limit.iterrows(), total=limit.shape[0])
-        for k,v in tqdmRange:
-            s=v['代码']
-            if s in dealed:
-                continue
-            kLmDates=limit[limit['代码']==s]['date']
-            k = getK(s, test=self.test, xq_a_token=self.xq_a_token).reset_index()
-            idxs=[]
-            if self.test==0:
-                idxs=[len(k)-1]
-            else:
-                for x in k.loc[k['date'].isin(kLmDates)].index.to_list():
-                    for i in range(1, 7):
-                        if x + i not in idxs and x + i < len(k):
-                            idxs.append(x + i)
-            mk=self.ramKMin(s)
-            data=np.transpose([[k['date'][x].date(),self.checkMinute(mk,k['date'][x].date())] for x in idxs])
-            if len(data)==0:
-                continue
-            df=pd.DataFrame({'date':data[0],'value':data[1]})
-            df['symbol'] = s
-            df['name'] = v['名称']
-            result[s]=df[~df['date'].isin(kLmDates)]
-            print(result[s])
+            lmdf=lmdf[~lmdf['名称'].str.contains("N|ST", na=False)]
+            tqdmRange = tqdm(lmdf.iterrows(), total=lmdf.shape[0])
+            for k,v in tqdmRange:
+                s=v['代码']
+                if s in dealed:
+                    continue
+                k = getK(s, test=self.test, xq_a_token=self.xq_a_token).reset_index()
+                if len(k)<20:
+                    continue
+                data=np.transpose([[k['date'].values[x],abs(k['close'].values[x]/k['open'].values[x]-1)] for x in range(-self.test,0)])
+                if len(data)==0:
+                    continue
+                df=pd.DataFrame({'date':data[0],'value':data[1]})
+                df['symbol'] = s
+                df['name'] = v['名称']
+                result[s] = df
+                # result[s]=df[~df['date'].isin(kLmDates)]
+                print(result[s])
             dealed.append(s)
         return result
 
@@ -98,6 +91,5 @@ class fatcor01:
 
 
 if __name__ == '__main__':
-    len(sys.argv) == 3
-    g=fatcor01('test2021ttt',0)
+    g=fatcor01('test2021ttt',int(sys.argv[1]))
     g.run()

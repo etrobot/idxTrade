@@ -391,15 +391,17 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf.set_index('symbol', inplace=True)
     elif mkt == 'cn':
         indDf = thsIndustry(mkt, pdate)
+        indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
+        # indDf = indDf[~indDf.index.str.startswith("SH688", na=False)]
     elif mkt=='us':
         indDf=usHot(pdate,g.xq_a_token)
-    else:
+    elif mkt=='hk':
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
-    avgAmount = indDf['amount'].mean()
-    indDf = indDf[indDf['amount'] > avgAmount]
+        avgAmount = indDf['amount'].mean()
+        indDf = indDf[indDf['amount'] > avgAmount]
+        # indDf = indDf[indDf.index.isin(xueqiuConcerned(mkt,g.xq_a_token)['symbol'])]
+
     indDf = indDf.fillna(value=np.nan)
-    # indDf = indDf[~indDf.index.str.startswith("SH688", na=False)]
-    indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
     cal = {'_J': [], '_U': []}
     indDf['filename'] = None
     indDf['past45Days'] = -999.0
