@@ -397,7 +397,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf=usHot(pdate,g.xq_a_token)
     elif mkt=='hk':
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
-        avgAmount = indDf['amount'].mean()
+        avgAmount = indDf['amount'].median()
         indDf = indDf[indDf['amount'] > avgAmount]
         # indDf = indDf[indDf.index.isin(xueqiuConcerned(mkt,g.xq_a_token)['symbol'])]
 
@@ -409,6 +409,10 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s" % (mkt, v['行业'], k, v['name'])).ljust(25))
         qdf = getK(k, pdate,g.xq_a_token, test)
+        if len(qdf)==0:
+            for mk, mv in cal.items():
+                cal[mk].append(None)
+            continue
         indDf.at[k, 'past45Days'] = round(qdf['close'][-1] / min(qdf['close'][-45:]) - 1, 4)
         info = [mkt, v['行业'], k, v['name']]
         indDf.at[k, 'filename'] = IMG_FOLDER + str(pdate.weekday() + 1) + '/' + mkt + '/' + '_'.join(

@@ -482,7 +482,10 @@ def cmsK(code:str,type:str='daily'):
         ('FQType', '2'),#不复权1，前复权2，后复权3
     )
     url='https://hq.cmschina.com/market/json?'+parse.urlencode(params)
-    data = json.loads(getUrl(url))['results'][0]['array']
+    kjson=json.loads(getUrl(url))
+    if len(kjson['results'])==0:
+        return []
+    data = kjson['results'][0]['array']
     df=pd.DataFrame(data=data,columns=['date','open','high','close','low','yesterday','volume','amount','price_chg','percent','turnoverrate','ma5','ma10','ma20','ma30','ma60','afterAmt','afterVol'])
     df.set_index('date',inplace=True)
     df.index=pd.to_datetime(df.index,format='%Y%m%d')

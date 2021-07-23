@@ -58,6 +58,9 @@ def send_email(subject,content):
 
 class xueqiuPortfolio():
     def __init__(self,mkt,config):
+        self.mkt = mkt
+        self.cfg = config
+        self.position = dict()
         self.holdnum = 5
         self.session = requests.Session()
         self.session.cookies.update(self.getXueqiuCookie())
@@ -66,9 +69,7 @@ class xueqiuPortfolio():
             "Connection": "close",
              "user-agent": "Mozilla",
         }
-        self.mkt=mkt
-        self.cfg=config
-        self.position = dict()
+
 
     def getXueqiuCookie(self):
         conf = configparser.ConfigParser()
@@ -80,7 +81,7 @@ class xueqiuPortfolio():
             'Connection': 'close'
         }
         bmoburl = 'https://api2.bmob.cn/1/classes/text/'
-        sbCookie = json.loads(requests.get(bmoburl + 'cc8966d77d', headers=headersBmob).text)['text']
+        sbCookie = json.loads(requests.get(bmoburl + self.cfg['bmob'], headers=headersBmob).text)['text']
         cookie_dict = {}
         for record in sbCookie.split(";"):
             key, value = record.strip().split("=", 1)
@@ -89,6 +90,7 @@ class xueqiuPortfolio():
             if 'expiry' in item:
                 del item['expiry']
         return cookie_dict
+
     def trade(self,mkt,mode,position_list=None):  # 调仓雪球组合
         portfolio_code = self.cfg['xueqiu'][mode]
         if position_list is None:
