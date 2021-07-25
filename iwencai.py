@@ -60,16 +60,23 @@ def crawl_data_from_wencai(question:str):
 
 
 if __name__ == "__main__":
+    # xueqiuCfg={
+    #     'bmob': '15d5b095f9',
+    #     "xueqiu":
+    #         {
+    #             'idx':'ZH2492692'
+    #         }
+    # }
     xueqiuCfg={
-        'bmob': '15d5b095f9',
+        'bmob': 'cc8966d77d',
         "xueqiu":
             {
-                'idx':'ZH2492692'
+                'idx':'ZH1353951'
             }
     }
-    conf = configparser.ConfigParser()
-    conf.read('config.ini')
-    wenCaiDf=pd.DataFrame()
+    # conf = configparser.ConfigParser()
+    # conf.read('config.ini')
+    # wenCaiDf=pd.DataFrame()
     # for k,q in conf['wencai'].items():
     #     df=crawl_data_from_wencai(q)
     #     wenCaiDf=wenCaiDf.append(df[['股票简称','股票代码','区间振幅']])
@@ -77,4 +84,4 @@ if __name__ == "__main__":
     x = xueqiuPortfolio('cn', xueqiuCfg)
     position = x.getPosition()['idx']
     for stock in position:
-        cls = cmsK(stock['stock_symbol'])['close']
+        print(stock)
