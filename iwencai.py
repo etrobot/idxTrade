@@ -74,14 +74,22 @@ if __name__ == "__main__":
                 'idx':'ZH1353951'
             }
     }
-    # conf = configparser.ConfigParser()
-    # conf.read('config.ini')
-    # wenCaiDf=pd.DataFrame()
-    # for k,q in conf['wencai'].items():
-    #     df=crawl_data_from_wencai(q)
-    #     wenCaiDf=wenCaiDf.append(df[['股票简称','股票代码','区间振幅']])
-    # print(wenCaiDf[~wenCaiDf['股票代码'].str.startswith("SH688", na=False)].sort_values('区间振幅')['股票代码'].values[-1])
-    x = xueqiuPortfolio('cn', xueqiuCfg)
-    position = x.getPosition()['idx']
-    for stock in position:
-        print(stock)
+    conf = configparser.ConfigParser()
+    conf.read('config.ini')
+    wenCaiDf=pd.DataFrame()
+    for k,q in conf['wencai'].items():
+        df=crawl_data_from_wencai(q)
+        wenCaiDf=wenCaiDf.append(df[['股票简称','股票代码','区间振幅']])
+    wencai= wenCaiDf[~wenCaiDf['股票代码'].str.startswith("SH688", na=False)].sort_values('区间振幅')['股票代码'].values[-1]
+    xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
+    position = xueqiuP.getPosition()['idx']
+    kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol='+','.join(x['stock_symbol'] for x in position)
+    quotes = json.loads(requests.get(url=kurl,headers={"user-agent": "Mozilla"}).text)['data']['items']
+    sortedList=sorted([[x['quote']['symbol'],float(x['quote']['percent'])] for x in quotes ],key=lambda x:x[1])
+    if len(position)==4 and wencai not in [x[0] for x in sortedList]:
+        for p in position:
+            if p['stock_symbol']==sortedList[-1][0]:
+                p['weight']=0
+                break
+        position.append(xueqiuP.newPostition('cn', wencai, 25))
+    xueqiuP.trade('cn','idx',position)
