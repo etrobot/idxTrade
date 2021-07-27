@@ -117,6 +117,7 @@ class xueqiuPortfolio():
     def getPosition(self):
         if len(self.position)>0:
             return self.position
+        self.position['cash']=dict()
         for mode,portfolio_code in self.cfg['xueqiu'].items():
             resp = self.session.get(self.p_url + portfolio_code, headers=self.headers).text
             portfolio_info = json.loads(re.search(r'(?<=SNB.cubeInfo = ).*(?=;\n)', resp).group())
@@ -133,6 +134,7 @@ class xueqiuPortfolio():
                 'pre_interest': 0.25
             }]
             self.position[mode]=position['holdings']
+            self.position['cash'][mode]=cash
         return self.position
 
     def newPostition(self,mkt,symbol,wgt):
