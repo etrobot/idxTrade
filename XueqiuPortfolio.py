@@ -123,7 +123,7 @@ class xueqiuPortfolio():
             portfolio_info = json.loads(re.search(r'(?<=SNB.cubeInfo = ).*(?=;\n)', resp).group())
             asset_balance = float(portfolio_info['net_value'])
             position = portfolio_info['view_rebalancing']
-            cash = asset_balance * float(position['cash']) / 100  # 可用资金
+            cash = asset_balance * float(position['cash'])  # 可用资金
             market = asset_balance - cash
             p_info = [{
                 'asset_balance': asset_balance,

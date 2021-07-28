@@ -1,7 +1,5 @@
 from copy import deepcopy
-import requests,json
-import pandas as pd
-import configparser
+import sys
 from XueqiuPortfolio import *
 from QuotaUtilities import *
 
@@ -60,38 +58,30 @@ def crawl_data_from_wencai(question:str):
 
 
 if __name__ == "__main__":
-    xueqiuCfg={
-        'bmob': '15d5b095f9',
-        "xueqiu":
-            {
-                'idx':'ZH2492692'
-            }
-    }
-    # xueqiuCfg={
-    #     'bmob': 'cc8966d77d',
-    #     "xueqiu":
-    #         {
-    #             'idx':'ZH1353951'
-    #         }
-    # }
+    xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
+    # xueqiuCfg={'bmob': 'cc8966d77d',"xueqiu":{'idx':'ZH1353951'}}
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
     position = xueqiuP.getPosition()['idx']
-    kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol='+','.join(x['stock_symbol'] for x in position)
+    kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol='+','.join(x['stock_symbol'] for x in position)+',SZ000001'
     quotes = json.loads(requests.get(url=kurl,headers={"user-agent": "Mozilla"}).text)['data']['items']
-    sortedList=sorted([[x['quote']['symbol'],float(x['quote']['percent'])] for x in quotes ],key=lambda x:x[1])
-    wenCaiDf = pd.DataFrame()
-    for k, q in conf['wencai'].items():
-        df = crawl_data_from_wencai(q)
-        wenCaiDf = wenCaiDf.append(df[['股票简称', '股票代码', '区间振幅']])
-    wenCaiDf['股票代码']= wenCaiDf['股票代码'].str[7:]+wenCaiDf['股票代码'].str[:6]
-    wencai = wenCaiDf[~wenCaiDf['股票代码'].isin(x[0] for x in sortedList)].sort_values('区间振幅')['股票代码'].values[-1]
+    sortedList=sorted([[x['quote']['symbol'],float(x['quote']['percent'])] for x in quotes if x['quote']['symbol'] != 'SZ000001'],key=lambda x:x[1])
+    wenCaiDf = pd.read_csv('wencai.csv')
+    if len(sys.argv)==1:
+        for k, q in conf['wencai'].items():
+            df = crawl_data_from_wencai(q)
+            df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
+            wenCaiDf = wenCaiDf.append(df[['股票简称', '股票代码', '区间振幅']])
+        wenCaiDf['date'] = int(quotes[-1]['quote']['timestamp'])
+        wenCaiDf['date'] = pd.to_datetime(wenCaiDf['date'].values,unit='ms',utc=True).date
+        wenCaiDf.to_csv('wencai.csv',index=False)
+    wencai = wenCaiDf[~wenCaiDf['股票代码'].isin(x[0] for x in sortedList)].sort_values('区间振幅')
+    print(wencai.iloc[[-1]])
     if len(position)==4:
         for p in position:
             if p['stock_symbol']==sortedList[-1][0]:
                 p['weight']=0
                 break
-    position.append(xueqiuP.newPostition('cn', wencai, min(25,xueqiuP.getPosition()['cash']['idx'])))
-    print(position)
+    position.append(xueqiuP.newPostition('cn', wencai['股票代码'].values[-1], min(25,xueqiuP.getPosition()['cash']['idx'])))
     xueqiuP.trade('cn','idx',position)
