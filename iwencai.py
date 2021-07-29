@@ -65,8 +65,23 @@ if __name__ == "__main__":
     xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
     xueqiuPp= xueqiuP.getPosition()
     position = xueqiuPp['idx']
+
+    # sell filter
     kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol='+','.join(x['stock_symbol'] for x in position)+',SZ000001'
     quotes = json.loads(requests.get(url=kurl,headers={"user-agent": "Mozilla"}).text)['data']['items']
+    last = [x['stock_symbol'] for x in xueqiuPp['last']['idx']]
+    last.append('SZ000001')
+    sortedList = sorted(
+        [[x['quote']['symbol'], float(x['quote']['percent'])] for x in quotes if x['quote']['symbol'] not in last],
+        key=lambda x: x[1])
+    if len(position)==4:
+        print('持仓',sortedList)
+        for p in position:
+            if p['stock_symbol']==sortedList[-1][0]:
+                p['weight']=0
+                break
+
+    # buy filter
     if len(sys.argv)==1:
         wenCaiDf = pd.DataFrame()
         for k, q in conf['wencai'].items():
@@ -77,21 +92,11 @@ if __name__ == "__main__":
         wenCaiDf['date'] = pd.to_datetime(wenCaiDf['date'].values,unit='ms',utc=True).date
     else:
         wenCaiDf = pd.read_csv('wencai.csv')
-
-    last = [x['stock_symbol'] for x in xueqiuPp['last']['idx'] if float(x['weight'])>0]
-    last.append('SZ000001')
-    sortedList = sorted(
-        [[x['quote']['symbol'], float(x['quote']['percent'])] for x in quotes if x['quote']['symbol'] not in last],
-        key=lambda x: x[1])
-    wencai = wenCaiDf[~wenCaiDf['股票代码'].isin(x[0] for x in sortedList)].sort_values('区间振幅')
+    wencai = wenCaiDf[~wenCaiDf['股票代码'].isin(x['stock_symbol'] for x in position)].sort_values('区间振幅')
     print(wencai.iloc[[-1]])
-    if len(position)==4:
-        print('持仓',sortedList)
-        for p in position:
-            if p['stock_symbol']==sortedList[-1][0]:
-                p['weight']=0
-                break
     position.append(xueqiuP.newPostition('cn', wencai['股票代码'].values[-1], min(25,xueqiuPp['cash']['idx'])))
     if len(sys.argv) == 1:
         wenCaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
+
+    # trade
     xueqiuP.trade('cn','idx',position)
