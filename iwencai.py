@@ -70,21 +70,20 @@ if __name__ == "__main__":
 
     # buy filter
     if len(sys.argv)==1:
-        wenCaiDf = pd.DataFrame()
+        wencaiDf = pd.DataFrame()
         for k, q in conf['wencai'].items():
             df = crawl_data_from_wencai(q)
             df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-            wenCaiDf = wenCaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权']])
-        wenCaiDf['date'] = idx.index[-1]
-        # wenCaiDf['date'] = pd.to_datetime(wenCaiDf['date'].values,unit='ms',utc=True).date
+            wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权']])
+        wencaiDf['date'] = idx.index[-1]
+        # wencaiDf['date'] = pd.to_datetime(wencaiDf['date'].values,unit='ms',utc=True).date
     else:
-        wenCaiDf = pd.read_csv('wencai.csv')
-    wenCaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
-    wenCaiDf.drop_duplicates(subset='股票代码', keep='first', inplace=True)
-    wencaiDf = wenCaiDf[~wenCaiDf['股票代码'].isin(x['stock_symbol'] for x in position)]
+        wencaiDf = pd.read_csv('wencai.csv')
+    wencaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
+    wencaiDf.drop_duplicates(subset='股票代码', keep='first', inplace=True)
     print(wencaiDf.iloc[[0]])
     if len(sys.argv) == 1:
-        wenCaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
+        wencaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
 
     # sell filter
     if len(position)==4:
@@ -92,22 +91,16 @@ if __name__ == "__main__":
             x['stock_symbol'] for x in position)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
-            [[x['quote']['symbol'], float(x['quote']['percent'])] for x in quotes],
-            key=lambda x: x[1])
+            [[x['quote']['symbol'], x['quote']['symbol'] in wencaiDf['股票代码'].values,float(x['quote']['percent'])] for x in quotes],
+            key=lambda x: (x[1],x[2]))
         for p in position:
-            print()
-            if p['stock_symbol'] not in wencaiDf['股票代码']:
-                cash = int(p['weight'])
-                p['weight'] = 0
-                print('Sell Historical : ', p)
-            elif p['stock_symbol']==sortedHoldings[-1][0]:
+            if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=int(p['weight'])
                 p['weight']=0
-                print('Sell Max : ',p)
-            if p['weight']==0:
+                print('Sell : ',p)
                 break
 
     # trade
     position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
     print(position)
-    xueqiuP.trade('cn','idx',position)
+    # xueqiuP.trade('cn','idx',position)
