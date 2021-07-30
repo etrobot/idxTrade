@@ -58,31 +58,15 @@ def crawl_data_from_wencai(question:str):
 
 
 if __name__ == "__main__":
+    idx=eastmoneyK('SZ000001')
     xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
     # xueqiuCfg={'bmob': 'cc8966d77d',"xueqiu":{'idx':'ZH1353951'}}
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
-    xueqiuPp= xueqiuP.getPosition()
-    position = xueqiuPp['idx']
-    cash=xueqiuPp['cash']['idx']
-    print(cash)
-
-    # sell filter
-    if len(position)==4:
-        kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(
-            x['stock_symbol'] for x in position) + ',SZ000001'
-        quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
-        sortedHoldings = sorted(
-            [[x['quote']['symbol'], float(x['quote']['percent'])] for x in quotes if
-             x['quote']['symbol'] != 'SZ000001'],
-            key=lambda x: x[1])
-        for p in position:
-            if p['stock_symbol']==sortedHoldings[-1][0]:
-                cash=int(p['weight'])
-                p['weight']=0
-                print('sell:',p)
-                break
+    xueqiuPp= xueqiuP.getPosition()['idx']
+    position = xueqiuPp['holding']
+    cash=xueqiuPp['cash']
 
     # buy filter
     if len(sys.argv)==1:
@@ -90,18 +74,40 @@ if __name__ == "__main__":
         for k, q in conf['wencai'].items():
             df = crawl_data_from_wencai(q)
             df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-            wenCaiDf = wenCaiDf.append(df[['股票简称', '股票代码', '区间涨跌幅:前复权']])
-        wenCaiDf['date'] = int(quotes[-1]['quote']['timestamp'])
-        wenCaiDf['date'] = pd.to_datetime(wenCaiDf['date'].values,unit='ms',utc=True).date
+            wenCaiDf = wenCaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权']])
+        wenCaiDf['date'] = idx.index[-1]
+        # wenCaiDf['date'] = pd.to_datetime(wenCaiDf['date'].values,unit='ms',utc=True).date
     else:
         wenCaiDf = pd.read_csv('wencai.csv')
     wenCaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
     wenCaiDf.drop_duplicates(subset='股票代码', keep='first', inplace=True)
     wencaiDf = wenCaiDf[~wenCaiDf['股票代码'].isin(x['stock_symbol'] for x in position)]
     print(wencaiDf.iloc[[0]])
-    position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25,cash)))
     if len(sys.argv) == 1:
         wenCaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
 
+    # sell filter
+    if len(position)==4:
+        kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(
+            x['stock_symbol'] for x in position)
+        quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
+        sortedHoldings = sorted(
+            [[x['quote']['symbol'], float(x['quote']['percent'])] for x in quotes],
+            key=lambda x: x[1])
+        for p in position:
+            print()
+            if p['stock_symbol'] not in wencaiDf['股票代码']:
+                cash = int(p['weight'])
+                p['weight'] = 0
+                print('Sell Historical : ', p)
+            elif p['stock_symbol']==sortedHoldings[-1][0]:
+                cash=int(p['weight'])
+                p['weight']=0
+                print('Sell Max : ',p)
+            if p['weight']==0:
+                break
+
     # trade
+    position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
+    print(position)
     xueqiuP.trade('cn','idx',position)

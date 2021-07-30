@@ -19,7 +19,7 @@ class idxTrade:#保存参数的类
         for mode in self.cfg['paramSet'].keys():
             if mode=='idx':
                 ik = idxCompare(market, self.cfg, mode, self.backtest)
-                position = self.xueqiu.getPosition()[mode]
+                position = self.xueqiu.getPosition()[mode]['holding']
                 iCls = ik['k']['close']
                 sell=[]
                 #检查卖出
@@ -63,7 +63,7 @@ class idxTrade:#保存参数的类
                     if symbols[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
-                        position.append(self.xueqiu.newPostition(market, symbols[0], min(21,self.xueqiu.getPosition()['cash'][mode])))
+                        position.append(self.xueqiu.newPostition(market, symbols[0], min(21,self.xueqiu.getPosition()[mode]['cash'])))
                         # print(sell,toBuy,position)
                         self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
