@@ -3,7 +3,6 @@ import sys
 from XueqiuPortfolio import *
 from QuotaUtilities import *
 
-
 def crawl_data_from_wencai(question:str):
     headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
                'Accept-Encoding': 'gzip, deflate',
@@ -74,9 +73,9 @@ if __name__ == "__main__":
         for k, q in conf['wencai'].items():
             df = crawl_data_from_wencai(q)
             df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-            wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权']])
-        wencaiDf['date'] = idx.index[-1]
-        # wencaiDf['date'] = pd.to_datetime(wencaiDf['date'].values,unit='ms',utc=True).date
+            df['date'] = idx.index[-1]
+            df['type'] = k[1:]
+            wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权','date','type']])
     else:
         wencaiDf = pd.read_csv('wencai.csv')
     wencaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
@@ -103,4 +102,4 @@ if __name__ == "__main__":
     # trade
     position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
     print(position)
-    # xueqiuP.trade('cn','idx',position)
+    xueqiuP.trade('cn','idx',position)
