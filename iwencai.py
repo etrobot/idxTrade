@@ -91,6 +91,7 @@ if __name__ == "__main__":
         sortedHoldings = sorted(
             [[x['quote']['symbol'],x['quote']['symbol'] not in wencaiDf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
+        print(sortedHoldings)
         for p in position:
             if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=int(p['weight'])
