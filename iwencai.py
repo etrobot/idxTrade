@@ -80,7 +80,6 @@ if __name__ == "__main__":
         wencaiDf = pd.read_csv('wencai.csv')
     wencaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
     wencaiDf.drop_duplicates(subset='股票代码', keep='first', inplace=True)
-    print(wencaiDf.iloc[[0]])
     if len(sys.argv) == 1:
         wencaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
 
@@ -90,7 +89,7 @@ if __name__ == "__main__":
             x['stock_symbol'] for x in position)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
-            [[x['quote']['symbol'], x['quote']['symbol'] in wencaiDf['股票代码'].values,float(x['quote']['percent'])] for x in quotes],
+            [[x['quote']['symbol'],x['quote']['symbol'] not in wencaiDf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
         for p in position:
             if p['stock_symbol']==sortedHoldings[-1][0]:
@@ -101,5 +100,4 @@ if __name__ == "__main__":
 
     # trade
     position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
-    print(position)
     xueqiuP.trade('cn','idx',position)
