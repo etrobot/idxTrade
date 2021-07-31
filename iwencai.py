@@ -96,7 +96,6 @@ if __name__ == "__main__":
             if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=int(p['weight'])
                 p['weight']=0
-                print('Sell : ',p)
                 break
 
     # trade
