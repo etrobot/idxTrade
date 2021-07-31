@@ -79,7 +79,7 @@ if __name__ == "__main__":
     else:
         wencaiDf = pd.read_csv('wencai.csv')
     wencaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
-    wencaiDf.drop_duplicates(subset='股票代码', keep='first', inplace=True)
+    wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1:
         wencaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
 

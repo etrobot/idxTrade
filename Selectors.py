@@ -1,9 +1,7 @@
 # 策略收益计算
 from QuotaUtilities import *
 import akshare as ak
-from matplotlib.font_manager import _rebuild
 from tqdm import tqdm
-from matplotlib import rcParams
 import matplotlib.pyplot as plt
 
 def factor_1(kdf):#计算因子值,越小越好
@@ -109,15 +107,6 @@ def dealSymbol(symbol):#为纯数字代码加上'sh'或'sz'前缀
     if sbl.startswith('6'):
         return 'sh'+sbl
     return 'sz'+sbl
-
-def preparePlot():
-    # print(matplotlib_fname())
-    # print(plt.style.available)
-    rcParams['font.family'] = ['sans-serif']
-    rcParams['font.sans-serif']=['Source Han Sans CN']  # 用来正常显示中文标签
-    rcParams['axes.unicode_minus']=False  # 用来正常显示负号
-    _rebuild()
-    plt.style.use(['fivethirtyeight','seaborn-notebook'])
 
 def idxCompare(mkt,cfg,mode='idx',backtest=0):
     iK = dict()

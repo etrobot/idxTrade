@@ -1,8 +1,6 @@
-import mplfinance as mpf
 import matplotlib as mpl  # 用于设置曲线参数
 from cycler import cycler  # 用于定制线条颜色
 import numpy as np
-from matplotlib.font_manager import _rebuild
 from idxTrade import *
 from selenium import webdriver
 
@@ -73,100 +71,6 @@ def updateFund(pdate:dt):
     fundDf['基金代码'] = fundDf['基金代码'].apply(
         lambda x: '<a href="https://xueqiu.com/S/F{fundcode}">{fundcode}</a>'.format(fundcode=x))
     renderHtml(fundDf,'../CMS/source/Quant/fund.html','含量化选股的内地基金')
-
-
-def draw(df, info, boardDates=()):
-    # 导入数据
-    # 导入股票数据
-    # 格式化列名，用于之后的绘制
-    df.index.names=['date']
-    df.rename(
-        columns={
-            'open': 'Open',
-            'high': 'High',
-            'low': 'Low',
-            'close': 'Close',
-            'volume': 'Volume'
-        },
-        inplace=True)
-    df = df[-75:]
-    dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
-    '''
-    设置marketcolors
-    up:设置K线线柱颜色，up意为收盘价大于等于开盘价
-    down:与up相反，这样设置与国内K线颜色标准相符
-    edge:K线线柱边缘颜色(i代表继承自up和down的颜色)，下同。详见官方文档)
-    wick:灯芯(上下影线)颜色
-    volume:成交量直方图的颜色
-    inherit:是否继承，选填
-    '''
-    marketcolors = {'candle': {'up': '#f64769', 'down': 'mediumaquamarine'},
-                    'edge': {'up': '#f64769', 'down': 'mediumaquamarine'},
-                    'wick': {'up': 'hotpink', 'down': 'aquamarine'},
-                    'ohlc': {'up': '#f64769', 'down': 'mediumaquamarine'},
-                    'volume': {'up': 'firebrick', 'down': 'seagreen'},
-                    'vcdopcod': False,  # Volume Color Depends On Price Change On Day
-                    'alpha': 1.0
-                    }
-    # 设置图形风格
-    # gridaxis:设置网格线位置
-    # gridstyle:设置网格线线型
-    # y_on_right:设置y轴位置是否在右
-    rcpdict = {'font.family': 'Source Han Sans CN'}
-    mystyle = mpf.make_mpf_style(
-        base_mpf_style='mike',
-        rc=rcpdict,
-        gridaxis='both',
-        gridstyle='-',
-        gridcolor='#393f52',
-        y_on_right=True,
-        marketcolors=marketcolors,
-        figcolor='#20212A',
-        facecolor='#20212A',
-        edgecolor='#393f52',
-    )
-    '''
-    设置基本参数
-    type:绘制图形的类型，有candle, renko, ohlc, line等
-    此处选择candle,即K线图
-    mav(moving average):均线类型,此处设置7,30,60日线
-    volume:布尔类型，设置是否显示成交量，默认False
-    title:设置标题
-    y_label:设置纵轴主标题
-    y_label_lower:设置成交量图一栏的标题
-    figratio:设置图形纵横比
-    figscale:设置图形尺寸(数值越大图像质量越高)
-    '''
-    kwargs = dict(
-        style=mystyle,
-        type='candle',
-        volume=True,
-        mav=(5, 10, 20),
-        title=info[len(IMG_FOLDER + '1/cn/'):-4] + '45天' + str(
-            round(df['Close'][-1] / df['Close'][0] * 100 - 100, 2)) + '% 最新' + str(
-            round(df['percent'][-1] * 100, 2)) + '% 额' + str(round(df['amount'][-1] / 100000000, 2)) + '亿',
-        # ylabel='OHLCV Candles',
-        # ylabel_lower='Shares\nTraded Volume',
-        savefig=info,
-        figratio=(2, 1),
-        figscale=1,
-        tight_layout=True,
-    )
-    if len(dt)>0:
-        kwargs['vlines']=dict(vlines=dt, linewidths=6, alpha=0.2, colors='khaki')
-    # 设置均线颜色，配色表可见下图
-    # 建议设置较深的颜色且与红色、绿色形成对比
-    # 此处设置七条均线的颜色，也可应用默认设置
-    mpl.rcParams['axes.prop_cycle'] = cycler(
-        color=['dodgerblue', 'deeppink',
-               'navy', 'teal', 'maroon', 'darkorange',
-               'indigo'])
-    # 图形绘制
-    # show_Uontrading:是否显示非交易日，默认False
-    # savefig:导出图片，填写文件名及后缀
-    mpf.plot(df, **kwargs, scale_width_adjustment=dict(volume=0.5, candle=1, lines=0.5))
-    plt.show()
-
 
 def cauculate(dfk):
     if len(dfk['close'].values) < 44:
@@ -455,7 +359,8 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     article = []
     drawedSymbolList = []
     if mkt=='cn':
-        debts = ak.bond_cov_jsl()
+        jslcookie = 'kbz__Session=ha205pagu7mc61ocqvpgb7mm33; kbz__user_login=1ubd08_P1ebax9aX3Nbo0NXn1ZGcoenW3Ozj5tTav9Cjl6nDqd2nn6vS25rXx9fZlqKR2LClnK3Oqcbaw6ytmKOCr6bq0t3K1I2nk6yumqmWlbSivrrK1I3D0O3hzdzCo66jmZmUxMPZyuHs0OPJr5m-1-3R44LDwtaYsMOBzJmmmdidrMGtipO50eDN2dDay8TV65GrlKqmlKaBnMS9vca4o4Liyt7dgbfG1-Tkkpmv39TlztinmqKPpKepnqqhpZOmmJPLwtbC5uKknqyjpZWs; SERVERID=5452564f5a1004697d0be99a0a2e3803|1627698004|1627697578'
+        debts = ak.bond_cov_jsl(cookie=jslcookie)
         debts = debts[
             ['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt', 'volume',
              'premium_rt', 'year_left', 'force_redeem_price', 'sprice']]
@@ -562,15 +467,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         mlog('complete' + title)
         # if g.testMode():
         #     return finalhtml
-
-
-def preparePlot():
-    mlog(mpl.matplotlib_fname())
-    mpl.rcParams['font.family'] = ['sans-serif']
-    mpl.rcParams['font.sans-serif'] = ['Source Han Sans CN']  # 用来正常显示中文标签
-    mpl.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-    _rebuild()
-
 
 class params:
     def __init__(self, market=None, test=0,pdate=None):
