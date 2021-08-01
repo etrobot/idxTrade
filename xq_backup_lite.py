@@ -358,26 +358,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     df[mCap] = df[mCap].apply(str) + '亿'
     article = []
     drawedSymbolList = []
-    if mkt=='cn':
-        jslcookie = 'kbz__Session=ha205pagu7mc61ocqvpgb7mm33; kbz__user_login=1ubd08_P1ebax9aX3Nbo0NXn1ZGcoenW3Ozj5tTav9Cjl6nDqd2nn6vS25rXx9fZlqKR2LClnK3Oqcbaw6ytmKOCr6bq0t3K1I2nk6yumqmWlbSivrrK1I3D0O3hzdzCo66jmZmUxMPZyuHs0OPJr5m-1-3R44LDwtaYsMOBzJmmmdidrMGtipO50eDN2dDay8TV65GrlKqmlKaBnMS9vca4o4Liyt7dgbfG1-Tkkpmv39TlztinmqKPpKepnqqhpZOmmJPLwtbC5uKknqyjpZWs; SERVERID=5452564f5a1004697d0be99a0a2e3803|1627698004|1627697578'
-        debts = ak.bond_cov_jsl(cookie=jslcookie)
-        debts = debts[
-            ['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt', 'volume',
-             'premium_rt', 'year_left', 'force_redeem_price', 'sprice']]
-        debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(
-            debcode=x['pre_bond_id'].upper(), debname=x['bond_nm']), axis=1)
-        debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
-            symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
-        debts[['orig_iss_amt', 'volume', 'year_left', 'force_redeem_price', 'sprice']] = debts[
-            ['orig_iss_amt', 'volume', 'year_left', 'force_redeem_price', 'sprice']].apply(
-            pd.to_numeric, errors='coerce')
-        debts['stock_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{symbol}">{stnm}</a>'.format(
-            symbol=x['stock_id'].upper(), stnm=x['stock_nm']), axis=1)
-        debts['距强赎价比'] = debts.apply(lambda x: x['force_redeem_price'] / x['sprice'] - 1, axis=1)
-        debtsNew = debts[debts['convert_price_valid_from'].isna()].copy().sort_values(by=['orig_iss_amt'])
-        debts = debtsNew.append(debts[~debts.index.isin(debtsNew.index)]).drop(
-            columns=['force_redeem_price', 'sprice'])
-        renderHtml(debts, '../CMS/source/Quant/debt.html', '转债强赎现价比' + pdate.strftime('%y%m%d'))
 
     tqdmRange = tqdm(df.iterrows(), total=df.shape[0])
     for k, v in tqdmRange:
@@ -404,10 +384,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
             if fundDf is not None and len(fundDf)>0:
                 rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
                 renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
-        if mkt == 'cn':
-            deb = debts[debts['stock_id'] == k.lower()]
-            if len(deb) != 0:
-                rowtitle += '[%s](https://xueqiu.com/S/%s)' % ('债溢' + deb['premium_rt'].values[0] + str(round(deb['volume'].values[0]/10000,1))+'亿触'+ str(deb['convert_price_valid_from'].values[0]), debts['stock_id'].values[0].upper())
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
@@ -486,7 +462,6 @@ class params:
 
 
 if __name__ == '__main__':
-    preparePlot()
     logging.basicConfig(
         filename='daily.log',
         level=logging.DEBUG
