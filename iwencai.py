@@ -48,13 +48,11 @@ def crawl_data_from_wencai(question:str):
             # 筛选查询字段，非查询字段丢弃
             df = df_data[fields]
             # 增加列, 交易日期 code 设置索引
-            return df.assign(trade_date=trade_date, code=df["股票代码"].apply(lambda x: x[0:6])).set_index("trade_date",
-                                                                                                       drop=False)
+            return df.assign(trade_date=trade_date, code=df["股票代码"].apply(lambda x: x[0:6])).set_index("trade_date",drop=False)
         else:
             print("连接访问接口失败")
     except Exception as e:
         print(e)
-
 
 if __name__ == "__main__":
     idx=eastmoneyK('SZ000001')
@@ -66,6 +64,7 @@ if __name__ == "__main__":
     xueqiuPp= xueqiuP.getPosition()['idx']
     position = xueqiuPp['holding']
     cash=xueqiuPp['cash']
+    stockHeld=[x['stock_symbol'] for x in position]
 
     # buy filter
     if len(sys.argv)==1:
@@ -75,9 +74,11 @@ if __name__ == "__main__":
             df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
             df['date'] = idx.index[-1]
             df['type'] = k[1:]
+            t.sleep(5*(int(k[1:])-1))
             wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权','date','type']])
     else:
         wencaiDf = pd.read_csv('wencai.csv')
+    wencaiDf=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]
     wencaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1:
@@ -85,8 +86,7 @@ if __name__ == "__main__":
 
     # sell filter
     if len(position)==4:
-        kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(
-            x['stock_symbol'] for x in position)
+        kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(stockHeld)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
             [[x['quote']['symbol'],x['quote']['symbol'] not in wencaiDf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
