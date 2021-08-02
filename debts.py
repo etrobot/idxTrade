@@ -1,8 +1,18 @@
 from QuotaUtilities import *
+import configparser
 
 if __name__=='__main__':
-    pdate=datetime(2021,7,31)
-    jslcookie='kbz__Session=ha205pagu7mc61ocqvpgb7mm33; kbz__user_login=1ubd08_P1ebax9aX3Nbo0NXn1ZGcoenW3Ozj5tTav9Cjl6nDqd2nn6vS25rXx9fZlqKR2LClnK3Oqcbaw6ytmKOCr6bq0t3K1I2nk6yumqmWlbSivrrK1I3D0O3hzdzCo66jmZmUxMPZyuHs0OPJr5m-1-3R44LDwtaYsMOBzJmmmdidrMGtipO50eDN2dDay8TV65GrlKqmlKaBnMS9vca4o4Liyt7dgbfG1-Tkkpmv39TlztinmqKPpKepnqqhpZOmmJPLwtbC5uKknqyjpZWs; SERVERID=5452564f5a1004697d0be99a0a2e3803|1627698004|1627697578'
+    pdate=datetime.now()
+    conf = configparser.ConfigParser()
+    conf.read('config.ini')
+    # 获取存储在bmob的雪球cookie
+    headersBmob = {
+        'X-Bmob-Application-Id': conf['bmob']['X-Bmob-Application-Id'],
+        'X-Bmob-REST-API-Key': conf['bmob']['X-Bmob-REST-API-Key'],
+        'Connection': 'close'
+    }
+    bmoburl = 'https://api2.bmob.cn/1/classes/text/'+ conf['bmob']['jsl']
+    jslcookie = json.loads(requests.get(bmoburl , headers=headersBmob).text)['text'].replace('\r','')
     debts = ak.bond_cov_jsl(cookie=jslcookie)
     debts = debts[['pre_bond_id', 'bond_nm', 'stock_id', 'convert_price_valid_from', 'stock_nm', 'orig_iss_amt','volume','premium_rt','year_left','force_redeem_price','sprice']]
     debts['amp']=None
