@@ -55,6 +55,7 @@ def crawl_data_from_wencai(question:str):
         print(e)
 
 if __name__ == "__main__":
+    MAXHOLDING=4
     idx=eastmoneyK('SZ000001')
     xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
     # xueqiuCfg={'bmob': 'cc8966d77d',"xueqiu":{'idx':'ZH1353951'}}
@@ -72,20 +73,23 @@ if __name__ == "__main__":
         for k, q in conf['wencai'].items():
             df = crawl_data_from_wencai(q)
             df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
+            df['最新涨跌幅']=pd.to_numeric(df["最新涨跌幅"], errors='coerce')
+            df['区间涨跌幅:前复权'] = pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce')
+            df['sum']=df['最新涨跌幅'] + df['区间涨跌幅:前复权']
             df['date'] = idx.index[-1]
             df['type'] = k[1:]
-            t.sleep(5*(int(k[1:])-1))
-            wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','区间振幅', '区间涨跌幅:前复权','date','type']])
+            t.sleep(10*(int(k[1:])-1))
+            wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','sum','date','type']])
     else:
         wencaiDf = pd.read_csv('wencai.csv')
     wencaiDf=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]
-    wencaiDf.sort_values(by=['区间涨跌幅:前复权'],ascending=False,inplace=True)
+    wencaiDf.sort_values(by=['sum'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1:
         wencaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
 
     # sell filter
-    if len(position)==4:
+    if len(position)>=MAXHOLDING:
         kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(stockHeld)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
@@ -96,8 +100,12 @@ if __name__ == "__main__":
             if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=int(p['weight'])
                 p['weight']=0
+                p["proactive"] = True
                 break
 
     # trade
-    position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
-    xueqiuP.trade('cn','idx',position)
+    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING:
+        position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
+        xueqiuP.trade('cn','idx',position)
+    else:
+        print(wencaiDf)
