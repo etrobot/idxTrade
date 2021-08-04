@@ -20,6 +20,7 @@ class idxTrade:#保存参数的类
             if mode=='idx':
                 ik = idxCompare(market, self.cfg, mode, self.backtest)
                 position = self.xueqiu.getPosition()[mode]['holding']
+                cash=self.xueqiu.getPosition()[mode]['cash']
                 iCls = ik['k']['close']
                 sell=[]
                 #检查卖出
@@ -37,21 +38,13 @@ class idxTrade:#保存参数的类
                     if stock['weight']>30:
                         sellSignal = True
                     if sellSignal:
+                        cash=stock['weight']
                         stock['weight']=0
                         stock["proactive"] = True
                         sell.append(stock['stock_symbol'])
 
-                avalableNum=4-(len(position)-len(sell))
                 #检查买入
-                if avalableNum>0:
-                    # toBuy=pd.read_csv('md/'+self.mkt+ik['k'].index[-5].strftime("%Y%m%d")+'.csv').iloc[:10].copy()
-                    # factor=[]
-                    # for stock in toBuy['雪球代码']:
-                    #     stockK=cmsK(stock)
-                    #     factor.append(factor_2(stockK))
-                    # toBuy['f']=factor
-                    # toBuy.sort_values(by='f', ascending=True,inplace=True)
-                    # toBuy = pd.read_csv('md/' + self.mkt + ik['k'].index[-1].strftime("%Y%m%d") + '.txt',dtype={'symbol': str})
+                if sum(int(x['weight']>0) for x in position)<5:
                     filename = '../CMS/source/Quant/%s%s_U.html' % (market,ik['k'].index[-1].weekday()+1)
                     if self.mkt!='us' and datetime.now().hour<14:
                         filename = '../CMS/source/Quant/%s%s_J.html' % (market, ik['k'].index[-1].weekday() + 1)
@@ -63,7 +56,7 @@ class idxTrade:#保存参数的类
                     if symbols[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
-                        position.append(self.xueqiu.newPostition(market, symbols[0], min(21,self.xueqiu.getPosition()[mode]['cash'])))
+                        position.append(self.xueqiu.newPostition(market, symbols[0], min(20,cash)))
                         # print(sell,toBuy,position)
                         self.xueqiu.trade(market,mode,position)
             # elif mode=='etf':
