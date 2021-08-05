@@ -365,7 +365,6 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     for k, v in tqdmRange:
         tqdmRange.set_description('【' + calKey + '】' + k + v['name'])
         dfmax = indDf[indDf['行业'] == v['行业']].sort_values(by=['past45Days'], ascending=False).iloc[0]
-        vlines = g.boardlist.get(k,[])
         if not g.testMode() and k not in drawedSymbolList:
             qdf = getK(k, pdate,g.xq_a_token, 1)
             genEchartJson(qdf,k)

@@ -6,7 +6,8 @@
     "baseIdx": ".IXIC",
     "paramSet": {
       "idx": {
-                ".DJI":["signal on",15,4,7,4]
+                ".IXIC":["signal on",15,4,7,4],
+                ".INX":["signal on",15,4,7,4]
         }
     },
     "bmob": "cc8966d77d",
@@ -48,7 +49,8 @@
     "baseIdx": "hkhsi",
     "paramSet": {
       "idx": {
-                "HKHSTECH":["signal on",15,4,7,4]
+                "HKHSTECH":["signal on",15,4,7,4],
+                "HKHSI":["signal on",15,4,7,4]
         }
 
     },

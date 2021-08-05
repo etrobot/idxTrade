@@ -86,7 +86,9 @@ if __name__ == "__main__":
     wencaiDf.sort_values(by=['sum'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1:
-        wencaiDf.append(pd.read_csv('wencai.csv')).to_csv('wencai.csv', index=False)
+        df2file= wencaiDf.append(pd.read_csv('wencai.csv'))
+        df2file.to_csv('wencai.csv', index=False)
+        renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
 
     # sell filter
     if len(position)>=MAXHOLDING:
