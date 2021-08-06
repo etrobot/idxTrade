@@ -308,13 +308,11 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     indDf['filename'] = None
     indDf['past45Days'] = -999.0
     if mkt=='cn':
-        cns=getLimit(getK('SH000001', pdate).index[-2])['代码'].to_list()
         boardhk=dict()
         for b in g.boardlist.keys():
             if len(g.boardlist[b])>0:
                 boardhk[b]=g.boardlist[b]
-        cns.extend(list(boardhk.keys()))
-        indDf=indDf[indDf.index.isin(cns)]
+        indDf=indDf[indDf.index.isin(list(boardhk.keys()))]
     tqdmRange = tqdm(indDf.iterrows(), total=indDf.shape[0])
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s" % (mkt, v['行业'], k, v['name'])).ljust(25))
@@ -351,10 +349,7 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     midMktCap = indDf[mCap].median()
     df = indDf.dropna(subset=[calKey])
     if mkt=='cn':
-        if calKey=='_U':
-            df = df[df.index.isin(getLimit(getK('SH000001', pdate).index[-2])['代码'])].sort_values(by=[calKey],ascending=True).iloc[:num]
-        else:
-            df = df[~df.index.isin(getLimit(getK('SH000001', pdate).index[-2])['代码'])].sort_values(by=[calKey],ascending=True).iloc[:num]
+        df = df.sort_values(by=[calKey],ascending=True).iloc[:num]
     else:
         df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'

@@ -68,24 +68,22 @@ if __name__ == "__main__":
     stockHeld=[x['stock_symbol'] for x in position]
 
     # buy filter
-    if len(sys.argv)==1:
-        wencaiDf = pd.DataFrame()
-        for k, q in conf['wencai'].items():
-            df = crawl_data_from_wencai(q)
-            df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-            df['最新涨跌幅']=pd.to_numeric(df["最新涨跌幅"], errors='coerce')
-            df['区间涨跌幅:前复权'] = pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce')
-            df['sum']=df['最新涨跌幅'] + df['区间涨跌幅:前复权']
-            df['date'] = idx.index[-1]
-            df['type'] = k[1:]
-            t.sleep(10*(int(k[1:])-1))
-            wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','sum','date','type']])
-    else:
-        wencaiDf = pd.read_csv('wencai.csv')
+    wencaiDf = pd.DataFrame()
+    for k, q in conf['wencai'].items():
+        df = crawl_data_from_wencai(q)
+        df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
+        df['最新涨跌幅']=pd.to_numeric(df["最新涨跌幅"], errors='coerce')
+        df['区间涨跌幅:前复权'] = pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce')
+        df['sum']=df['最新涨跌幅'] + df['区间涨跌幅:前复权']
+        df['date'] = idx.index[-1]
+        df['type'] = k[1:]
+        t.sleep(10*(int(k[1:])-1))
+        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','sum','date','type']])
+
     wencaiDf=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]
     wencaiDf.sort_values(by=['sum'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    if len(sys.argv) == 1:
+    if len(sys.argv) == 1 and datetime.now().hour>=14:
         df2file= wencaiDf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
@@ -106,7 +104,7 @@ if __name__ == "__main__":
                 break
 
     # trade
-    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING:
+    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14:
         position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
         xueqiuP.trade('cn','idx',position)
     else:
