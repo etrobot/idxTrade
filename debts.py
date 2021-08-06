@@ -39,12 +39,17 @@ if __name__=='__main__':
         debts=pd.read_csv('debts.csv')
     debts['stock_K'] = None
     debts['stock_monthK'] = None
+    stocks=dict()
     for k, v in tqdm(debts.iterrows(), total=debts.shape[0]):
         sk = eastmoneyK(v['stock_id'])
         if len(sk) > 0:
             sc=sk['close'].values[-22:]
-            debts.loc[k, 'stock_K'] = round((sc[-1] / sc[-2] - 1)*100,2)
-            debts.loc[k, 'stock_monthK']=round((sc[-1]/sc[0]-1)*100,2)
+            if k not in stocks.keys():
+                stocks[k]=[]
+                stocks[k].append(round((sc[-1] / sc[-2] - 1)*100,2))
+                stocks[k].append(round((sc[-1]/sc[0]-1)*100,2))
+            debts.loc[k, 'stock_K'] = stocks[k][0]
+            debts.loc[k, 'stock_monthK'] = stocks[k][1]
     #to html
     debts.sort_values(by=['stock_monthK'],ascending=False,inplace=True)
     debts['bond_nm'] = debts.apply(lambda x: '<a href="https://xueqiu.com/S/{debcode}">{debname}</a>'.format(

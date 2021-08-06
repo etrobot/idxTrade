@@ -346,12 +346,12 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
     upRatio=round(indDf['percent'][indDf['percent']>0].count()/len(indDf['percent'])*100,1)
     mCap = {'us': 'market_capital', 'cn': 'float_market_capital', 'hk': 'float_market_capital'}[mkt]
     capTpye = {'us': '总', 'cn': '流通', 'hk': '港股'}[mkt]
-    midMktCap = indDf[mCap].median()
+    avgMktCap = indDf[mCap].mean()
     df = indDf.dropna(subset=[calKey])
     if mkt=='cn':
         df = df.sort_values(by=[calKey],ascending=True).iloc[:num]
     else:
-        df = df[df[mCap] < midMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
+        df = df[df[mCap] < avgMktCap].sort_values(by=[calKey], ascending=True).iloc[:num]
     df[mCap] = df[mCap].apply(str) + '亿'
     article = []
     drawedSymbolList = []
