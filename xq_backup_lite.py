@@ -299,7 +299,7 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf=usHot(pdate,g.xq_a_token)
     elif mkt=='hk':
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
-        avgAmount = indDf['amount'].median()
+        avgAmount = indDf['amount'].mean()
         indDf = indDf[indDf['amount'] > avgAmount]
         # indDf = indDf[indDf.index.isin(xueqiuConcerned(mkt,g.xq_a_token)['symbol'])]
 
