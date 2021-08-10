@@ -47,13 +47,13 @@ def etfStocks():
         kk = getK(k, xq_a_token=xq_a_token)
         if len(kk)>0:
             cls=kk['close'].values
-            es.loc[k, 't22'] = round((cls[-1]/cls[-min(23,len(cls))]-1)*100,2)
-            es.loc[k, 'ma20/ma30'] = round((cls[-20:].mean() / cls[-30:].mean() - 1) * 100, 2)
+            es.loc[k, 't22'] = round(cls[-1]/cls[-min(23,len(cls))]-1,4)
+            es.loc[k, 'ma20/ma30'] = round(cls[-20:].mean() / cls[-30:].mean()-1,4)
     es['股票名称'] = es.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
         stock_code=x.name, stock_name=x['股票名称']), axis=1)
     es['etf'] = es.apply(
         lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundname}</a>'.format(fundcode=dealFundCode(x['etf_code']),fundname=x['etf']), axis=1)
-    es=es[['股票名称','占净值比例','持股数','etf','t22','ma20/ma30']]
+    es=es[['股票名称','t22','ma20/ma30','etf','占净值比例']]
     es.sort_values(by=['t22'],ascending=False,inplace=True)
     renderHtml(es, '../CMS/source/Quant/etf.html', 'etf')
 
