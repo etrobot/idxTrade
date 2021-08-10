@@ -82,7 +82,7 @@ if __name__ == "__main__":
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅','换手率', '区间涨跌幅:前复权','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    if len(sys.argv) != 1 or datetime.now().hour>=14:
+    if len(sys.argv) == 1 and datetime.now().hour>=14:
         df2file= wencaiDf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
