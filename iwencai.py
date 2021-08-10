@@ -106,6 +106,8 @@ if __name__ == "__main__":
     # trade
     if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14:
         position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
+        if wencaiDf['股票代码'].values[0] in getLimit(idx.index[-1])['代码']:
+            t.sleep(180)
         xueqiuP.trade('cn','idx',position)
     else:
         print(wencaiDf)
