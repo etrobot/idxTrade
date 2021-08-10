@@ -72,16 +72,17 @@ if __name__ == "__main__":
     for k, q in conf['wencai'].items():
         df = crawl_data_from_wencai(q)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-        df['最新涨跌幅']=pd.to_numeric(df["最新涨跌幅"], errors='coerce')
-        df['区间涨跌幅:前复权'] = pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce')
-        df['sum']=df['最新涨跌幅'] + df['区间涨跌幅:前复权']
+        df['换手率']=np.round(pd.to_numeric(df['换手率'], errors='coerce'),2)
+        df['最新涨跌幅']=np.round(pd.to_numeric(df["最新涨跌幅"], errors='coerce'),2)
+        df['区间涨跌幅:前复权'] = np.round(pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce'),2)
+        df['factor']=df['区间涨跌幅:前复权']*(1-abs(10-df['换手率'])/100)
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         t.sleep(10*(int(k[1:])-1))
-        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','sum','date','type']])
-    wencaiDf.sort_values(by=['sum'],ascending=False,inplace=True)
+        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅','换手率', '区间涨跌幅:前复权','factor','date','type']])
+    wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    if len(sys.argv) == 1 and datetime.now().hour>=14:
+    if len(sys.argv) != 1 or datetime.now().hour>=14:
         df2file= wencaiDf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
