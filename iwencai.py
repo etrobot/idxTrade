@@ -79,14 +79,14 @@ if __name__ == "__main__":
         df['type'] = k[1:]
         t.sleep(10*(int(k[1:])-1))
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','sum','date','type']])
-
-    wencaiDf=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]
     wencaiDf.sort_values(by=['sum'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
         df2file= wencaiDf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
+    w=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]['股票代码'].values[0]
+
 
     # sell filter
     if len(position)>=MAXHOLDING:
@@ -104,9 +104,9 @@ if __name__ == "__main__":
                 break
 
     # trade
-    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14:
-        position.append(xueqiuP.newPostition('cn', wencaiDf['股票代码'].values[0], min(25, cash)))
-        if wencaiDf['股票代码'].values[0] in getLimit(idx.index[-1])['代码']:
+    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14 and len(sys.argv) == 1:
+        position.append(xueqiuP.newPostition('cn', w, min(25, cash)))
+        if w in getLimit(idx.index[-1])['代码']:
             t.sleep(180)
         xueqiuP.trade('cn','idx',position)
     else:
