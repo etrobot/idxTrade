@@ -14,7 +14,7 @@ def etfHolding():
         holding['etf_code']=k
         holding['etf']=v['基金简称']
         df = df.append(holding)
-    df.drop('序号',1,inplace=True)
+    df.drop(labels=['序号'],axis=1,inplace=True)
     df.to_csv('etf.csv',index=False)
 
 def dealFundCode(code:str):

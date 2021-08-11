@@ -83,8 +83,11 @@ if __name__ == "__main__":
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
-        df2file= wencaiDf.append(pd.read_csv('wencai.csv'))
+        df2file = wencaiDf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
+        df2file['股票简称'] = df2file.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
+            stock_code=x['股票代码'], stock_name=x['股票简称']), axis=1)
+        df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
     w=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]['股票代码'].values[0]
 
