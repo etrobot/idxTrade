@@ -24,11 +24,11 @@ def dealFundCode(code:str):
         return 'SZ'+code
 
 def etfStocks():
-    xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
-    ah=ak.stock_hk_spot_em().set_index('代码')
     etf=pd.read_csv('etf.csv',dtype={'股票代码':str,'etf_code':str})
-    es=etf.sort_values(by=['占净值比例'],ascending=False).copy()
+    es=etf[etf['占净值比例']>0].copy()
+    es=es.sort_values(by=['占净值比例'],ascending=False)
     es.drop_duplicates(subset='股票代码', keep='first',inplace=True)
+    ah=ak.stock_hk_spot_em().set_index('代码')
     for k,v in es.iterrows():
         symbol=v['股票代码']
         if '.' in symbol:
@@ -42,7 +42,8 @@ def etfStocks():
                 es.loc[k,'股票代码'] = 'SZ'+symbol
     es.set_index('股票代码', inplace=True)
     es['t22']=None
-    es['ma20/ma30'] = None
+    es['ma20/ma30-1'] = None
+    xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
     for k, v in tqdm(es.iterrows(), total=es.shape[0]):
         kk = getK(k, xq_a_token=xq_a_token)
         if len(kk)>0:
@@ -53,7 +54,7 @@ def etfStocks():
         stock_code=x.name, stock_name=x['股票名称']), axis=1)
     es['etf'] = es.apply(
         lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundname}</a>'.format(fundcode=dealFundCode(x['etf_code']),fundname=x['etf']), axis=1)
-    es=es[['股票名称','t22','ma20/ma30','etf','占净值比例']]
+    es=es[['股票名称','t22','ma20/ma30-1','etf','占净值比例']]
     es.sort_values(by=['t22'],ascending=False,inplace=True)
     renderHtml(es, '../CMS/source/Quant/etf.html', 'etf')
 
