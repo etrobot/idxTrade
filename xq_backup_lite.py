@@ -133,9 +133,9 @@ def xueqiuBackupByIndustry(mkt=None, pdate=None, test=0):
         df.drop_duplicates(subset='symbol', keep='first', inplace=True)
         df.to_csv('Industry/' + mkt + hrefname[i] + indCode + '.csv', encoding=ENCODE_IN_USE)
         # writeIndustry(df[['symbol','name']].copy(), market, hrefname[i], indCode)
-        df.dropna(subset=['volume'], inplace=True)
         df['行业'] = hrefname[i]
         mktDf = mktDf.append(df)
+    mktDf.dropna(subset=['current_year_percent'], inplace=True)
     mktDf = mktDf.loc[mktDf['current'] >= 1.0]
     mktDf.set_index('symbol', inplace=True)
     mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
@@ -163,6 +163,7 @@ def usHot(pdate:date,xq_a_token:str):
                 mlog('retrying...')
                 t.sleep(20)
                 continue
+    mktDf.dropna(subset=['current_year_percent'], inplace=True)
     mktDf = mktDf.loc[mktDf['current'] >= 1.0]
     mktDf.set_index('symbol', inplace=True)
     mktDf['float_market_capital'] = mktDf['float_market_capital'].astype('float').div(100000000.0).round(1)
@@ -299,8 +300,8 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf=usHot(pdate,g.xq_a_token)
     elif mkt=='hk':
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
-        avgAmount = indDf['amount'].mean()
-        indDf = indDf[indDf['amount'] > avgAmount]
+    avgAmount = indDf['amount'].mean()
+    indDf = indDf[indDf['amount'] > avgAmount]
         # indDf = indDf[indDf.index.isin(xueqiuConcerned(mkt,g.xq_a_token)['symbol'])]
 
     indDf = indDf.fillna(value=np.nan)

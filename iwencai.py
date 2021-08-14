@@ -71,12 +71,13 @@ if __name__ == "__main__":
     wencaiDf = pd.DataFrame()
     for k, q in conf['wencai'].items():
         df = crawl_data_from_wencai(q)
-        # print(df.columns)
+        print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['最新价']=pd.to_numeric(df['最新价'], errors='coerce')
         df['5日均线']=pd.to_numeric(df['5日均线'], errors='coerce')
+        df['最新涨跌幅']=pd.to_numeric(df['最新涨跌幅'], errors='coerce')
         df['区间涨跌幅:前复权'] = np.round(pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce'),2)
-        df['factor']=df['区间涨跌幅:前复权']*df['5日均线']/df['最新价']
+        df['factor']=(df['区间涨跌幅:前复权']+df['最新涨跌幅'])*df['5日均线']/df['最新价']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         t.sleep(10*(2-int(k[1:])))
@@ -111,7 +112,8 @@ if __name__ == "__main__":
     # trade
     if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14 and len(sys.argv) == 1:
         position.append(xueqiuP.newPostition('cn', w, min(25, cash)))
-        if w in getLimit(idx.index[-1])['代码']:
+        if w in getLimit(idx.index[-1])['代码'].tolist():
+            print(w+'涨停')
             t.sleep(180)
         xueqiuP.trade('cn','idx',position)
     else:
