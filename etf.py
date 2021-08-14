@@ -1,4 +1,5 @@
 from QuotaUtilities import *
+import sys
 
 def etfHolding():
     rdate=reportDate()
@@ -13,6 +14,9 @@ def etfHolding():
         holding=holding[holding['季度']==holding['季度'].values[0]]
         holding['etf_code']=k
         holding['etf']=v['基金简称']
+        etfK=ak.fund_em_etf_fund_info(fund=k)
+        etfK['累计净值'] = pd.to_numeric(etfK['累计净值'], errors='coerce')
+        holding['etf_ma20/60']=etfK['累计净值'][-20:].mean()/etfK['累计净值'][-60:].mean()
         df = df.append(holding)
     df.drop(labels=['序号'],axis=1,inplace=True)
     df.to_csv('etf.csv',index=False)
@@ -59,5 +63,6 @@ def etfStocks():
     renderHtml(es, '../CMS/source/Quant/etf.html', 'etf')
 
 if __name__=='__main__':
-    # etfHolding()
+    if len(sys.argv) > 1:
+        etfHolding()
     etfStocks()
