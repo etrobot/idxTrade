@@ -70,6 +70,7 @@ if __name__ == "__main__":
     # buy filter
     wencaiDf = pd.DataFrame()
     for k, q in conf['wencai'].items():
+        t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
         # print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
@@ -80,7 +81,6 @@ if __name__ == "__main__":
         df['factor']=(df['区间涨跌幅:前复权']+df['最新涨跌幅'])*df['5日均线']/df['最新价']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
-        t.sleep(10*(int(k[1:])-1))
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
