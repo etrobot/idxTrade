@@ -42,8 +42,11 @@ def crawl_data_from_wencai(question:str):
         if response.status_code == 200:
             json = response.json()
             df_data = pd.DataFrame(json["data"]["data"])
-            # 规范返回的columns，去掉[xxxx]内容
-            df_data.columns = [col.split("[")[0] for col in df_data.columns]
+            # 规范返回的columns，去掉[xxxx]内容,并将重复的命名为.1.2...
+            cols = pd.Series([re.sub(r'\[[^)]*\]', '', col) for col in pd.Series(df_data.columns)])
+            for dup in cols[cols.duplicated()].unique():
+                cols[cols[cols == dup].index.values.tolist()] = [dup + '.' + str(i) if i != 0 else dup for i in range(sum(cols == dup))]
+            df_data.columns=cols
             return df_data
             # 筛选查询字段，非查询字段丢弃
             df = df_data[fields]
