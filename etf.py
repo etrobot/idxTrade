@@ -29,7 +29,7 @@ def dealFundCode(code:str):
 
 def etfStocks():
     etf=pd.read_csv('etf.csv',dtype={'股票代码':str,'etf_code':str})
-    es=etf[etf['占净值比例']>0].copy()
+    es=etf[etf['占净值比例']<0.1].copy()
     es=es.sort_values(by=['占净值比例'],ascending=False)
     es.drop_duplicates(subset='股票代码', keep='first',inplace=True)
     ah=ak.stock_hk_spot_em().set_index('代码')
@@ -45,20 +45,20 @@ def etfStocks():
             else:
                 es.loc[k,'股票代码'] = 'SZ'+symbol
     es.set_index('股票代码', inplace=True)
-    es['t22']=None
+    es['Percent']=None
     es['ma20/ma60'] = None
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
     for k, v in tqdm(es.iterrows(), total=es.shape[0]):
         kk = getK(k, xq_a_token=xq_a_token)
         if len(kk)>0:
             cls=kk['close'].values
-            es.loc[k, 't22'] = round(cls[-1]/cls[-min(23,len(cls))]-1,4)
+            es.loc[k, 'Percent'] = round(cls[-1]/cls[-2]-1,4)
             es.loc[k, 'ma20/ma60'] = round(cls[-20:].mean() / cls[-60:].mean(),4)
     es['股票名称'] = es.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
         stock_code=x.name, stock_name=x['股票名称']), axis=1)
     es['etf'] = es.apply(
         lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundname}</a>'.format(fundcode=dealFundCode(x['etf_code']),fundname=x['etf']), axis=1)
-    es=es[['股票名称','t22','ma20/ma60','etf','占净值比例']]
+    es=es[['股票名称','Percent','ma20/ma60','etf','占净值比例']]
     es.sort_values(by=['ma20/ma60'],ascending=False,inplace=True)
     renderHtml(es, '../CMS/source/Quant/etf.html', 'etf')
 

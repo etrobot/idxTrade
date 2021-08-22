@@ -83,15 +83,16 @@ if __name__ == "__main__":
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
-    wencaiDf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
+    wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
-        df2file = wencaiDf.append(pd.read_csv('wencai.csv'))
+        df2file = wdf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         df2file['股票简称'] = df2file.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
             stock_code=x['股票代码'], stock_name=x['股票简称']), axis=1)
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
-    w=wencaiDf[~wencaiDf['股票代码'].isin(stockHeld)]['股票代码'].values[0]
+    w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
+    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'])
 
 
     # sell filter
@@ -99,7 +100,7 @@ if __name__ == "__main__":
         kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(stockHeld)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
-            [[x['quote']['symbol'],x['quote']['symbol'] not in wencaiDf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
+            [[x['quote']['symbol'],x['quote']['symbol'] not in wdf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
         print(sortedHoldings)
         for p in position:
@@ -111,10 +112,10 @@ if __name__ == "__main__":
 
     # trade
     if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14 and len(sys.argv) == 1:
-        position.append(xueqiuP.newPostition('cn', w, min(25, cash)))
-        if w in getLimit(idx.index[-1])['代码'].tolist():
-            print(w+'涨停')
+        position.append(xueqiuP.newPostition('cn', w['股票代码'], min(25, cash)))
+        if w['股票代码'] in getLimit(idx.index[-1])['代码'].tolist():
             t.sleep(180)
         xueqiuP.trade('cn','idx',position)
     else:
+        pd.options.display.max_rows = 999
         print(wencaiDf)
