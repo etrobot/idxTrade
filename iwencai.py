@@ -79,13 +79,12 @@ if __name__ == "__main__":
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['最新价']=pd.to_numeric(df['最新价'], errors='coerce')
         df['5日均线']=pd.to_numeric(df['5日均线'], errors='coerce')
-        df['50日均线'] = pd.to_numeric(df['50日均线'], errors='coerce')
         df['最新涨跌幅']=pd.to_numeric(df['最新涨跌幅'], errors='coerce')
-        df['区间最高价:前复权'] = np.round(pd.to_numeric(df["区间最高价:前复权"], errors='coerce'),2)
-        df['factor']=(df['区间最高价:前复权']-df['50日均线'])/abs(df['区间最高价:前复权']-df['5日均线'])
+        df['区间涨跌幅:前复权'] = np.round(pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce'),2)
+        df['factor']=(df['区间涨跌幅:前复权']+df['最新涨跌幅'])*df['5日均线']/df['最新价']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
-        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间最高价:前复权','factor','date','type']])
+        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
