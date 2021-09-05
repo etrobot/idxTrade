@@ -78,10 +78,9 @@ if __name__ == "__main__":
         # print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['最新价']=pd.to_numeric(df['最新价'], errors='coerce')
-        df['最新涨跌幅']=pd.to_numeric(df['最新涨跌幅'], errors='coerce')
-        df['区间振幅'] = np.round(pd.to_numeric(df["区间振幅"], errors='coerce'), 2)
-        df['区间涨跌幅:前复权'] = np.round(pd.to_numeric(df["区间涨跌幅:前复权"], errors='coerce'),2)
-        df['factor']= df['区间振幅']*(1+df['最新涨跌幅'])
+        df['20日均线'] = np.round(pd.to_numeric(df["20日均线"], errors='coerce'),2)
+        df['50日均线'] = np.round(pd.to_numeric(df["50日均线"], errors='coerce'), 2)
+        df['factor']= df['20日均线']/df['50日均线']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','factor','date','type']])
