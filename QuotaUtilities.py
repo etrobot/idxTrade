@@ -515,11 +515,11 @@ def heldBy(symbol:str,pdate:dt,mkt='cn'):
     '''
     if mkt == 'cn':
         symbol=symbol[-6:]
-        furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=ShareHDNum&sortDirec=1&pageNum=1&pageSize=290&p=1&pageNo=1'%(symbol,reportDate().strftime('%Y-%m-%d'))
+        furl='http://data.eastmoney.com/dataapi/zlsj/detail?SHType=1&SHCode=&SCode=%s&ReportDate=%s&sortField=FREE_SHARES_RATIO&sortDirec=1&pageNum=1&pageSize=290'%(symbol,reportDate().strftime('%Y-%m-%d'))
         response = requests.get(url=furl, headers={"user-agent": "Mozilla"})
         data=pd.DataFrame(json.loads(response.text)['data'])
         if len(data) > 0:
-            flist = data[data['f6'].isin(getFundListSorted()[:30])]['f3'].to_list()
+            flist = data[data['PARENT_ORGCODE_OLD'].isin(getFundListSorted()[:30])]['HOLDER_CODE'].to_list()
         else:
             return None
     elif mkt=='hk':

@@ -44,7 +44,8 @@ class idxTrade:#保存参数的类
                         sell.append(stock['stock_symbol'])
 
                 #检查买入
-                if sum(int(x['weight']>0) for x in position)<5:
+                print([int(x['weight']!=0) for x in position],position)
+                if sum(int(x['weight']!=0) for x in position)<5:
                     filename = '../CMS/source/Quant/%s%s_U.html' % (market,ik['k'].index[-1].weekday()+1)
                     if self.mkt!='us' and datetime.now().hour<14:
                         filename = '../CMS/source/Quant/%s%s_J.html' % (market, ik['k'].index[-1].weekday() + 1)
@@ -52,7 +53,7 @@ class idxTrade:#保存参数的类
                         with open(filename, "r") as f:
                             html = etree.HTML(f.read())
                             symbols=[x.split('/')[-1] for x in html.xpath('//a[not(@id)]/@href')]
-                    print(symbols)
+                    # print(symbols)
                     if symbols[0] not in [x['stock_symbol'] for x in position]:
                         # for stock in toBuy['雪球代码'][:avalableNum]:
                         #     position.append(self.xueqiu.newPostition(market, stock, 25))
