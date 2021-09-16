@@ -75,14 +75,18 @@ if __name__ == "__main__":
     for k, q in conf['wencai'].items():
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
-        # print(df.columns)
+        print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['最新价']=pd.to_numeric(df['最新价'], errors='coerce')
+        df['区间涨跌幅:前复权'] = pd.to_numeric(df['区间涨跌幅:前复权'], errors='coerce')
         df['50日均线'] = np.round(pd.to_numeric(df["50日均线"], errors='coerce'), 2)
+        df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)
         df['factor']= df['最新价']/df['50日均线']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
-        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', '区间涨跌幅:前复权','factor','date','type']])
+        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅','区间涨跌幅:前复权', 'a股市值(不含限售股)','factor','date','type']])
+    mktcap=wencaiDf.sort_values(by=['区间涨跌幅:前复权'])[-10:].sort_values(by=['a股市值(不含限售股)'])['a股市值(不含限售股)'].values
+    wencaiDf=wencaiDf.loc[wencaiDf['a股市值(不含限售股)'].between(mktcap[-6], mktcap[-1], inclusive=False)]
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
