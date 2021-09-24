@@ -89,7 +89,7 @@ if __name__ == "__main__":
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', 'a股市值(不含限售股)','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(19,max(wdf['a股市值(不含限售股)']), inclusive='neither')]
+    wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
         df2file = wdf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
