@@ -78,13 +78,12 @@ if __name__ == "__main__":
         print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
-        df['振幅'] = pd.to_numeric(df['振幅'], errors='coerce')
-        df['区间最高价:前复权日'] = pd.to_numeric(df['区间最高价:前复权日'], errors='coerce')
-        df['成交量'] = pd.to_numeric(df['成交量'], errors='coerce')
-        df['成交额'] = pd.to_numeric(df['成交额'], errors='coerce')
+        df['{(}{(}成交额{)}{-}收盘价:不复权{)}'] = pd.to_numeric(df['{(}{(}成交额{)}{-}收盘价:不复权{)}'], errors='coerce')
+        df['filter']=df['{(}{(}成交额{)}{-}收盘价:不复权{)}']/df['收盘价:不复权']
+        df=df.loc[df['filter']>=-0.01]
         df['42日均线'] = np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)
-        df['factor']= (df['收盘价:不复权']+df['区间最高价:前复权日']-df['成交额']/df['成交量'])/df['42日均线']
+        df['factor']= df['收盘价:不复权']/df['42日均线']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', 'a股市值(不含限售股)','factor','date','type']])
