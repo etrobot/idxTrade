@@ -57,7 +57,21 @@ def crawl_data_from_wencai(question:str):
     except Exception as e:
         print(e)
 
+def conceptSorted():
+    concept = {}
+    exclude=['融资融券', '转融券标的', '富时罗素概念股', '标普道琼斯A股', '富时罗素概念', '地方国资改革', '三季报预增', '央企国资改革', '沪股通','深股通', 'ST板块', 'MSCI概念', '一带一路', '雄安新区','央企控股']
+    for k,v in crawl_data_from_wencai('涨停，所属概念').iterrows():
+        for cpt in v['所属概念'].split('；'):
+            if cpt in exclude:
+                continue
+            elif cpt in concept.keys():
+                concept[cpt]+=1
+            else:
+                concept[cpt]=1
+    return sorted({k:v for k,v in concept.items() if v>5}, key=lambda k: concept[k], reverse=True)
+
 if __name__ == "__main__":
+    cptSorted = conceptSorted()
     MAXHOLDING=4
     idx=eastmoneyK('SZ000001')
     xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
@@ -75,21 +89,21 @@ if __name__ == "__main__":
     for k, q in conf['wencai'].items():
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
-        print(df.columns)
+        # print(df.columns)
+        if len(cptSorted)>0:
+            print(cptSorted)
+            df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted), na=False)]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
-        df['{(}{(}成交额{)}{-}收盘价:不复权{)}'] = pd.to_numeric(df['{(}{(}成交额{)}{-}收盘价:不复权{)}'], errors='coerce')
-        df['filter']=df['{(}{(}成交额{)}{-}收盘价:不复权{)}']/df['收盘价:不复权']
-        df=df.loc[df['filter']>-0.013]
         df['42日均线'] = np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
-        df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)
+        df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
         df['factor']= df['收盘价:不复权']/df['42日均线']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', 'a股市值(不含限售股)','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
+    # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
     if len(sys.argv) == 1 and datetime.now().hour>=14:
         df2file = wdf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
@@ -98,7 +112,7 @@ if __name__ == "__main__":
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
     w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
-    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'])
+    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)']*10,'亿')
 
 
     # sell filter
@@ -108,7 +122,6 @@ if __name__ == "__main__":
         sortedHoldings = sorted(
             [[x['quote']['symbol'],x['quote']['symbol'] not in wdf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
-        print(sortedHoldings)
         for p in position:
             if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=int(p['weight'])
