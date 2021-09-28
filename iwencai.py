@@ -80,7 +80,7 @@ if __name__ == "__main__":
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
         df['{(}{(}成交额{)}{-}收盘价:不复权{)}'] = pd.to_numeric(df['{(}{(}成交额{)}{-}收盘价:不复权{)}'], errors='coerce')
         df['filter']=df['{(}{(}成交额{)}{-}收盘价:不复权{)}']/df['收盘价:不复权']
-        df=df.loc[df['filter']>=-0.01]
+        df=df.loc[df['filter']>-0.013]
         df['42日均线'] = np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)
         df['factor']= df['收盘价:不复权']/df['42日均线']
