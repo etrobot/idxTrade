@@ -57,21 +57,24 @@ def crawl_data_from_wencai(question:str):
     except Exception as e:
         print(e)
 
-def conceptSorted():
-    concept = {}
+def conceptSorted(num:int):
+    params = (
+        ('filter', 'HS,GEM2STAR'),
+        ('date', datetime.now().strftime('%Y%m%d')),
+    )
+
+    response = requests.get('https://data.10jqka.com.cn/dataapi/limit_up/block_top', headers={"user-agent": "Mozilla"}, params=params)
     exclude=['融资融券', '转融券标的', '富时罗素概念股', '标普道琼斯A股', '富时罗素概念', '地方国资改革', '三季报预增', '央企国资改革', '沪股通','深股通', 'ST板块', 'MSCI概念', '一带一路', '雄安新区','央企控股']
-    for k,v in crawl_data_from_wencai('涨停，所属概念').iterrows():
-        for cpt in v['所属概念'].split('；'):
-            if cpt in exclude:
-                continue
-            elif cpt in concept.keys():
-                concept[cpt]+=1
-            else:
-                concept[cpt]=1
-    return sorted({k:v for k,v in concept.items() if v>5}, key=lambda k: concept[k], reverse=True)
+
+    df=pd.DataFrame(json.loads(response.text)['data'])
+    df['limit_up_num'] = pd.to_numeric(df['limit_up_num'], errors='coerce')
+
+    concept=df[~df['name'].isin(exclude)][['name','limit_up_num']].loc[df['limit_up_num']>num].sort_values(by=['limit_up_num'],ascending=False).set_index('name')
+    print(concept.to_dict()['limit_up_num'])
+    return concept.index.tolist()
 
 if __name__ == "__main__":
-    cptSorted = conceptSorted()
+    cptSorted = conceptSorted(int(sys.argv[-1]))
     MAXHOLDING=4
     idx=eastmoneyK('SZ000001')
     xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
@@ -91,7 +94,6 @@ if __name__ == "__main__":
         df = crawl_data_from_wencai(q)
         # print(df.columns)
         if len(cptSorted)>0:
-            print(cptSorted)
             df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted), na=False)]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
@@ -112,7 +114,7 @@ if __name__ == "__main__":
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
     w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
-    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)']*10,'亿')
+    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿')
 
 
     # sell filter
@@ -130,7 +132,7 @@ if __name__ == "__main__":
                 break
 
     # trade
-    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14 and len(sys.argv) == 1:
+    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14 and len(sys.argv) < 3:
         position.append(xueqiuP.newPostition('cn', w['股票代码'], min(25, cash)))
         if w['股票代码'] in getLimit(idx.index[-1])['代码'].tolist():
             t.sleep(180)

@@ -1,5 +1,5 @@
 #!/bin/bash
 curPath="$(dirname "$0")"
 cd $curPath || exit
-cd ../ && /Users/admin/Documents/DEV/PY/idxTrade/env/bin/python iwencai.py
+cd ../ && /Users/admin/Documents/DEV/PY/idxTrade/env/bin/python iwencai.py $1
 bash $curPath/push.sh
