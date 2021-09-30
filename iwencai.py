@@ -69,9 +69,9 @@ def conceptSorted(num:int):
     df=pd.DataFrame(json.loads(response.text)['data'])
     df['limit_up_num'] = pd.to_numeric(df['limit_up_num'], errors='coerce')
 
-    concept=df[~df['name'].isin(exclude)][['name','limit_up_num']].loc[df['limit_up_num']>num].sort_values(by=['limit_up_num'],ascending=False).set_index('name')
+    concept=df[~df['name'].isin(exclude)][['name','limit_up_num']].sort_values(by=['limit_up_num'],ascending=False).set_index('name')
     print(concept.to_dict()['limit_up_num'])
-    return concept.index.tolist()
+    return concept.loc[concept['limit_up_num']>num].index.tolist()
 
 if __name__ == "__main__":
     cptSorted = conceptSorted(int(sys.argv[-1]))
