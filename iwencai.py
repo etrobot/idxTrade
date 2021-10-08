@@ -60,11 +60,11 @@ def crawl_data_from_wencai(question:str):
 def conceptSorted(num:int):
     params = (
         ('filter', 'HS,GEM2STAR'),
-        ('date', datetime.now().strftime('%Y%m%d')),
+        ('date',idx.index[-1].strftime('%Y%m%d')),
     )
 
     response = requests.get('https://data.10jqka.com.cn/dataapi/limit_up/block_top', headers={"user-agent": "Mozilla"}, params=params)
-    exclude=['融资融券', '转融券标的', '富时罗素概念股', '标普道琼斯A股', '富时罗素概念', '地方国资改革', '三季报预增', '央企国资改革', '沪股通','深股通', 'ST板块', 'MSCI概念', '一带一路', '雄安新区','央企控股']
+    exclude=['融资融券', '转融券标的', '富时罗素概念股', '标普道琼斯A股', '富时罗素概念', '地方国资改革', '三季报预增','半年报预增', '央企国资改革', '沪股通','深股通', 'MSCI概念', '一带一路', '雄安新区','央企控股','深圳','浙江','江苏']
 
     df=pd.DataFrame(json.loads(response.text)['data'])
     df['limit_up_num'] = pd.to_numeric(df['limit_up_num'], errors='coerce')
@@ -74,9 +74,9 @@ def conceptSorted(num:int):
     return concept.loc[concept['limit_up_num']>num].index.tolist()
 
 if __name__ == "__main__":
+    idx=eastmoneyK('SZ000001')
     cptSorted = conceptSorted(int(sys.argv[-1]))
     MAXHOLDING=4
-    idx=eastmoneyK('SZ000001')
     xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
     # xueqiuCfg={'bmob': 'cc8966d77d',"xueqiu":{'idx':'ZH1353951'}}
     conf = configparser.ConfigParser()
@@ -126,7 +126,7 @@ if __name__ == "__main__":
             key=lambda x: (x[1],x[2]))
         for p in position:
             if p['stock_symbol']==sortedHoldings[-1][0]:
-                cash=int(p['weight'])
+                cash=max(cash,int(p['weight']))
                 p['weight']=0
                 p["proactive"] = True
                 break
