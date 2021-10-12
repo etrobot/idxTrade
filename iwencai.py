@@ -92,14 +92,15 @@ if __name__ == "__main__":
     for k, q in conf['wencai'].items():
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
-        # print(df.columns)
+        print(df.columns)
         if len(cptSorted)>0:
-            df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted), na=False)]
+            df=df.loc[~df['所属概念'].str.match('|'.join(cptSorted), na=False)]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
-        df['42日均线'] = np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
+        df['f'] = df['收盘价:不复权']/pd.to_numeric(df['区间最低价:前复权'], errors='coerce')-1
+        df=df.loc[df['f']<0.01*int(sys.argv[-1])*int(sys.argv[-1])+0.03]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-        df['factor']= df['收盘价:不复权']/df['42日均线']
+        df['factor']= df['收盘价:不复权']/np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', 'a股市值(不含限售股)','factor','date','type']])
