@@ -64,7 +64,7 @@ def conceptSorted(num:int):
     )
 
     response = requests.get('https://data.10jqka.com.cn/dataapi/limit_up/block_top', headers={"user-agent": "Mozilla"}, params=params)
-    exclude=['融资融券', '转融券标的', '富时罗素概念股', '标普道琼斯A股', '富时罗素概念', '地方国资改革', '三季报预增','半年报预增', '央企国资改革', '沪股通','深股通', 'MSCI概念', '一带一路', '雄安新区','央企控股','深圳','浙江','江苏']
+    exclude=['融资融券', '转融券标的', '富时罗素概念股', '标普道琼斯A股', '富时罗素概念', '地方国资改革', '三季报预增','半年报预增', '央企国资改革', '沪股通','深股通', 'MSCI概念', '一带一路', '雄安新区','央企控股','深圳','广东(除深圳)','浙江','江苏','湖北']
 
     df=pd.DataFrame(json.loads(response.text)['data'])
     df['limit_up_num'] = pd.to_numeric(df['limit_up_num'], errors='coerce')
@@ -92,9 +92,10 @@ if __name__ == "__main__":
     for k, q in conf['wencai'].items():
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
-        print(df.columns)
+        df.to_csv('test.csv',encoding='GBK')
+        # print(df.columns)
         if len(cptSorted)>0:
-            df=df.loc[~df['所属概念'].str.match('|'.join(cptSorted), na=False)]
+            df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted).replace('(','\(').replace(')','\)'), na=False)]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
         df['f'] = df['收盘价:不复权']/pd.to_numeric(df['区间最低价:前复权'], errors='coerce')-1
