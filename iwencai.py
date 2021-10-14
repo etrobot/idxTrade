@@ -98,8 +98,13 @@ if __name__ == "__main__":
             df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted).replace('(','\(').replace(')','\)'), na=False)]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
-        df['f'] = df['收盘价:不复权']/pd.to_numeric(df['区间最低价:前复权'], errors='coerce')-1
-        df=df.loc[df['f']<0.015*int(sys.argv[-1])*int(sys.argv[-1])]
+        df['涨跌幅:前复权'] = pd.to_numeric(df['涨跌幅:前复权'], errors='coerce')
+        df['振幅'] = pd.to_numeric(df['振幅'], errors='coerce')
+        # max(a,b)=((a+b)+abs(a-b)) / 2 ;
+        df['f1'] = ((df['涨跌幅:前复权']+df['振幅'])+abs(df['振幅']-df['涨跌幅:前复权'])) / 2
+        df = df.loc[df['f1'] < int(sys.argv[-1]) * (int(sys.argv[-1])-1)]
+        df['f2'] = df['收盘价:不复权']/pd.to_numeric(df['区间最低价:前复权'], errors='coerce')-1
+        df=df.loc[df['f2']<0.015*int(sys.argv[-1])*int(sys.argv[-1])]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
         df['factor']= df['收盘价:不复权']/np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
         df['date'] = idx.index[-1]
