@@ -93,27 +93,24 @@ if __name__ == "__main__":
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
         df.to_csv('test.csv',encoding='GBK')
-        # print(df.columns)
-        if len(cptSorted)>0:
-            df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted).replace('(','\(').replace(')','\)'), na=False)]
+        print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
+        df['bullOrBear'] = pd.to_numeric(df['涨跌幅:前复权满足条件的次数'], errors='coerce')
+        df=df.loc[df['bullOrBear']>=df['bullOrBear'].median()]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
-        df['涨跌幅:前复权'] = pd.to_numeric(df['涨跌幅:前复权'], errors='coerce')
-        df['振幅'] = pd.to_numeric(df['振幅'], errors='coerce')
-        # max(a,b)=((a+b)+abs(a-b)) / 2 ;
-        df['f1'] = ((df['涨跌幅:前复权']+df['振幅'])+abs(df['振幅']-df['涨跌幅:前复权'])) / 2
-        df = df.loc[df['f1'] < int(sys.argv[-1]) * (int(sys.argv[-1])-1)]
-        df['f2'] = df['收盘价:不复权']/pd.to_numeric(df['区间最低价:前复权'], errors='coerce')-1
-        df=df.loc[df['f2']<0.015*int(sys.argv[-1])*int(sys.argv[-1])]
+        df['f2'] = df['收盘价:不复权'] / pd.to_numeric(df['区间最低价:前复权'], errors='coerce') - 1
+        df = df.loc[df['f2'] < 0.015 * int(sys.argv[-1]) * int(sys.argv[-1])]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-        df['factor']= df['收盘价:不复权']/np.round(pd.to_numeric(df["42日均线"], errors='coerce'), 2)
+        df['factor']= df['收盘价:不复权']/pd.to_numeric(df["42日均线"], errors='coerce')
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
+        if len(cptSorted)>0:
+            df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted).replace('(','\(').replace(')','\)'), na=False)]
         wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', 'a股市值(不含限售股)','factor','date','type']])
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
-    if len(sys.argv) == 1 and datetime.now().hour>=14:
+    if len(sys.argv) == 2 and datetime.now().hour>=14:
         df2file = wdf.append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         df2file['股票简称'] = df2file.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
@@ -139,7 +136,7 @@ if __name__ == "__main__":
                 break
 
     # trade
-    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and datetime.now().hour>=14 and len(sys.argv) < 3:
+    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and len(sys.argv) < 3:
         position.append(xueqiuP.newPostition('cn', w['股票代码'], min(25, cash)))
         if w['股票代码'] in getLimit(idx.index[-1])['代码'].tolist():
             t.sleep(180)
