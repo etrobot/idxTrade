@@ -93,7 +93,7 @@ if __name__ == "__main__":
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
         df.to_csv('test.csv',encoding='GBK')
-        print(df.columns)
+        # print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['bullOrBear'] = pd.to_numeric(df['涨跌幅:前复权满足条件的次数'], errors='coerce')
         df=df.loc[df['bullOrBear']>=df['bullOrBear'].median()]
