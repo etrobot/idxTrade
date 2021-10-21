@@ -376,11 +376,11 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
                 for i in range(-min(datetime.now().month, len(mK)), 0):
                     yr = yr * (1 + mK['percent'][i])
                 cur_year_perc[cnstock] = round(yr * 100 - 100, 2)
-        if mkt=='cn' or mkt=='hk':
-            fundDf = heldBy(k, pdate,mkt)
-            if fundDf is not None and len(fundDf)>0:
-                rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
-                renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
+        # if mkt=='cn' or mkt=='hk':
+        #     fundDf = heldBy(k, pdate,mkt)
+        #     if fundDf is not None and len(fundDf)>0:
+        #         rowtitle += '[%s](../Fund/%s.html)'%('持股基金',k)
+        #         renderHtml(fundDf,'../CMS/source/Fund/' + k + '.html','%s(%s)'%(v['name'],k))
 
         rowtitle += '%s市值%s TTM%s 今年%s%%  %s' % (capTpye, v[mCap], v['pe_ttm'], cur_year_perc[k], calKey)
 
