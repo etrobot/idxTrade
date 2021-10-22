@@ -104,14 +104,14 @@ if __name__ == "__main__":
         df['factor']= df['收盘价:不复权']/pd.to_numeric(df["42日均线"], errors='coerce')
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
-        if len(cptSorted)>0:
-            df=df.loc[~df['所属概念'].str.contains('|'.join(cptSorted).replace('(','\(').replace(')','\)'), na=False)]
-        wencaiDf = wencaiDf.append(df[['股票简称', '股票代码','最新涨跌幅', 'a股市值(不含限售股)','factor','date','type']])
+        wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
+    wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
+    if len(cptSorted) > 0:
+        wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
     if len(sys.argv) == 2 and datetime.now().hour>=14:
-        df2file = wdf.append(pd.read_csv('wencai.csv'))
+        df2file = wdf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date', 'type']].append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         df2file['股票简称'] = df2file.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
             stock_code=x['股票代码'], stock_name=x['股票简称']), axis=1)
@@ -143,4 +143,4 @@ if __name__ == "__main__":
         xueqiuP.trade('cn','idx',position)
     else:
         pd.options.display.max_rows = 999
-        print(wencaiDf)
+        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date']])

@@ -387,11 +387,11 @@ def df2md(mkt, calKey, indDf, pdate, test=0, num=10):
         maxtxt = v['行业'] + '板块近45日最强：[%s](https://xueqiu.com/S/%s) %s市值%s亿 TTM%s 45日低点至今涨幅%d%% 今年%s%%' % (
             dfmax['name'], dfmax.name, capTpye, dfmax[mCap], round(dfmax['pe_ttm'],0), dfmax['past45Days'] * 100,
             cur_year_perc[dfmax.name])
-        if mkt=='cn' or mkt=='hk':
-            fundDf = heldBy(dfmax.name, pdate,mkt)
-            if fundDf is not None and len(fundDf)>0:
-                maxtxt += '[%s](../Fund/%s.html)'%('持股基金',dfmax.name)
-                renderHtml(fundDf,'../CMS/source/Fund/' + dfmax.name + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
+        # if mkt=='cn' or mkt=='hk':
+        #     fundDf = heldBy(dfmax.name, pdate,mkt)
+        #     if fundDf is not None and len(fundDf)>0:
+        #         maxtxt += '[%s](../Fund/%s.html)'%('持股基金',dfmax.name)
+        #         renderHtml(fundDf,'../CMS/source/Fund/' + dfmax.name + '.html','%s(%s)'%(dfmax['name'],dfmax.name))
 
         artxt = [rowtitle, '<div id="%s" style="height:12rem"></div>' % k, maxtxt]
         article.append('\n<br><div>' + '\n<br>'.join([str(x) for x in artxt]) + '</div>')
