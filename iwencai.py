@@ -95,8 +95,6 @@ if __name__ == "__main__":
         df.to_csv('test.csv',encoding='GBK')
         # print(df.columns)
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-        df['bullOrBear'] = pd.to_numeric(df['涨跌幅:前复权满足条件的次数'], errors='coerce')
-        df=df.loc[df['bullOrBear']>=df['bullOrBear'].median()]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
         df['f2'] = df['收盘价:不复权'] / pd.to_numeric(df['区间最低价:前复权'], errors='coerce') - 1
         df = df.loc[df['f2'] < 0.015 * int(sys.argv[-1]) * int(sys.argv[-1])]
@@ -107,7 +105,7 @@ if __name__ == "__main__":
         wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
+    # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
     if len(cptSorted) > 0:
         wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
     if len(sys.argv) == 2 and datetime.now().hour>=14:
