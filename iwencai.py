@@ -94,6 +94,7 @@ if __name__ == "__main__":
         df = crawl_data_from_wencai(q)
         df.to_csv('test.csv',encoding='GBK')
         # print(df.columns)
+        df['code']=df['股票代码'].str[:6]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['收盘价:不复权']=pd.to_numeric(df['收盘价:不复权'], errors='coerce')
         df['f2'] = df['收盘价:不复权'] / pd.to_numeric(df['区间最低价:前复权'], errors='coerce') - 1
@@ -105,8 +106,9 @@ if __name__ == "__main__":
         wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
+    wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
     # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
-    if len(cptSorted) > 0:
+    if len(cptSorted) > 0 :
         wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
     if len(sys.argv) == 2 and datetime.now().hour>=14:
         df2file = wdf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date', 'type']].append(pd.read_csv('wencai.csv'))
@@ -116,6 +118,8 @@ if __name__ == "__main__":
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
     w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
+    if len(wdfX700)>0:
+        w=wdfX700.iloc[0]
     print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿')
 
 
