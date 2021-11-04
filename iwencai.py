@@ -108,8 +108,11 @@ if __name__ == "__main__":
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
     wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
     # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
-    if len(cptSorted) > 0 :
-        wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
+    # if len(cptSorted) > 0 :
+        # if int(sys.argv[-1])>5:
+        #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
+        # else:
+        #     wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
     if len(sys.argv) == 2 and datetime.now().hour>=14:
         df2file = wdf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date', 'type']].append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
