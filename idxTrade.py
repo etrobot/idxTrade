@@ -46,9 +46,9 @@ class idxTrade:#保存参数的类
                 #检查买入
                 print([int(x['weight']!=0) for x in position],position)
                 if sum(int(x['weight']!=0) for x in position)<5:
-                    filename = '../CMS/source/Quant/%s%s_U.html' % (market,ik['k'].index[-1].weekday()+1)
+                    filename = '../CMS/source/Quant/%s%s_J.html' % (market,ik['k'].index[-1].weekday()+1)
                     if self.mkt!='us' and datetime.now().hour<14:
-                        filename = '../CMS/source/Quant/%s%s_J.html' % (market, ik['k'].index[-1].weekday() + 1)
+                        filename = '../CMS/source/Quant/%s%s_U.html' % (market, ik['k'].index[-1].weekday() + 1)
                     if os.path.isfile(filename):
                         with open(filename, "r") as f:
                             html = etree.HTML(f.read())
