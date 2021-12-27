@@ -97,7 +97,7 @@ if __name__ == "__main__":
         df['code']=df['股票代码'].str[:6]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-        df['factor']= pd.to_numeric(df['涨停价'], errors='coerce')/pd.to_numeric(df["20日均线"], errors='coerce')
+        df['factor']= pd.to_numeric(df["20日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df)
