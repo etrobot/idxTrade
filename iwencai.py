@@ -97,13 +97,13 @@ if __name__ == "__main__":
         df['code']=df['股票代码'].str[:6]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-        df['factor']= pd.to_numeric(df["20日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')
+        df['factor']= pd.to_numeric(df["20日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
-    wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
+    # wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
     # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
     # if len(cptSorted) > 0 :
         # if int(sys.argv[-1])>5:
@@ -118,8 +118,8 @@ if __name__ == "__main__":
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
     w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
-    if len(wdfX700)>0:
-        w=wdfX700.iloc[0]
+    # if len(wdfX700)>0:
+    #     w=wdfX700.iloc[0]
     print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿')
 
 
