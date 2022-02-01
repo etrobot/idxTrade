@@ -103,9 +103,11 @@ if __name__ == "__main__":
         wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
+
     # wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
     # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
-    # if len(cptSorted) > 0 :
+    if len(cptSorted) > 0 :
+        wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
         # if int(sys.argv[-1])>5:
         #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
         # else:
