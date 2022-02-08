@@ -296,13 +296,14 @@ def dailyCheck(mkt=None, pdate=None, test=0):
         indDf = thsIndustry(mkt, pdate)
         indDf = indDf[~indDf['name'].str.contains("N|\*ST", na=False)]
         # indDf = indDf[~indDf.index.str.startswith("SH688", na=False)]
-    elif mkt=='us':
-        indDf=usHot(pdate,g.xq_a_token)
-    elif mkt=='hk':
+    # elif mkt=='us':
+    #     indDf=usHot(pdate,g.xq_a_token)
+    # elif mkt=='hk':
+    else:
         indDf = xueqiuBackupByIndustry(mkt, pdate, test)
     avgAmount = indDf['amount'].mean()
     indDf = indDf[indDf['amount'] > avgAmount]
-        # indDf = indDf[indDf.index.isin(xueqiuConcerned(mkt,g.xq_a_token)['symbol'])]
+    # indDf = indDf[indDf.index.isin(xueqiuConcerned(mkt,g.xq_a_token)['symbol'])]
 
     indDf = indDf.fillna(value=np.nan)
     cal = {'_J': [], '_U': []}
