@@ -1,6 +1,6 @@
 from QuotaUtilities import *
 
-def getlimit(idxdate:datetime):
+def getlimit(idxdate:datetime,mode=None):
     print(idxdate.strftime('%Y%m%d'))
     cookies = {
         'Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1': '1640619309,1642582805',
@@ -45,6 +45,8 @@ def getlimit(idxdate:datetime):
         highDays = [int(x) for x in re.findall(r"[-+]?\d*\.\d+|\d+", d['high_days'])]
         if len(highDays) == 2 and highDays[0] - highDays[1] < 2 and highDays[1] > 2:
             llist.append([idxdate, d['code'], highDays[0], highDays[1]])
+    if mode is not None:
+        return pd.DataFrame(llist, columns=['date', 'symbol', 'days', 'highLimit'])
     df=pd.read_csv('limit/limit.csv',dtype={'symbol':str})
     df.append(pd.DataFrame(llist,columns=['date','symbol','days','highLimit']))
     df=df.drop_duplicates(subset='symbol', keep='last', inplace=False)
@@ -56,9 +58,13 @@ def getlimit(idxdate:datetime):
 
 def storeJson():
     idx = eastmoneyK('SZ000001')
+    df=pd.DataFrame()
     for i in idx.index[-258:]:
-        getlimit(i)
+          df=df.append(getlimit(i,mode='new'))
+    df.to_csv('limit/limit.csv', index=False)
+
 
 if __name__ == "__main__":
+    # storeJson()
     getlimit(eastmoneyK('SZ000001').index[-1])
 
