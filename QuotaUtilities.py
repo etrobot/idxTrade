@@ -23,6 +23,56 @@ def getK(k:str, pdate=None,xq_a_token=None,test=0):
         qdf = xueqiuK(symbol=k, startDate=pdate, cookie=xq_a_token)#pdate - timedelta(days=250)).strftime('%Y%m%d')
     return qdf
 
+def getLimits():
+    szzs = eastmoneyK('SZ000001')
+    # print(szzs.index[-1460])
+    filename='limit/limits.json'
+    if os.path.isfile(filename):
+        idxMax=1
+        lmDict = json.loads(open(filename, "r").read())
+    else:
+        idxMax = 1460
+        lmDict = {}
+    ipoDates={}
+    for i in range(-idxMax,0):
+        szIdx = szzs.index[i].strftime("%Y%m%d")
+        print(szIdx)
+        df = getLimit(szzs.index[i])
+        for idx,row in df.iterrows():
+            if row['代码'] not in ipoDates.keys():
+                try:
+                    ipodate = str(ak.stock_individual_info_em(symbol=row['代码'][2:])['value'][3])
+                    ipoDates[row['代码']] = ipodate
+                    print(row['代码'],ipoDates[row['代码']])
+                except:
+                    ipoDates[row['代码']] = ''
+                    pass
+            if row['代码'] not in lmDict.keys():
+                lmDict[row['代码']]=[[szIdx]]
+            else:
+                if lmDict[row['代码']][-1][-1]==szzs.index[i-1].strftime("%Y%m%d"):
+                    lmDict[row['代码']][-1].append(szIdx)
+                elif lmDict[row['代码']][-1][-1]!=szzs.index[i].strftime("%Y%m%d"):
+                    lmDict[row['代码']].append([szIdx])
+
+    maxDates=[]
+    for k in lmDict.keys():
+        lmDict[k]=[x for x in lmDict[k] if ipoDates[k] not in x]
+        counts=[]
+        maxdate=None
+        for dates in lmDict[k]:
+            counts.append(len(dates))
+            if len(dates)==max(counts):
+                maxdate=dates[-1]
+        maxDates.append([k,maxdate,max(counts)])
+
+    df=pd.DataFrame(maxDates,columns=['symbol','date','max'])
+    df.sort_values(by=['max'],ascending=False)[df['max']>2].to_csv('limit/limits.csv',index=False)
+
+    string = json.dumps(lmDict)
+    with open('limit/limits.json', 'w') as f:
+        f.write(string)
+
 def getLimit(pdate:date=None,fname=None,mode=None):
     zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + pdate.strftime("%Y%m%d") + ".js"
     zdt_indexx = [u'代码', u'名称', u'最新价格', u'涨跌幅', u'封成比', u'封流比', u'封单金额', u'最后一次涨停时间',
@@ -83,7 +133,8 @@ def getLimit(pdate:date=None,fname=None,mode=None):
                     df = pd.DataFrame(t2, columns=zdt_indexx)
                     df.to_csv('md/limit'+pdate.strftime("%Y%m%d")+'.csv')
                     if mode is None:
-                        return df[~df['代码'].astype(str).str.startswith('SH688')]
+                        return df
+                        # return df[~df['代码'].astype(str).str.startswith('SH688')]
                         # return df[~df['代码'].astype(str).str.startswith('SH688') & ~df['代码'].astype(str).str.startswith('SZ3')]
                 except Exception as e:
                     mlog(e)

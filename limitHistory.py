@@ -1,6 +1,9 @@
 from QuotaUtilities import *
 
-def getlimit(idxdate:datetime,mode=None):
+
+
+
+def limitStatistic(idxdate:datetime,mode=None):
     print(idxdate.strftime('%Y%m%d'))
     cookies = {
         'Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1': '1640619309,1642582805',
@@ -60,11 +63,12 @@ def storeJson():
     idx = eastmoneyK('SZ000001')
     df=pd.DataFrame()
     for i in idx.index[-258:]:
-          df=df.append(getlimit(i,mode='new'))
+          df=df.append(limitStatistic(i,mode='new'))
     df.to_csv('limit/limit.csv', index=False)
 
 
 if __name__ == "__main__":
     # storeJson()
-    getlimit(eastmoneyK('SZ000001').index[-1])
+    # limitStatistic(eastmoneyK('SZ000001').index[-1])
+    getLimits()
 
