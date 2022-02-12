@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="limit History">
-      <change beforePath="$PROJECT_DIR$/.idea/idxTrade.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/idxTrade.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/QuotaUtilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuotaUtilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/limitHistory.py" beforeDir="false" afterPath="$PROJECT_DIR$/limitHistory.py" afterDir="false" />
@@ -357,13 +355,6 @@
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
     </task>
-    <task id="LOCAL-00173" summary="update trading algo">
-      <created>1628062095734</created>
-      <option name="number" value="00173" />
-      <option name="presentableId" value="LOCAL-00173" />
-      <option name="project" value="LOCAL" />
-      <updated>1628062095735</updated>
-    </task>
     <task id="LOCAL-00174" summary="update">
       <created>1628147124126</created>
       <option name="number" value="00174" />
@@ -700,7 +691,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644486962620</updated>
     </task>
-    <option name="localTasksCounter" value="222" />
+    <task id="LOCAL-00222" summary="limit History">
+      <created>1644574814818</created>
+      <option name="number" value="00222" />
+      <option name="presentableId" value="LOCAL-00222" />
+      <option name="project" value="LOCAL" />
+      <updated>1644574814818</updated>
+    </task>
+    <option name="localTasksCounter" value="223" />
     <servers />
   </component>
   <component name="TodoView">

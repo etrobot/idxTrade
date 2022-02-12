@@ -1,7 +1,64 @@
+import pandas as pd
+
 from QuotaUtilities import *
 
+def getLimits():
+    szzs = eastmoneyK('SZ000001')
+    # print(szzs.index[-1460])
+    filename='limit/limits.json'
+    cols=['symbol','name','max','ipodate','limits','times','latest']#代码，名称，最高板，上市日，≥3连板纪录，次数，最后连板日期
+    end = 0
+    if os.path.isfile(filename):
+        start=end-1
+        lmDict = json.loads(open(filename, "r").read())
+        limitDf = pd.read_csv('limit/limits.csv', index_col='symbol')
+    else:
+        start = -1460
+        lmDict = {}
+        limitDf=pd.DataFrame([],columns=cols)
+    infos={}
+    for i in range(start,end):
+        szIdx = szzs.index[i].strftime("%Y%m%d")
+        df = getLimit(szzs.index[i])
+        for idx,row in df.iterrows():
+            # print(szIdx,row['代码'],row['名称'])
+            if row['代码'] not in infos.keys() and row['代码'] not in limitDf.index:
+                infos[row['代码']] = getInfo(row['代码'])
+            if row['代码'] not in lmDict.keys():
+                lmDict[row['代码']]=[[szIdx]]
+            elif len(lmDict[row['代码']])>0:
+                if lmDict[row['代码']][-1][-1]==szzs.index[i-1].strftime("%Y%m%d"):
+                    lmDict[row['代码']][-1].append(szIdx)
+                elif lmDict[row['代码']][-1][-1]!=szzs.index[i].strftime("%Y%m%d"):
+                    lmDict[row['代码']].append([szIdx])
 
+    maxDates=[]
+    for k in lmDict.keys():
+        name=limitDf['name'].get(k,infos.get(k,{}).get('股票简称',None))
+        if name is None:
+            continue
+        ipodate=limitDf['ipodate'].get(k,infos.get(k,{}).get('上市时间',None))
+        lmDict[k] = [x for x in lmDict[k] if ipodate not in x]
+        if len(lmDict[k])==0:
+            continue
+        counts=[]
+        for dates in lmDict[k]:
+            counts.append(len(dates))
+        # print(k,name,lmDict[k])
+        records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>2]
+        if len(records)>0:
+            maxDates.append([k,name,max(counts),ipodate,', '.join(records),len(records),records[-1]])
 
+    df=pd.DataFrame(maxDates,columns=cols)
+    df=df[~df['name'].str.contains('\*|退')]
+    df=df.sort_values(by=['latest','max'],ascending=False)
+    df.to_csv('limit/limits.csv',index=False)
+    df['symbol'] = df['symbol'].apply(
+        lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundcode}</a>'.format(fundcode=x))
+    renderHtml(df[df['max']>2], '../CMS/source/Quant/limits.html', '连板统计')
+    string = json.dumps(lmDict)
+    with open('limit/limits.json', 'w') as f:
+        f.write(string)
 
 def limitStatistic(idxdate:datetime,mode=None):
     print(idxdate.strftime('%Y%m%d'))
@@ -10,21 +67,6 @@ def limitStatistic(idxdate:datetime,mode=None):
         'hxmPid': '',
         'v': 'A0aSl97zW6psJw9OiWEn2CdlkTfNp4vvXOm-xTBvMghEJ-jpmDfacSx7DtgD',
     }
-
-    headers = {
-        'Connection': 'keep-alive',
-        'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
-        'Accept': 'application/json, text/plain, */*',
-        'sec-ch-ua-mobile': '?0',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
-        'sec-ch-ua-platform': '"macOS"',
-        'Sec-Fetch-Site': 'same-origin',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        'Referer': 'https://data.10jqka.com.cn/datacenterph/limitup/limtupInfo.html?client_userid=nM9Y3&back_source=hyperlink&share_hxapp=isc&fontzoom=no',
-        'Accept-Language': 'zh-CN,zh-TW;q=0.9,zh;q=0.8,en-US;q=0.7,en;q=0.6,ja;q=0.5',
-    }
-
     params = (
         ('page', '1'),
         ('limit', '1600'),
@@ -40,6 +82,7 @@ def limitStatistic(idxdate:datetime,mode=None):
     result=json.loads(response.text)
     with open('limit/%s.json' % idxdate.strftime('%Y%m%d'), 'w', encoding='utf-8') as f:
         json.dump(result,f)
+    return
     llist=[]
     data = result['data']['info']
     for d in data:
