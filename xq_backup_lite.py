@@ -319,11 +319,9 @@ def dailyCheck(mkt=None, pdate=None, test=0):
     for k, v in tqdmRange:
         tqdmRange.set_description(("%s %s %s %s" % (mkt, v['行业'], k, v['name'])).ljust(25))
         qdf = getK(k, pdate,g.xq_a_token, test)
-        if len(qdf)<30:
+        if len(qdf)<30 or max(qdf['open'][x]/qdf['close'][x-1] for x in range(-29,0))>1.2:
             for mk, mv in cal.items():
                 cal[mk].append(None)
-            continue
-        if max(qdf['open'][x]/qdf['close'][x-1] for x in range(-29,0))>1.2:
             continue
         indDf.at[k, 'past45Days'] = round(qdf['close'][-1] / min(qdf['close'][-45:]) - 1, 4)
         info = [mkt, v['行业'], k, v['name']]

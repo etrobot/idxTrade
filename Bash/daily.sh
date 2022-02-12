@@ -12,6 +12,6 @@ fi
 cd ../../CMS || exit
 git pull
 
-cd ../idxTrade && /Users/tfproduct01/Documents/DEV/PY/venv/bin/python -u xq_backup_lite.py $1 $2;
+cd ../idxTrade && /Users/admin/Documents/DEV/PY/idxTrade/env/bin/python -u xq_backup_lite.py $1 $2;
 
 bash $curPath/push.sh
