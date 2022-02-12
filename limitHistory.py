@@ -38,7 +38,7 @@ def getLimits():
         if name is None:
             continue
         ipodate=limitDf['ipodate'].get(k,infos.get(k,{}).get('上市时间',None))
-        lmDict[k] = [x for x in lmDict[k] if ipodate not in x]
+        lmDict[k] = [x for x in lmDict[k] if str(ipodate) != x[0][:8]]
         if len(lmDict[k])==0:
             continue
         counts=[]
@@ -47,7 +47,7 @@ def getLimits():
         # print(k,name,lmDict[k])
         records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>2]
         if len(records)>0:
-            maxDates.append([k,name,max(counts),ipodate,', '.join(records),len(records),records[-1]])
+            maxDates.append([k,name.replace(' ',''),max(counts),ipodate,', '.join(records),len(records),records[-1]])
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]
