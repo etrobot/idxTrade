@@ -11,6 +11,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed,wait
 import lxml.html
 import akshare as ak
 from lxml import etree
+import traceback
 
 def getK(k:str, pdate=None,xq_a_token=None,test=0):
     if test == 1 and os.path.isfile('Quotation/' + k + '.csv'):
@@ -22,13 +23,41 @@ def getK(k:str, pdate=None,xq_a_token=None,test=0):
     return qdf
 
 def getInfo(symbol:str):
-    print('get info '+symbol[-6:])
+    if not os.path.isfile('info.csv'):
+        getAllInfo()
+    all = pd.read_csv('info.csv',dtype={'股票代码': str})
+    all.set_index('股票代码',inplace=True)
     try:
-        info = ak.stock_individual_info_em(symbol=symbol[-6:]).set_index('item').to_dict()
-        return info['value']
+        info = ak.stock_individual_info_em(symbol=symbol[-6:]).set_index('item').to_dict()['value']
+        info['行业'] = info['行业'].replace('行业','')
+        info['region']=all['省份'].get(symbol[-6:],'')
+        info['city'] = all['城市'].get(symbol[-6:], '').replace('市','')
+        return info
     except:
         return {}
         pass
+
+def getAllInfo():
+    start_time = t.time()  # 获取程序开始运行时间
+    df = pd.DataFrame()  # 定义一个空的DataFrame用于存储数据
+    i=1
+    while i<=250:
+        try:
+            url = 'https://s.askci.com/stock/a/?reportTime=2021-12-31&pageNum={i}'.format(i=i)  # 日期可以改，可获取季度数据
+            print(url)
+            df = pd.concat([df, pd.read_html(url)[3].loc[:, :]])  # 第1个表格故填[0],经观察发现所需表格是网页中第4个表格，故为[3]。获得后纵向追加到df中
+            endtime = t.time() - start_time
+            print('正在获取上市公司基本信息表第' + str(i) + '页', '已运行%.2f秒' % endtime)
+        except Exception:
+            traceback.print_exc()
+            pass
+            t.sleep(20)
+            continue
+        i += 1
+    df['股票代码'] = df['股票代码'].astype('str').str.zfill(6)  # 将原本的int数据类型转换为文本，补齐股票代码为6位，用的时候必须加上.str前缀
+    df.drop(['序号', '招股书', '公司财报'], axis=1, inplace=True)  # 删除多余的列，axis=1（按列方向操作）、inplace=True（修改完数据，在原数据上保存）
+    df.to_csv('info.csv',index='股票代码')
+    print('\n', '*******目标爬取完成*******')
 
 def getLimit(pdate:date=None,fname=None,mode=None):
     zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + pdate.strftime("%Y%m%d") + ".js"

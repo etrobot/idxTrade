@@ -6,7 +6,7 @@ def getLimits():
     szzs = eastmoneyK('SZ000001')
     # print(szzs.index[-1460])
     filename='limit/limits.json'
-    cols=['symbol','name','max','ipodate','limits','times','latest']#代码，名称，最高板，上市日，≥3连板纪录，次数，最后连板日期
+    cols=['symbol','name','max','industry','region','city','ipodate','limits','times','latest']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
     end = 0
     if os.path.isfile(filename):
         start=end-1
@@ -21,7 +21,7 @@ def getLimits():
         szIdx = szzs.index[i].strftime("%Y%m%d")
         df = getLimit(szzs.index[i])
         for idx,row in df.iterrows():
-            # print(szIdx,row['代码'],row['名称'])
+            print(szIdx,row['代码'],row['名称'])
             if row['代码'] not in infos.keys() and row['代码'] not in limitDf.index:
                 infos[row['代码']] = getInfo(row['代码'])
             if row['代码'] not in lmDict.keys():
@@ -34,20 +34,24 @@ def getLimits():
 
     maxDates=[]
     for k in lmDict.keys():
-        name=limitDf['name'].get(k,infos.get(k,{}).get('股票简称',None))
+        info=infos.get(k,{})
+        name=limitDf['name'].get(k,info.get('股票简称',None))
         if name is None:
             continue
-        ipodate=limitDf['ipodate'].get(k,infos.get(k,{}).get('上市时间',None))
+        ipodate=limitDf['ipodate'].get(k,info.get('上市时间',None))
+        industry=limitDf['industry'].get(k,info.get('行业',None))
+        region=limitDf['region'].get(k,info.get('region',None))
+        city=limitDf['city'].get(k,info.get('city',None))
         lmDict[k] = [x for x in lmDict[k] if str(ipodate) != x[0][:8]]
         if len(lmDict[k])==0:
             continue
         counts=[]
         for dates in lmDict[k]:
             counts.append(len(dates))
-        # print(k,name,lmDict[k])
+        print(k,info,lmDict[k])
         records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>2]
         if len(records)>0:
-            maxDates.append([k,name.replace(' ',''),max(counts),ipodate,', '.join(records),len(records),records[-1]])
+            maxDates.append([k,name.replace(' ',''),max(counts),industry,region,city,ipodate,', '.join(records),len(records),records[-1]])
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]

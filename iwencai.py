@@ -92,7 +92,7 @@ if __name__ == "__main__":
     for k, q in conf['wencai'].items():
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
-        df.to_csv('test.csv',encoding='GBK')
+        # df.to_csv('test.csv',encoding='GBK')
         # print(df.columns)
         df['code']=df['股票代码'].str[:6]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
@@ -100,6 +100,11 @@ if __name__ == "__main__":
         df['factor']= pd.to_numeric(df["20日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
+        if os.path.isfile('limit/limits.csv'):
+            limit = pd.read_csv('limit/limits.csv')
+            limit = limit[['symbol', 'limits']]
+            limit.columns = ['股票代码', '连板']
+            df = df.merge(limit).dropna(subset=['股票简称'])
         wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
@@ -122,8 +127,7 @@ if __name__ == "__main__":
     w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
     # if len(wdfX700)>0:
     #     w=wdfX700.iloc[0]
-    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿')
-
+    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿',w['连板'])
 
     # sell filter
     if len(position)>=MAXHOLDING:
@@ -146,5 +150,7 @@ if __name__ == "__main__":
             t.sleep(180)
         xueqiuP.trade('cn','idx',position)
     else:
-        pd.options.display.max_rows = 999
-        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date']])
+        pd.options.display.max_rows = 0
+        pd.options.display.width = 0
+        pd.options.display.colheader_justify = 'left'
+        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','连板']])
