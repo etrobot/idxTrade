@@ -46,7 +46,7 @@ def getLimits():
         industry=limitDf['industry'].get(k,info.get('行业',None))
         region=limitDf['region'].get(k,info.get('region',None))
         city=limitDf['city'].get(k,info.get('city',None))
-        lmDict[k] = [x for x in lmDict[k] if str(ipodate) != x[0][:8]]
+        lmDict[k] = [x for x in lmDict[k] if str(ipodate) != x[0][:8] or ((k.startswith('SZ300') and int(x[0][:8])>20200823))]
         if len(lmDict[k])==0:
             continue
         counts=[]
