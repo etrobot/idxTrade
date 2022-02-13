@@ -22,11 +22,9 @@ def getK(k:str, pdate=None,xq_a_token=None,test=0):
         qdf = xueqiuK(symbol=k, startDate=pdate, cookie=xq_a_token)#pdate - timedelta(days=250)).strftime('%Y%m%d')
     return qdf
 
-def getInfo(symbol:str):
-    if not os.path.isfile('info.csv'):
-        getAllInfo()
-    all = pd.read_csv('info.csv',dtype={'股票代码': str})
-    all.set_index('股票代码',inplace=True)
+def getInfo(symbol:str,all:pd.DataFrame):
+    if symbol[-6:] in all['股票简称'] and all['行业分类'].get(symbol[-6:])!='--':
+        return {'股票简称':all['股票简称'].get(symbol[-6:]),'行业':all['行业分类'].get(symbol[-6:]),'region':all['省份'].get(symbol[-6:]),'city':all['省份'].get(symbol[-6:])}
     try:
         info = ak.stock_individual_info_em(symbol=symbol[-6:]).set_index('item').to_dict()['value']
         info['行业'] = info['行业'].replace('行业','')

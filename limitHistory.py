@@ -17,13 +17,17 @@ def getLimits():
         lmDict = {}
         limitDf=pd.DataFrame([],columns=cols)
     infos={}
+    if not os.path.isfile('info.csv'):
+        getAllInfo()
+    all = pd.read_csv('info.csv',dtype={'股票代码': str})
+    all.set_index('股票代码',inplace=True)
     for i in range(start,end):
         szIdx = szzs.index[i].strftime("%Y%m%d")
         df = getLimit(szzs.index[i])
         for idx,row in df.iterrows():
-            print(szIdx,row['代码'],row['名称'])
+            # print(szIdx,row['代码'],row['名称'])
             if row['代码'] not in infos.keys() and row['代码'] not in limitDf.index:
-                infos[row['代码']] = getInfo(row['代码'])
+                infos[row['代码']] = getInfo(row['代码'],all)
             if row['代码'] not in lmDict.keys():
                 lmDict[row['代码']]=[[szIdx]]
             elif len(lmDict[row['代码']])>0:
