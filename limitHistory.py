@@ -6,7 +6,7 @@ def getLimits():
     szzs = eastmoneyK('SZ000001')
     # print(szzs.index[-1460])
     filename='limit/limits.json'
-    cols=['symbol','name','max','industry','region','city','ipodate','limits','times','latest']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
+    cols=['symbol','name','max','industry','region','city','ipodate','limits','times','lastTime','latest']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
     end = 0
     if os.path.isfile(filename):
         start=end-1
@@ -57,11 +57,11 @@ def getLimits():
         print(k,info,lmDict[k])
         records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>2]
         if len(records)>0:
-            maxDates.append([k,name.replace(' ',''),max(counts),industry,region,city,ipodate,', '.join(records),len(records),records[-1]])
+            maxDates.append([k,name.replace(' ',''),max(counts),industry,region,city,ipodate,', '.join(records),len(records),records[-1],lmDict[k][-1][-1]])
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]
-    df=df.sort_values(by=['latest','max'],ascending=False)
+    df=df.sort_values(by=['times','max'],ascending=False)
     df.to_csv('limit/limits.csv',index=False)
     df['symbol'] = df['symbol'].apply(
         lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundcode}</a>'.format(fundcode=x))
