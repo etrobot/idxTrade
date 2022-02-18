@@ -6,12 +6,13 @@ def getLimits():
     szzs = eastmoneyK('SZ000001')
     # print(szzs.index[-1460])
     filename='limit/limits.json'
-    cols=['symbol','name','max','industry','region','city','ipodate','limits','times','lastTime','latest']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
+    cols=['symbol','name','max','industry','region','city','ipodate','limits','times','latest','reason_type']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
     end = 0
     if os.path.isfile(filename):
         start=end-1
         lmDict = json.loads(open(filename, "r").read())
-        limitDf = pd.read_csv('limit/limits.csv', index_col='symbol')
+        limitDf = pd.read_csv('limit/limits.csv', dtype={'symbol': str,'ipodate':str})
+        limitDf.set_index('symbol',inplace=True)
     else:
         start = -1460
         lmDict = {}
@@ -37,15 +38,15 @@ def getLimits():
                     lmDict[row['代码']].append([szIdx])
 
     maxDates=[]
+    reason=getReason()
     for k in lmDict.keys():
         info=infos.get(k,{})
         name=limitDf['name'].get(k,info.get('股票简称',None))
         if name is None:
             continue
         ipodate=limitDf['ipodate'].get(k,info.get('上市时间',None))
-        industry=limitDf['industry'].get(k,info.get('行业',None))
-        region=limitDf['region'].get(k,info.get('region',None))
-        city=limitDf['city'].get(k,info.get('city',None))
+        if sum(len(x) for x in lmDict[k])<4:
+            continue
         lmDict[k] = [x for x in lmDict[k] if str(ipodate) != x[0][:8]]
         if k.startswith('SZ300'):
             lmDict[k] = [x for x in lmDict[k] if int(x[0][:8])>20200823]
@@ -55,16 +56,24 @@ def getLimits():
         for dates in lmDict[k]:
             counts.append(len(dates))
         print(k,info,lmDict[k])
-        records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>2]
+        records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>=2]
+        industry=limitDf['industry'].get(k,info.get('行业',None))
+        region=limitDf['region'].get(k,info.get('region',None))
+        city=limitDf['city'].get(k,info.get('city',None))
+        # reason_type=limitDf['reason_type'].get(k,info.get('reason_type',None))
+        reason_type = reason['reason_type'].get(k[2:], None)
+        if 'ST' in name:
+            reason_type='ST'
         if len(records)>0:
-            maxDates.append([k,name.replace(' ',''),max(counts),industry,region,city,ipodate,', '.join(records),len(records),records[-1],lmDict[k][-1][-1]])
+            maxDates.append([k,name.replace(' ',''),max(counts),industry,region,city,ipodate,', '.join(records),len(records),lmDict[k][-1][-1],reason_type])
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]
     df=df.sort_values(by=['latest','times'],ascending=False)
     df.to_csv('limit/limits.csv',index=False)
+    df['limits'] = df['limits'].str[-120:]
     df['symbol'] = df['symbol'].apply(
-        lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundcode}</a>'.format(fundcode=x))
+        lambda x: '<a href="https://xueqiu.com/S/{scode}">{sname}</a>'.format(scode=x,sname=x))
     renderHtml(df[df['max']>2], '../CMS/source/Quant/limits.html', '连板统计')
     string = json.dumps(lmDict)
     with open('limit/limits.json', 'w') as f:
@@ -92,36 +101,37 @@ def limitStatistic(idxdate:datetime,mode=None):
     result=json.loads(response.text)
     with open('limit/%s.json' % idxdate.strftime('%Y%m%d'), 'w', encoding='utf-8') as f:
         json.dump(result,f)
-    return
     llist=[]
     data = result['data']['info']
     for d in data:
-        if d['high_days'] in [None, '首板']:
+        # if d['high_days'] in [None, '首板']:
+        #     continue
+        # highDays = [int(x) for x in re.findall(r"[-+]?\d*\.\d+|\d+", d['high_days'])]
+        llist.append([idxdate, d['code'], d['reason_type']])
+    return pd.DataFrame(llist, columns=['date', 'symbol', 'reason_type'])
+
+def getReason():
+    filename='limit/reason.csv'
+    idx = eastmoneyK('SZ000001')
+    if os.path.isfile(filename):
+        df = pd.read_csv(filename, dtype={'symbol': str},parse_dates=['date'])
+    else:
+        df = pd.DataFrame()
+    for i in idx.index[-260:]:
+        if 'date' in df.columns and i <= max(df['date']):
             continue
-        highDays = [int(x) for x in re.findall(r"[-+]?\d*\.\d+|\d+", d['high_days'])]
-        if len(highDays) == 2 and highDays[0] - highDays[1] < 2 and highDays[1] > 2:
-            llist.append([idxdate, d['code'], highDays[0], highDays[1]])
-    if mode is not None:
-        return pd.DataFrame(llist, columns=['date', 'symbol', 'days', 'highLimit'])
-    df=pd.read_csv('limit/limit.csv',dtype={'symbol':str})
-    df.append(pd.DataFrame(llist,columns=['date','symbol','days','highLimit']))
-    df=df.drop_duplicates(subset='symbol', keep='last', inplace=False)
-    df = df.sort_values(by=['date'], ascending=True)
+        df=df.append(limitStatistic(i,mode='new'))
+    df = df.sort_values(by=['date'], ascending=False)
     # gb=df.groupby('date')
     # for k,v in gb:
     #     print(k,v['symbol'].tolist())
-    df.to_csv('limit/limit.csv',index=False)
-
-def storeJson():
-    idx = eastmoneyK('SZ000001')
-    df=pd.DataFrame()
-    for i in idx.index[-258:]:
-          df=df.append(limitStatistic(i,mode='new'))
-    df.to_csv('limit/limit.csv', index=False)
+    df = df.drop_duplicates(subset='symbol', keep='first')
+    df.to_csv(filename, index=False)
+    return df.set_index('symbol')
 
 
 if __name__ == "__main__":
-    # storeJson()
+    # getReason()
     # limitStatistic(eastmoneyK('SZ000001').index[-1])
     getLimits()
 

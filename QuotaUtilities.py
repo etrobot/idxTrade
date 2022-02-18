@@ -586,7 +586,7 @@ def renderHtml(df,filename:str,title:str):
     df.index = np.arange(1, len(df) + 1)
     df.index.name='序号'
     df.reset_index(inplace=True)
-    pd.set_option('colheader_justify', 'center')
+    #pd.set_option('colheader_justify', 'center')
     html_string = '<html><head><title>%s</title>{style}</head><body>{table}{tablesort}{gAds}</body></html>'%title
     html_string = html_string.format(
         table=df.to_html(render_links=True, escape=False, index=False),
