@@ -61,7 +61,7 @@ def getLimits():
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]
-    df=df.sort_values(by=['times','max'],ascending=False)
+    df=df.sort_values(by=['times','latest'],ascending=False)
     df.to_csv('limit/limits.csv',index=False)
     df['symbol'] = df['symbol'].apply(
         lambda x: '<a href="https://xueqiu.com/S/{fundcode}">{fundcode}</a>'.format(fundcode=x))
