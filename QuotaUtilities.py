@@ -490,10 +490,9 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
             data = json.loads(h.content[1:-1])
             data = [x.split(",") for x in data['data']]
             df=pd.DataFrame(data=data,columns=["date","open","close","high","low","volume","amount","amplitude","turnoverrate"])
-            df.set_index('date',inplace=True)
-            df.index=pd.to_datetime(df.index).date
+            df.set_index(pd.to_datetime(df['date']),inplace=True)
             df=df.apply(pd.to_numeric, errors='coerce').fillna(df)
-            df.to_csv(quoFile,encoding='utf-8',index_label='date',date_format='%Y-%m-%d')
+            df.to_csv(quoFile,encoding='utf-8',index=False,date_format='%Y-%m-%d')
             return df
         except Exception as e:
             print(e)

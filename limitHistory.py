@@ -6,7 +6,7 @@ def getLimits():
     szzs = eastmoneyK('SZ000001')
     # print(szzs.index[-1460])
     filename='limit/limits.json'
-    cols=['symbol','name','max','industry','region','city','ipodate','limits','times','latest','reason_type']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
+    cols=['symbol','name','max','comboTimes','industry','region','city','ipodate','maxCombo','latest','reason_type']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
     end = 0
     if os.path.isfile(filename):
         start=end-1
@@ -37,6 +37,9 @@ def getLimits():
                 elif lmDict[row['代码']][-1][-1]!=szzs.index[i].strftime("%Y%m%d"):
                     lmDict[row['代码']].append([szIdx])
 
+    szzs.index=szzs.index.strftime("%Y%m%d")
+    szzs['dateShift']=szzs.index
+    szzs['dateShift']=szzs['dateShift'].shift(-1)
     maxDates=[]
     reason=getReason()
     for k in lmDict.keys():
@@ -45,9 +48,9 @@ def getLimits():
         if name is None:
             continue
         ipodate=limitDf['ipodate'].get(k,info.get('上市时间',None))
-        if sum(len(x) for x in lmDict[k])<4:
+        if sum(len(x) for x in lmDict[k])<6:
             continue
-        lmDict[k] = [x for x in lmDict[k] if str(ipodate) != x[0][:8]]
+        lmDict[k] = [x for x in lmDict[k] if x[0][:8] not in [ipodate,szzs['dateShift'].get(ipodate)]]
         if k.startswith('SZ300'):
             lmDict[k] = [x for x in lmDict[k] if int(x[0][:8])>20200823]
         if len(lmDict[k])==0:
@@ -55,8 +58,8 @@ def getLimits():
         counts=[]
         for dates in lmDict[k]:
             counts.append(len(dates))
-        print(k,info,lmDict[k])
-        records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>=2]
+        #print(k,info,lmDict[k])
+        records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>=max(counts)]
         industry=limitDf['industry'].get(k,info.get('行业',None))
         region=limitDf['region'].get(k,info.get('region',None))
         city=limitDf['city'].get(k,info.get('city',None))
@@ -65,13 +68,12 @@ def getLimits():
         if 'ST' in name:
             reason_type='ST'
         if len(records)>0:
-            maxDates.append([k,name.replace(' ',''),max(counts),industry,region,city,ipodate,', '.join(records),len(records),lmDict[k][-1][-1],reason_type])
+            maxDates.append([k,name.replace(' ',''),max(counts),len([x for x in counts if x>1]),industry,region,city,ipodate,', '.join(records),lmDict[k][-1][-1],reason_type])
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]
-    df=df.sort_values(by=['latest','times'],ascending=False)
+    df=df.sort_values(by=['latest','comboTimes'],ascending=False)
     df.to_csv('limit/limits.csv',index=False)
-    df['limits'] = df['limits'].str[-120:]
     df['symbol'] = df['symbol'].apply(
         lambda x: '<a href="https://xueqiu.com/S/{scode}">{sname}</a>'.format(scode=x,sname=x))
     renderHtml(df[df['max']>2], '../CMS/source/Quant/limits.html', '连板统计')
