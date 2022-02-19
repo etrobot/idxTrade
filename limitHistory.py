@@ -4,9 +4,8 @@ from QuotaUtilities import *
 
 def getLimits():
     szzs = eastmoneyK('SZ000001')
-    # print(szzs.index[-1460])
     filename='limit/limits.json'
-    cols=['symbol','name','max','comboTimes','industry','region','city','ipodate','maxCombo','latest','reason_type']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
+    cols=['symbol','name','max','comboTimes','industry','region','city','latest','reason_type','ipodate','maxCombo']#代码，名称，最高板,行业,省份,城市，上市日，≥3连板纪录，次数，最后连板日期
     end = 0
     if os.path.isfile(filename):
         start=end-1
@@ -14,7 +13,8 @@ def getLimits():
         limitDf = pd.read_csv('limit/limits.csv', dtype={'symbol': str,'ipodate':str})
         limitDf.set_index('symbol',inplace=True)
     else:
-        start = -1460
+        start = -1465
+        print(szzs.index[start])
         lmDict = {}
         limitDf=pd.DataFrame([],columns=cols)
     infos={}
@@ -22,26 +22,35 @@ def getLimits():
         getAllInfo()
     all = pd.read_csv('info.csv',dtype={'股票代码': str})
     all.set_index('股票代码',inplace=True)
-    for i in range(start,end):
-        szIdx = szzs.index[i].strftime("%Y%m%d")
-        df = getLimit(szzs.index[i])
-        for idx,row in df.iterrows():
-            # print(szIdx,row['代码'],row['名称'])
-            if row['代码'] not in infos.keys() and row['代码'] not in limitDf.index:
-                infos[row['代码']] = getInfo(row['代码'],all)
-            if row['代码'] not in lmDict.keys():
-                lmDict[row['代码']]=[[szIdx]]
-            elif len(lmDict[row['代码']])>0:
-                if lmDict[row['代码']][-1][-1]==szzs.index[i-1].strftime("%Y%m%d"):
-                    lmDict[row['代码']][-1].append(szIdx)
-                elif lmDict[row['代码']][-1][-1]!=szzs.index[i].strftime("%Y%m%d"):
-                    lmDict[row['代码']].append([szIdx])
 
+    for i in range(start,end):
+        if szzs.index[i]<datetime(2021,2,18):
+            print('jrj',szzs.index[i])
+            symbols = getLimit(szzs.index[i])['代码']
+        else:
+            print('10jqka',szzs.index[i])
+            symbols = limitStatistic(szzs.index[i])['symbol']
+        szIdx = szzs.index[i].strftime("%Y%m%d")
+        for lsymbol in symbols:
+            if lsymbol.startswith('6'):
+                lsymbol = 'SH' + lsymbol
+            elif len(lsymbol)==6:
+                lsymbol = 'SZ' + lsymbol
+            if lsymbol not in infos.keys() and lsymbol not in limitDf.index:
+                infos[lsymbol] = getInfo(lsymbol,all)
+            if lsymbol not in lmDict.keys():
+                lmDict[lsymbol]=[[szIdx]]
+            elif len(lmDict[lsymbol])>0:
+                if lmDict[lsymbol][-1][-1]==szzs.index[i-1].strftime("%Y%m%d"):
+                    lmDict[lsymbol][-1].append(szIdx)
+                elif lmDict[lsymbol][-1][-1]!=szzs.index[i].strftime("%Y%m%d"):
+                    lmDict[lsymbol].append([szIdx])
+
+    reason=getReason()
     szzs.index=szzs.index.strftime("%Y%m%d")
     szzs['dateShift']=szzs.index
     szzs['dateShift']=szzs['dateShift'].shift(-1)
     maxDates=[]
-    reason=getReason()
     for k in lmDict.keys():
         info=infos.get(k,{})
         name=limitDf['name'].get(k,info.get('股票简称',None))
@@ -58,7 +67,7 @@ def getLimits():
         counts=[]
         for dates in lmDict[k]:
             counts.append(len(dates))
-        #print(k,info,lmDict[k])
+        print(k,info,lmDict[k])
         records=[x[0].replace('-','')+"-%s"%len(x) for x in lmDict[k] if len(x)>=max(counts)]
         industry=limitDf['industry'].get(k,info.get('行业',None))
         region=limitDf['region'].get(k,info.get('region',None))
@@ -68,7 +77,7 @@ def getLimits():
         if 'ST' in name:
             reason_type='ST'
         if len(records)>0:
-            maxDates.append([k,name.replace(' ',''),max(counts),len([x for x in counts if x>1]),industry,region,city,ipodate,', '.join(records),lmDict[k][-1][-1],reason_type])
+            maxDates.append([k,name.replace(' ',''),max(counts),len([x for x in counts if x>1]),industry,region,str(city)[:7],lmDict[k][-1][-1],reason_type,ipodate,', '.join(records)])
 
     df=pd.DataFrame(maxDates,columns=cols)
     df=df[~df['name'].str.contains('\*|退')]
@@ -81,7 +90,7 @@ def getLimits():
     with open('limit/limits.json', 'w') as f:
         f.write(string)
 
-def limitStatistic(idxdate:datetime,mode=None):
+def limitStatistic(idxdate:datetime):
     print(idxdate.strftime('%Y%m%d'))
     cookies = {
         'Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1': '1640619309,1642582805',
@@ -122,7 +131,7 @@ def getReason():
     for i in idx.index[-260:]:
         if 'date' in df.columns and i <= max(df['date']):
             continue
-        df=df.append(limitStatistic(i,mode='new'))
+        df=df.append(limitStatistic(i))
     df = df.sort_values(by=['date'], ascending=False)
     # gb=df.groupby('date')
     # for k,v in gb:
@@ -136,4 +145,3 @@ if __name__ == "__main__":
     # getReason()
     # limitStatistic(eastmoneyK('SZ000001').index[-1])
     getLimits()
-
