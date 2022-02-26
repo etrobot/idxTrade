@@ -102,8 +102,8 @@ if __name__ == "__main__":
         df['type'] = k[1:]
         if os.path.isfile('limit/limits.csv'):
             limit = pd.read_csv('limit/limits.csv')
-            limit = limit[['symbol', 'limits']]
-            limit.columns = ['股票代码', '连板']
+            limit = limit[['symbol', 'reason_type']]
+            limit.columns = ['股票代码', '概念']
             df = df.merge(limit).dropna(subset=['股票简称'])
         wencaiDf = wencaiDf.append(df)
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
     # if len(wdfX700)>0:
     #     w=wdfX700.iloc[0]
-    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿',w['连板'])
+    print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿',w['概念'])
 
     # sell filter
     if len(position)>=MAXHOLDING:
@@ -153,4 +153,4 @@ if __name__ == "__main__":
         pd.options.display.max_rows = 0
         pd.options.display.width = 0
         pd.options.display.colheader_justify = 'left'
-        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','连板']])
+        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','概念']])

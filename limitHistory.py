@@ -129,7 +129,7 @@ def getReason():
     else:
         df = pd.DataFrame()
     for i in idx.index[-260:]:
-        if 'date' in df.columns and i <= max(df['date']):
+        if 'date' in df.columns and i < max(df['date']):
             continue
         df=df.append(limitStatistic(i))
     df = df.sort_values(by=['date'], ascending=False)
