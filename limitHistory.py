@@ -75,7 +75,7 @@ def getLimits():
         print(k,info,lmDict[k])
         records=[x[-1][0].replace('-','')+"-%s%%"%int(round(x[-1][-1]*100)) for x in lmDict[k] if len(x)>=max(counts)]
         try:
-            cur_value='%s亿'%int(round(lmDict[k][-1][-1][1]/100000000))
+            cur_value=int(round(lmDict[k][-1][-1][1]/100000000))
         except:
             cur_value=lmDict[k][-1][-1][1]
             pass
