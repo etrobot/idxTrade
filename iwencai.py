@@ -77,8 +77,7 @@ if __name__ == "__main__":
     idx=eastmoneyK('SZ000001')
     cptSorted = conceptSorted(int(sys.argv[-1]))
     MAXHOLDING=4
-    xueqiuCfg={'bmob': '15d5b095f9',"xueqiu":{'idx':'ZH2492692'}}
-    # xueqiuCfg={'bmob': 'cc8966d77d',"xueqiu":{'idx':'ZH1353951'}}
+    xueqiuCfg={'vika': 'xueqiu_primary',"xueqiu":{'idx':'ZH2492692'}}
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
