@@ -74,13 +74,13 @@ class xueqiuPortfolio():
         conf = configparser.ConfigParser()
         conf.read('config.ini')
         # 获取存储在bmob的雪球cookie
-        headersBmob = {
-            'X-Bmob-Application-Id': conf['bmob']['X-Bmob-Application-Id'],
-            'X-Bmob-REST-API-Key': conf['bmob']['X-Bmob-REST-API-Key'],
+        headersVika = {
+            'Authorization': conf['vika']['Authorization'],
             'Connection': 'close'
         }
-        bmoburl = 'https://api2.bmob.cn/1/classes/text/'
-        sbCookie = json.loads(requests.get(bmoburl + self.cfg['bmob'], headers=headersBmob).text)['text']
+        vikaUrl = 'https://api.vika.cn/fusion/v1/datasheets/dstMiuU9zzihy1LzFX/records?viewId=viwoAJhnS2NMT&fieldKey=name'
+        vikajson = json.loads(requests.get(vikaUrl, headers=headersVika).text)['data']['records']
+        sbCookie=[x['fields']['value'] for x in vikajson if x['recordId']==conf['vika']['xueqiu1']][0]
         cookie_dict = {}
         for record in sbCookie.split(";"):
             key, value = record.strip().split("=", 1)
