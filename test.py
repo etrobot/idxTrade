@@ -1,5 +1,6 @@
 import random,hashlib
-from xq_backup_lite import *
+from QuotaUtilities import *
+# from xq_backup_lite import *
 import lxml
 
 def _create_random_tmp(salt_count, seed):
@@ -90,6 +91,7 @@ def tencentQuotaAbu(mkt,symbol):
 if __name__=='__main__':
     # print(list({'abc':'cccc'}).values()[0])
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
+    print(xq_a_token)
     # usHot(xq_a_token)
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
@@ -112,7 +114,7 @@ if __name__=='__main__':
     # print(round(1.55))
     # mkt='cn'
     # calKey='_U'
-    pdate=datetime.now().date()
+    # pdate=datetime.now().date()
     # qdf = qdf = xueqiuK(symbol='00410', startDate=(pdate - timedelta(days=250)).strftime('%Y%m%d'), cookie=xq_a_token)
     # draw(qdf, '../upknow/5/hk/hk_地产_00410_SOHO中国.png')
     # toBuy = pd.read_csv('md/cn20201117.txt', dtype={'symbol': str})
@@ -145,4 +147,5 @@ if __name__=='__main__':
     # thsIndustry('cn',datetime(2021,3,19))
     # updateAllImg('cn',datetime(2021,4,30), ['_J','_U'], xq_a_token)
     # print(xueqiuConcerned('hk',xq_a_token)['symbol'])
-    heldBy('SZ002463',pdate)
+    # heldBy('SZ002463',pdate)
+    # getCsvK()

@@ -92,11 +92,12 @@ if __name__ == "__main__":
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
         # df.to_csv('test.csv',encoding='GBK')
-        # print(df.columns)
+        print(df.columns)
         df['code']=df['股票代码'].str[:6]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-        df['factor']= pd.to_numeric(df["20日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
+        # df['factor']= pd.to_numeric(df["20日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
+        df['factor']= df['融资余额增速']
         df['date'] = idx.index[-1]
         df['type'] = k[1:]
         if os.path.isfile('limit/limits.csv'):
@@ -110,8 +111,8 @@ if __name__ == "__main__":
 
     # wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
     # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
-    if len(cptSorted) > 0 :
-        wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
+    # if len(cptSorted) > 0 :
+    #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
         # if int(sys.argv[-1])>5:
         #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
         # else:

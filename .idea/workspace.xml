@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="limit History" />
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="vika">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QuotaUtilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuotaUtilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iwencai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwencai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -362,20 +367,6 @@
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
     </task>
-    <task id="LOCAL-00188" summary="wencai">
-      <created>1630046371083</created>
-      <option name="number" value="00188" />
-      <option name="presentableId" value="LOCAL-00188" />
-      <option name="project" value="LOCAL" />
-      <updated>1630046371087</updated>
-    </task>
-    <task id="LOCAL-00189" summary="update">
-      <created>1630237076681</created>
-      <option name="number" value="00189" />
-      <option name="presentableId" value="LOCAL-00189" />
-      <option name="project" value="LOCAL" />
-      <updated>1630237076686</updated>
-    </task>
     <task id="LOCAL-00190" summary="update">
       <created>1630304656955</created>
       <option name="number" value="00190" />
@@ -705,7 +696,21 @@
       <option name="project" value="LOCAL" />
       <updated>1646488070526</updated>
     </task>
-    <option name="localTasksCounter" value="237" />
+    <task id="LOCAL-00237" summary="limit History">
+      <created>1652702403381</created>
+      <option name="number" value="00237" />
+      <option name="presentableId" value="LOCAL-00237" />
+      <option name="project" value="LOCAL" />
+      <updated>1652702403381</updated>
+    </task>
+    <task id="LOCAL-00238" summary="vika">
+      <created>1652702492038</created>
+      <option name="number" value="00238" />
+      <option name="presentableId" value="LOCAL-00238" />
+      <option name="project" value="LOCAL" />
+      <updated>1652702492038</updated>
+    </task>
+    <option name="localTasksCounter" value="239" />
     <servers />
   </component>
   <component name="TodoView">
@@ -784,7 +789,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="add us hot" />
     <MESSAGE value="bg color" />
     <MESSAGE value="try catch" />
     <MESSAGE value="update style" />
@@ -809,7 +813,8 @@
     <MESSAGE value="wencai" />
     <MESSAGE value="drop ushot" />
     <MESSAGE value="limit History" />
-    <option name="LAST_COMMIT_MESSAGE" value="limit History" />
+    <MESSAGE value="vika" />
+    <option name="LAST_COMMIT_MESSAGE" value="vika" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv" />

@@ -500,7 +500,7 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
 
 def cmsK(code:str,type:str='daily'):
     """招商证券A股行情数据"""
-    typeNum={'daily':1,'monthly':3}
+    typeNum={'daily':1,'monthly':3,'weekly':2}
     code=code.upper()
     quoFile = 'Quotation/' + code + '.csv'
     if len(code)==8:
@@ -694,3 +694,21 @@ def xueqiuConcerned(mkt:str,xq_a_token:str)->pd.DataFrame:
     response = requests.get(url,headers={"user-agent": "Mozilla", 'Connection': 'close',"cookie": xq_a_token})
     result=pd.DataFrame(json.loads(response.text)['data']['list'])
     return result
+
+def getCsvK(filename='symbols.csv',cookie=None):
+    if cookie is None:
+        cookie = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
+    df=pd.read_csv(filename,dtype={'symbols':str})
+    for k,v in df.iterrows():
+        v=v['symbols']
+        if len(v)==6:
+            if v.startswith('6'):
+                v='SH'+v
+            if (v.startswith('0') or v.startswith('3')):
+                v='SZ'+v
+            df.at[k, 'month_percent']=cmsK(v,'monthly')['percent'].values[-1]
+        elif len(v)==5:
+            qdf= xqQuot(period='month',symbol=v,cookie=cookie)
+            qdf=pd.DataFrame(qdf['item'],columns=qdf['column'])
+            df.at[k, 'month_percent']=qdf['percent'].values[-1]
+    df.to_csv(filename,index=False)
