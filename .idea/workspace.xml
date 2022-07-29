@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="vika">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="wencai">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuotaUtilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/QuotaUtilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iwencai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwencai.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -367,13 +365,6 @@
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
     </task>
-    <task id="LOCAL-00190" summary="update">
-      <created>1630304656955</created>
-      <option name="number" value="00190" />
-      <option name="presentableId" value="LOCAL-00190" />
-      <option name="project" value="LOCAL" />
-      <updated>1630304656956</updated>
-    </task>
     <task id="LOCAL-00191" summary="update">
       <created>1630307683142</created>
       <option name="number" value="00191" />
@@ -710,7 +701,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652702492038</updated>
     </task>
-    <option name="localTasksCounter" value="239" />
+    <task id="LOCAL-00239" summary="wencai">
+      <created>1658814606512</created>
+      <option name="number" value="00239" />
+      <option name="presentableId" value="LOCAL-00239" />
+      <option name="project" value="LOCAL" />
+      <updated>1658814606512</updated>
+    </task>
+    <option name="localTasksCounter" value="240" />
     <servers />
   </component>
   <component name="TodoView">
@@ -810,11 +808,11 @@
     <MESSAGE value="bash remove gitee" />
     <MESSAGE value="remove Fund" />
     <MESSAGE value="update" />
-    <MESSAGE value="wencai" />
     <MESSAGE value="drop ushot" />
     <MESSAGE value="limit History" />
     <MESSAGE value="vika" />
-    <option name="LAST_COMMIT_MESSAGE" value="vika" />
+    <MESSAGE value="wencai" />
+    <option name="LAST_COMMIT_MESSAGE" value="wencai" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv" />
