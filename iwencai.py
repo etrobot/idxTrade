@@ -48,10 +48,6 @@ def crawl_data_from_wencai(question:str):
                 cols[cols[cols == dup].index.values.tolist()] = [dup + '.' + str(i) if i != 0 else dup for i in range(sum(cols == dup))]
             df_data.columns=cols
             return df_data
-            # 筛选查询字段，非查询字段丢弃
-            df = df_data[fields]
-            # 增加列, 交易日期 code 设置索引
-            return df.assign(trade_date=trade_date, code=df["股票代码"].apply(lambda x: x[0:6])).set_index("trade_date",drop=False)
         else:
             print("连接访问接口失败")
     except Exception as e:
@@ -92,7 +88,7 @@ if __name__ == "__main__":
         t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
         df = crawl_data_from_wencai(q)
         # df.to_csv('test.csv',encoding='GBK')
-        print(df.columns)
+        # print(df.columns)
         df['code']=df['股票代码'].str[:6]
         df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
         df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
@@ -130,12 +126,17 @@ if __name__ == "__main__":
     print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿',w['概念'])
 
     # sell filter
+    wait4close=False
+    limits = []
     if len(position)>=MAXHOLDING:
+        limits=getLimit(idx.index[-1])['代码'].tolist()
         kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(stockHeld)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
             [[x['quote']['symbol'],x['quote']['symbol'] not in wdf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
+        if sortedHoldings[-1][0] in limits:
+            wait4close=True
         for p in position:
             if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=max(cash,int(p['weight']))
@@ -145,8 +146,10 @@ if __name__ == "__main__":
 
     # trade
     if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and len(sys.argv) < 3:
+        if len(limits)==0:
+            limits=getLimit(idx.index[-1])['代码'].tolist()
         position.append(xueqiuP.newPostition('cn', w['股票代码'], min(25, cash)))
-        if w['股票代码'] in getLimit(idx.index[-1])['代码'].tolist():
+        if w['股票代码'] in limits or wait4close:
             t.sleep(180)
         xueqiuP.trade('cn','idx',position)
     else:

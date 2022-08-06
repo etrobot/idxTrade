@@ -132,9 +132,11 @@ class xueqiuPortfolio():
                 'money_type': u'CNY',
                 'pre_interest': 0.25
             }]
+            print(position)
             self.position[mode]['holding']=position['holdings']
             self.position[mode]['cash']=int(cash)
             self.position[mode]['last']=portfolio_info['last_success_rebalancing']['holdings']
+            self.position[mode]['update']=datetime.fromtimestamp(position['updated_at']/1000).date()
         return self.position
 
     def newPostition(self,mkt,symbol,wgt):
