@@ -1,17 +1,16 @@
 # coding=utf-8
 # from idxTrade import *
 
-import sys,configparser,os
-import json
-import requests
+import sys,configparser,os,json,re
+from datetime import *
+from pathlib import Path
+import requests,demjson
 from lxml import etree
 import pandas as pd
 import akshare as ak
 
-import mplfinance as mpf
-import matplotlib as mpl  # 用于设置曲线参数
-import matplotlib.pyplot as plt
-from cycler import cycler  # 用于定制线条颜色
+import asyncio
+from pyppeteer import launch
 
 from urllib.request import urlopen
 from urllib.request import Request
@@ -24,7 +23,7 @@ from tqdm import tqdm
 from mutagen.mp3 import MP3
 from moviepy.editor import VideoFileClip, AudioFileClip
 
-IMG_FOLDER='Quotation/'
+FOLDER='video/'
 
 IS_PY3 = sys.version_info.major == 3
 conf = configparser.ConfigParser()
@@ -116,7 +115,7 @@ def text2voice(text:str):
         result_str = err.read()
         has_error = True
 
-    save_file = "error.txt" if has_error else 'result.' + FORMAT
+    save_file = FOLDER+"error.txt" if has_error else FOLDER+'result.' + FORMAT
     with open(save_file, 'wb') as of:
         of.write(result_str)
 
@@ -135,105 +134,12 @@ def getSinaNews(symbol:str):
     resp.encoding = 'GB18030'
     html = etree.HTML(resp.text)
     df=pd.DataFrame()
-    df['dateText'] = html.xpath('//ul[@class="xb_list"]//span[@class="xb_list_r"]/text()')
     df['title'] = html.xpath('//ul[@class="xb_list"]//a/text()')
     df['url'] = html.xpath('//ul[@class="xb_list"]//a/@href')
+    df['dateText'] = html.xpath('//ul[@class="xb_list"]//span[@class="xb_list_r"]/text()')
     df=df[~df['title'].str.contains("美股", na=False)]
     df = df[df['url'].str.contains("2022", na=False)]
-    return df
-
-def draw(df:pd.DataFrame, info:str, news:str):
-    # 导入数据
-    # 导入股票数据
-    # 格式化列名，用于之后的绘制
-    df.rename(
-        columns={
-            'open': 'Open',
-            'high': 'High',
-            'low': 'Low',
-            'close': 'Close',
-            'volume': 'Volume'
-        },
-        inplace=True)
-    df = df[-60:]
-    # dt = df.loc[df.index.isin(boardDates)].copy().index.to_list()
-    '''
-    设置marketcolors
-    up:设置K线线柱颜色，up意为收盘价大于等于开盘价
-    down:与up相反，这样设置与国内K线颜色标准相符
-    edge:K线线柱边缘颜色(i代表继承自up和down的颜色)，下同。详见官方文档)
-    wick:灯芯(上下影线)颜色
-    volume:成交量直方图的颜色
-    inherit:是否继承，选填
-    '''
-    marketcolors = {'candle': {'up': '#f64769', 'down': 'mediumaquamarine'},
-                    'edge': {'up': '#f64769', 'down': 'mediumaquamarine'},
-                    'wick': {'up': 'hotpink', 'down': 'aquamarine'},
-                    'ohlc': {'up': '#f64769', 'down': 'mediumaquamarine'},
-                    'volume': {'up': 'firebrick', 'down': 'seagreen'},
-                    'vcdopcod': False,  # Volume Color Depends On Price Change On Day
-                    'alpha': 1.0
-                    }
-    # 设置图形风格
-    # gridaxis:设置网格线位置
-    # gridstyle:设置网格线线型
-    # y_on_right:设置y轴位置是否在右
-    # rcpdict = {'font.family': 'Source Han Sans CN'}
-    mystyle = mpf.make_mpf_style(
-        base_mpf_style='mike',
-        # rc=rcpdict,
-        gridaxis='both',
-        gridstyle='-',
-        gridcolor='#393f52',
-        y_on_right=True,
-        marketcolors=marketcolors,
-        figcolor='#20212A',
-        facecolor='#20212A',
-        edgecolor='#393f52',
-    )
-    '''
-    设置基本参数
-    type:绘制图形的类型，有candle, renko, ohlc, line等
-    此处选择candle,即K线图
-    mav(moving average):均线类型,此处设置7,30,60日线
-    volume:布尔类型，设置是否显示成交量，默认False
-    title:设置标题
-    y_label:设置纵轴主标题
-    y_label_lower:设置成交量图一栏的标题
-    figratio:设置图形纵横比
-    figscale:设置图形尺寸(数值越大图像质量越高)
-    '''
-    kwargs = dict(
-        style=mystyle,
-        type='candle',
-        volume=True,
-        mav=(5, 10, 20),
-        title=info,
-        # title=info + '60天' + str(
-        #     round(df['Close'][-1] / df['Close'][0] * 100 - 100, 2)) + '% 最新' + str(
-        #     round(df['percent'][-1] * 100, 2)) + '% 额' + str(round(df['amount'][-1] / 100000000, 2)) + '亿',
-        ylabel='OHLCV',
-        ylabel_lower='Shares\nTraded Volume',
-        savefig=info,
-        figratio=(8, 5),
-        figscale=1,
-        tight_layout=True,
-        # vlines=dict(vlines=dt, linewidths=8, alpha=0.2, colors='khaki')
-    )
-
-    # 设置均线颜色，配色表可见下图
-    # 建议设置较深的颜色且与红色、绿色形成对比
-    # 此处设置七条均线的颜色，也可应用默认设置
-    mpl.rcParams['axes.prop_cycle'] = cycler(
-        color=['dodgerblue', 'deeppink',
-               'navy', 'teal', 'maroon', 'darkorange',
-               'indigo'])
-
-    # 图形绘制
-    # show_Uontrading:是否显示非交易日，默认False
-    # savefig:导出图片，填写文件名及后缀
-    mpf.plot(df, **kwargs, scale_width_adjustment=dict(volume=0.5, candle=1, lines=0.5),returnfig=True)
-    plt.show()
+    return df[['title','dateText']]
 
 # 合成视频
 def get_video(count:int,imageFile:str,videoFile:str):
@@ -251,19 +157,19 @@ def get_video(count:int,imageFile:str,videoFile:str):
 # 加入音频
 def get_audio(videoFile:str):
     video = VideoFileClip(videoFile)
-    videos = video.set_audio(AudioFileClip('result.mp3'))  # 音频文件
-    videos.write_videofile('sound.mp4', audio_codec='aac')  # 保存合成视频，注意加上参数audio_codec='aac'，否则音频无声音
+    videos = video.set_audio(AudioFileClip(FOLDER+'result.mp3'))  # 音频文件
+    videos.write_videofile(FOLDER+'sound.mp4', audio_codec='aac')  # 保存合成视频，注意加上参数audio_codec='aac'，否则音频无声音
 
 
 # 计算每个音频的时间（秒）
 def get_time_count():
-    audio = MP3("result.mp3")
+    audio = MP3(FOLDER+"result.mp3")
     time_count = int(audio.info.length)
     return time_count
 
 def futuComInfo(symbol:str):
     url='https://www.futunn.com/stock/%s-US/company-profile'%symbol
-    html=etree.HTML(requests.get(url=url, headers={"user-agent": "Mozilla"}).text.replace(', ','，'))
+    html=etree.HTML(requests.get(url=url, headers={"user-agent": "Mozilla"}).text.replace(', ','，').replace('Inc.',''))
     info= html.xpath('//div[@class="value"]/text()')
     if len(info)>0 and '。' in info[-1]:
         comInfo=info[-1].split('。')[0]
@@ -273,26 +179,70 @@ def futuComInfo(symbol:str):
             return info[1] + comInfo
     return ''
 
+def genEchartJson(qdf:pd.DataFrame):
+    qdf['date']=qdf.index.strftime('%m-%d').tolist()
+    transdf = qdf[['date', 'open', 'close', 'low', 'high', 'volume']].copy()
+    transdf.T
+    with open(FOLDER+'videoQuote.json', 'w', encoding='utf-8') as f:
+        json.dump(transdf.values.tolist(), f)
+
+async def browserShot(url,filename):
+    width, height = 1366, 768
+    browser = await launch(headless=True, args=['--disable-infobars', f'--window-size={width}, {height}'])
+    page = await browser.newPage()
+    await page.setViewport({
+        'width': width, 'height': height})
+    await page.goto(url)
+    await page.screenshot({'path': filename, 'fullPage': False})
+    await browser.close()
+
+def latestTradeDate():
+    resp = requests.get('https://xueqiu.com/S/.IXIC', headers={"user-agent": "Mozilla"})
+    quote = demjson.decode(
+        re.search(r'(?<=<script>window.STOCK_PAGE = true;SNB = ).*(?=;</script><script>window.analytics_config = )',
+                  resp.text.replace('\n', '')).group())
+    latestTradeDate = datetime.utcfromtimestamp(quote['data']['quote']['timestamp'] / 1000)
+    return latestTradeDate
+
+def genStockVideo(symbol:str,tradeDate:datetime):
+    tradeDateTxt = tradeDate.strftime('%Y%m%d')
+    newsDf = getSinaNews(symbol)
+    companyInfo = futuComInfo(symbol)
+    print([companyInfo, '最新一条新闻是', newsDf.iloc[0]['title'], '来源是', newsDf.iloc[0]['dateText']])
+    readText = '，'.join([companyInfo, '最新一条新闻是', newsDf.iloc[0]['title'], '来源是', newsDf.iloc[0]['dateText']])
+    newsTable = newsDf[:7].to_html(index=False).replace('<table', '<table class="table"')
+    with open(FOLDER + "quoteTemp.html", "r") as fin:
+        with open(FOLDER + "quote.html", "w") as fout:
+            fout.write(
+                fin.read().replace('{{title}}', symbol + ' ' + tradeDateTxt).replace('{{news}}', newsTable).replace(
+                    '{{companyInfo}}', companyInfo))
+
+    imageFile = FOLDER + 'videoQuote.png'
+    videoFile = FOLDER + 'video.mp4'
+    # futu begin
+    if os.path.isfile("futuSymbols.csv"):
+        futuSymbols = pd.read_csv("futuSymbols.csv")
+    else:
+        futuSymbols = ak.stock_us_code_table_fu()
+        futuSymbols.to_csv("futuSymbols.csv")
+    kline = ak.stock_us_hist_fu(symbol=futuSymbols[futuSymbols['股票简称'] == symbol].代码)
+    kline.rename(columns={"日期": "date", "今开": "open", "今收": "close", "最高": "high", "最低": "low", "成交量": "volume",
+                          "成交额": "amount"}, inplace=True)
+    kline.set_index(pd.to_datetime(kline['date'], format="%Y-%m-%d"), inplace=True)
+    for col in ["open", "close", "high", "low"]:
+        kline[col] = kline[col] / 10
+    # futu end
+    genEchartJson(kline)
+    quoteUrl = 'http://127.0.0.1:5500/quote.html'
+    asyncio.get_event_loop().run_until_complete(browserShot(quoteUrl, imageFile))
+
+    # text2voice(readText)
+    get_video(get_time_count(), imageFile, videoFile)
+    get_audio(videoFile)
 
 if __name__ == '__main__':
     # preparePlot()
     text = "『超越量化』轧(ga2)空策略今日精选:今日排名第一的股票是，AMC，筛选股票池为，全市场空头持仓比例排名前一百的股票，筛选条件为：回踩五日线大涨,日涨幅为过去二十日最大，五日线低于二十日线，按日涨幅和近一周涨幅的差距从大到小排列。"
     symbol='REV'
-    newsDf=getSinaNews(symbol)
-    imageFile=IMG_FOLDER+symbol+'.png'
-    videoFile=symbol+'.mp4'
-    #futu begin
-    if os.path.isfile("futuSymbols.csv"):
-        futuSymbols=pd.read_csv("futuSymbols.csv")
-    else:
-        futuSymbols=ak.stock_us_code_table_fu()
-        futuSymbols.to_csv("futuSymbols.csv")
-    kline = ak.stock_us_hist_fu(symbol=futuSymbols[futuSymbols['股票简称']==symbol].代码)
-    kline.rename(columns = {"日期": "date", "今开":"open", "今收":"close", "最高":"high", "最低":"low", "成交量":"volume", "成交额":"amount"},  inplace=True)
-    kline.set_index(pd.to_datetime(kline['date'],format="%Y-%m-%d"),inplace=True)
-    for col in ["open", "close", "high", "low"]:
-        kline[col]=kline[col]/10
-    #futu end
-    draw(kline,imageFile,'\n'.join(newsDf['title'].to_list()))
-    # get_video(get_time_count(),imageFile,videoFile)
-    # get_audio(videoFile)
+    tradeDate = latestTradeDate()
+    genStockVideo(symbol,tradeDate)
