@@ -3,7 +3,6 @@
 
 import sys,configparser,os,json,re
 from datetime import *
-from pathlib import Path
 import requests,demjson
 from lxml import etree
 import pandas as pd
@@ -23,7 +22,11 @@ from tqdm import tqdm
 from mutagen.mp3 import MP3
 from moviepy.editor import VideoFileClip, AudioFileClip
 
+from XueqiuPortfolio import *
+from iwencai import crawl_data_from_wencai
+
 FOLDER='video/'
+MAXHOLDING=4
 
 IS_PY3 = sys.version_info.major == 3
 conf = configparser.ConfigParser()
@@ -147,7 +150,7 @@ def get_video(count:int,imageFile:str,videoFile:str):
     img_size = (1920, 1080)      # 图片尺寸
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     videoWriter = cv2.VideoWriter(videoFile, fourcc, fps, img_size)
-    for i in tqdm(range(0, count)):
+    for i in tqdm(range(0, count+1)):
         frame = cv2.imread(imageFile)
         frame = cv2.resize(frame, img_size)  # 生成视频   图片尺寸和设定尺寸相同
         videoWriter.write(frame)  # 将图片写进视频里
@@ -155,10 +158,10 @@ def get_video(count:int,imageFile:str,videoFile:str):
 
 
 # 加入音频
-def get_audio(videoFile:str):
+def get_audio(videoFile:str,symbol:str):
     video = VideoFileClip(videoFile)
     videos = video.set_audio(AudioFileClip(FOLDER+'result.mp3'))  # 音频文件
-    videos.write_videofile(FOLDER+'sound.mp4', audio_codec='aac')  # 保存合成视频，注意加上参数audio_codec='aac'，否则音频无声音
+    videos.write_videofile(FOLDER+symbol+'.mp4', audio_codec='aac')  # 保存合成视频，注意加上参数audio_codec='aac'，否则音频无声音
 
 
 # 计算每个音频的时间（秒）
@@ -205,20 +208,17 @@ def latestTradeDate():
     return latestTradeDate
 
 def genStockVideo(symbol:str,tradeDate:datetime):
-    tradeDateTxt = tradeDate.strftime('%Y%m%d')
+    tradeDateTxt = tradeDate.strftime('%Y/%m/%d')
     newsDf = getSinaNews(symbol)
     companyInfo = futuComInfo(symbol)
     print([companyInfo, '最新一条新闻是', newsDf.iloc[0]['title'], '来源是', newsDf.iloc[0]['dateText']])
     readText = '，'.join([companyInfo, '最新一条新闻是', newsDf.iloc[0]['title'], '来源是', newsDf.iloc[0]['dateText']])
     newsTable = newsDf[:7].to_html(index=False).replace('<table', '<table class="table"')
-    with open(FOLDER + "quoteTemp.html", "r") as fin:
+    with open(FOLDER + "quoteTemp.xhtml", "r") as fin:
         with open(FOLDER + "quote.html", "w") as fout:
             fout.write(
                 fin.read().replace('{{title}}', symbol + ' ' + tradeDateTxt).replace('{{news}}', newsTable).replace(
                     '{{companyInfo}}', companyInfo))
-
-    imageFile = FOLDER + 'videoQuote.png'
-    videoFile = FOLDER + 'video.mp4'
     # futu begin
     if os.path.isfile("futuSymbols.csv"):
         futuSymbols = pd.read_csv("futuSymbols.csv")
@@ -233,16 +233,69 @@ def genStockVideo(symbol:str,tradeDate:datetime):
         kline[col] = kline[col] / 10
     # futu end
     genEchartJson(kline)
-    quoteUrl = 'http://127.0.0.1:5500/quote.html'
-    asyncio.get_event_loop().run_until_complete(browserShot(quoteUrl, imageFile))
+    genVideo('http://127.0.0.1:5500/quote.html',readText)
 
-    # text2voice(readText)
+def genVideo(targetUrl:str,readText:str,symbol='symbol'):
+    imageFile = FOLDER + 'videoQuote.png'
+    videoFile = FOLDER + 'video.mp4'
+    asyncio.get_event_loop().run_until_complete(browserShot(targetUrl, imageFile))
+    text2voice(readText)
     get_video(get_time_count(), imageFile, videoFile)
-    get_audio(videoFile)
+    get_audio(videoFile,symbol)
+
+def trade(xueqiuCfg:dict,wdf:pd.DataFrame=None):
+    if wdf is None:
+        return
+    xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
+    xqPp = xueqiuP.getPosition()['idx']
+    cash = xqPp['cash']
+    position = xqPp['holding']
+    kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(x['stock_symbol'] for x in xqPp['holding'])
+    quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
+    if len(position) >= MAXHOLDING:
+        sortedHoldings = sorted(
+            [[x['quote']['symbol'], x['quote']['symbol'] not in wdf['股票代码'].values[:10], float(x['quote']['percent'])]
+             for x
+             in quotes],
+            key=lambda x: (x[1], x[2]))
+        for p in position:
+            if p['stock_symbol'] == sortedHoldings[-1][0]:
+                cash = max(cash, int(p['weight']))
+                p['weight'] = 0
+                p["proactive"] = True
+                break
+    position.append(xueqiuP.newPostition('cn', wdf['股票代码'].values[0], min(100/MAXHOLDING, cash)))
+    xueqiuP.trade('us', 'idx', position)
+    return xqPp['holding']
+
+
+def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
+    prev=trade(xueqiuCfg,crawl_data_from_wencai(''))
+    tradeDateTxt = tradeDate.strftime('%Y/%m/%d')
+    xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
+    xqPp= xueqiuP.getPosition()['idx']
+    last=pd.DataFrame(xqPp['last']['rebalancing_histories'])[['stock_symbol','stock_name','prev_target_weight','target_weight']]
+    lastDf=last.rename(columns={'stock_symbol':'股票代码','stock_name':'企业名称','prev_target_weight':'调仓前','target_weight':'目标仓位'}).to_html(index=False).replace('<table','<table class="table"')
+    holding=pd.DataFrame(prev)[['stock_symbol','stock_name','weight']]
+    holdingDf=holding.rename(columns={'stock_symbol':'股票代码','stock_name':'企业名称','weight':'持仓百分比'}).to_html(index=False).replace('<table','<table class="table"')
+    data=xueqiuP.getCube()
+    with open(FOLDER+'cube.json', 'w') as outfile:
+        json.dump(data, outfile)
+    with open(FOLDER + "portfolioTemp.xhtml", "r") as fin:
+        with open(FOLDER + "portfolio.html", "w") as fout:
+            fout.write(
+                fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(xqPp['monthly_gain'],xqPp['total_gain'])).replace('{{rebalancing}}',lastDf).replace(
+                    '{{position}}', holdingDf))
+    readText='本组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain'])+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['holding'])+'。调(tiao2)仓计划为：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调(tiao2)到百分之'+str(x['target_weight']) for x in xqPp['last']['rebalancing_histories'])
+    print(readText)
+    text2voice(readText)
+    genVideo('http://127.0.0.1:5500/portfolio.html',readText)
 
 if __name__ == '__main__':
-    # preparePlot()
-    text = "『超越量化』轧(ga2)空策略今日精选:今日排名第一的股票是，AMC，筛选股票池为，全市场空头持仓比例排名前一百的股票，筛选条件为：回踩五日线大涨,日涨幅为过去二十日最大，五日线低于二十日线，按日涨幅和近一周涨幅的差距从大到小排列。"
-    symbol='REV'
+    xueqiuConfig={'vika': 'xueqiu2',"xueqiu":{'idx':'ZH2334621'}}
     tradeDate = latestTradeDate()
-    genStockVideo(symbol,tradeDate)
+    genTradeVideo(tradeDate,xueqiuConfig)
+    # text = "『超越量化』轧(ga2)空策略今日精选:今日排名第一的股票是，AMC，筛选股票池为，全市场空头持仓比例排名前一百的股票，筛选条件为：回踩五日线大涨,日涨幅为过去二十日最大，五日线低于二十日线，按日涨幅和近一周涨幅的差距从大到小排列。"
+    # symbols=sys.argv[1:]
+    # for symbol in symbols:
+    #     genStockVideo(symbol.upper(),tradeDate)

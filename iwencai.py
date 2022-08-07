@@ -73,13 +73,14 @@ if __name__ == "__main__":
     idx=eastmoneyK('SZ000001')
     cptSorted = conceptSorted(int(sys.argv[-1]))
     MAXHOLDING=4
-    xueqiuCfg={'vika': 'xueqiu_primary',"xueqiu":{'idx':'ZH2492692'}}
+    xueqiuCfg={'vika': 'xueqiu1',"xueqiu":{'idx':'ZH2492692'}}
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
     xueqiuPp= xueqiuP.getPosition()['idx']
     position = xueqiuPp['holding']
     cash=xueqiuPp['cash']
+    last=xueqiuPp['last']
     stockHeld=[x['stock_symbol'] for x in position]
 
     # buy filter
@@ -135,8 +136,10 @@ if __name__ == "__main__":
         sortedHoldings = sorted(
             [[x['quote']['symbol'],x['quote']['symbol'] not in wdf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
-        if sortedHoldings[-1][0] in limits:
-            wait4close=True
+        if last['error_status'] ==0:
+            for stock in last['rebalancing_histories']:
+                if sortedHoldings[-1][0]==stock['stock_symbol'] and stock['target_weight']>0:
+                    wait4close=True
         for p in position:
             if p['stock_symbol']==sortedHoldings[-1][0]:
                 cash=max(cash,int(p['weight']))
@@ -148,7 +151,7 @@ if __name__ == "__main__":
     if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and len(sys.argv) < 3:
         if len(limits)==0:
             limits=getLimit(idx.index[-1])['代码'].tolist()
-        position.append(xueqiuP.newPostition('cn', w['股票代码'], min(25, cash)))
+        position.append(xueqiuP.newPostition('cn', w['股票代码'], min(100/MAXHOLDING, cash)))
         if w['股票代码'] in limits or wait4close:
             t.sleep(180)
         xueqiuP.trade('cn','idx',position)

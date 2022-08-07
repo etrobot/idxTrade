@@ -62,7 +62,7 @@ class xueqiuPortfolio():
         self.position = dict()
         self.holdnum = 5
         self.session = requests.Session()
-        self.session.cookies.update(self.getXueqiuCookie())
+        self.session.cookies.update(self.getXueqiuCookie(config))
         self.p_url = 'https://xueqiu.com/P/'
         self.headers = {
             "Connection": "close",
@@ -70,7 +70,7 @@ class xueqiuPortfolio():
         }
 
 
-    def getXueqiuCookie(self):
+    def getXueqiuCookie(self,config):
         conf = configparser.ConfigParser()
         conf.read('config.ini')
         # 获取存储在bmob的雪球cookie
@@ -80,7 +80,7 @@ class xueqiuPortfolio():
         }
         vikaUrl = 'https://api.vika.cn/fusion/v1/datasheets/dstMiuU9zzihy1LzFX/records?viewId=viwoAJhnS2NMT&fieldKey=name'
         vikajson = json.loads(requests.get(vikaUrl, headers=headersVika).text)['data']['records']
-        sbCookie=[x['fields']['value'] for x in vikajson if x['recordId']==conf['vika']['xueqiu1']][0]
+        sbCookie=[x['fields']['value'] for x in vikajson if x['recordId']==conf['vika'][config['vika']]][0]
         cookie_dict = {}
         for record in sbCookie.split(";"):
             key, value = record.strip().split("=", 1)
@@ -118,7 +118,7 @@ class xueqiuPortfolio():
             return self.position
         for mode,portfolio_code in self.cfg['xueqiu'].items():
             self.position[mode]=dict()
-            resp = self.session.get(self.p_url + portfolio_code, headers=self.headers).text
+            resp = self.session.get(self.p_url + portfolio_code, headers=self.headers).text.replace('null','0')
             portfolio_info = json.loads(re.search(r'(?<=SNB.cubeInfo = ).*(?=;\n)', resp).group())
             asset_balance = float(portfolio_info['net_value'])
             position = portfolio_info['view_rebalancing']
@@ -132,11 +132,13 @@ class xueqiuPortfolio():
                 'money_type': u'CNY',
                 'pre_interest': 0.25
             }]
-            print(position)
             self.position[mode]['holding']=position['holdings']
             self.position[mode]['cash']=int(cash)
             self.position[mode]['last']=portfolio_info['last_success_rebalancing']['holdings']
             self.position[mode]['update']=datetime.fromtimestamp(position['updated_at']/1000).date()
+            self.position[mode]['last']=portfolio_info['sell_rebalancing']
+            self.position[mode]['monthly_gain']=portfolio_info['monthly_gain']
+            self.position[mode]['total_gain'] = portfolio_info['total_gain']
         return self.position
 
     def newPostition(self,mkt,symbol,wgt):
@@ -162,3 +164,9 @@ class xueqiuPortfolio():
             "proactive": True,
             "price": str(stock['current'])
         }
+
+    def getCube(self):
+        cubeUrl = 'https://xueqiu.com/cubes/nav_daily/all.json?cube_symbol=' + self.cfg['xueqiu']['idx']
+        print(cubeUrl)
+        response = self.session.get(url=cubeUrl,headers=self.headers)
+        return json.loads(response.text)
