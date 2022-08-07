@@ -20,10 +20,11 @@ from urllib.parse import quote_plus
 import cv2
 from tqdm import tqdm
 from mutagen.mp3 import MP3
-from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.editor import VideoFileClip, AudioFileClip,concatenate_videoclips
 
 from XueqiuPortfolio import *
 from iwencai import crawl_data_from_wencai
+from QuotaUtilities import renderHtml
 
 FOLDER='video/'
 MAXHOLDING=4
@@ -243,8 +244,8 @@ def genVideo(targetUrl:str,readText:str,symbol='symbol'):
     get_video(get_time_count(), imageFile, videoFile)
     get_audio(videoFile,symbol)
 
-def trade(xueqiuCfg:dict,wdf:pd.DataFrame=None):
-    if wdf is None:
+def trade(xueqiuCfg:dict,symbols=()):
+    if symbols is None:
         return
     xueqiuP = xueqiuPortfolio('cn', xueqiuCfg)
     xqPp = xueqiuP.getPosition()['idx']
@@ -254,7 +255,7 @@ def trade(xueqiuCfg:dict,wdf:pd.DataFrame=None):
     quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
     if len(position) >= MAXHOLDING:
         sortedHoldings = sorted(
-            [[x['quote']['symbol'], x['quote']['symbol'] not in wdf['股票代码'].values[:10], float(x['quote']['percent'])]
+            [[x['quote']['symbol'], x['quote']['symbol'] not in symbols[:10], float(x['quote']['percent'])]
              for x
              in quotes],
             key=lambda x: (x[1], x[2]))
@@ -264,7 +265,7 @@ def trade(xueqiuCfg:dict,wdf:pd.DataFrame=None):
                 p['weight'] = 0
                 p["proactive"] = True
                 break
-    position.append(xueqiuP.newPostition('cn', wdf['股票代码'].values[0], min(100/MAXHOLDING, cash)))
+    position.append(xueqiuP.newPostition('cn', symbols[0], min(100/MAXHOLDING, cash)))
     xueqiuP.trade('us', 'idx', position)
     return xqPp['holding']
 
@@ -289,13 +290,39 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
     readText='本组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain'])+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['holding'])+'。调(tiao2)仓计划为：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调(tiao2)到百分之'+str(x['target_weight']) for x in xqPp['last']['rebalancing_histories'])
     print(readText)
     text2voice(readText)
-    genVideo('http://127.0.0.1:5500/portfolio.html',readText)
+    genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade')
+
+def wencai(sentence:str):
+    df=crawl_data_from_wencai(sentence)
+    df = df[['股票代码', '股票简称', '美股@成交额', '美股@振幅', '美股@最新价', '美股@最新涨跌幅', 'hqCode']]
+    df['美股@振幅'] = pd.to_numeric(df['美股@振幅'], errors='coerce')
+    df['美股@最新涨跌幅'] = pd.to_numeric(df['美股@最新涨跌幅'], errors='coerce')
+    df['股票代码'] = df.apply(
+        lambda x: '<a href="https://finance.yahoo.com/quote/{hqcode}/news/">{symbol}</a>'.format(hqcode=x['hqCode'],
+                                                                                        symbol=x['股票代码']), axis=1)
+    df['股票简称'] = df.apply(
+        lambda x: '<a href="https://xueqiu.com/S/{hqcode}">{name}</a>'.format(hqcode=x['hqCode'],
+                                                                                                 name=x['股票简称']),
+        axis=1)
+    df['NewsLen'] = df.apply(
+        lambda x: '<a href="https://feeds.finance.yahoo.com/rss/2.0/headline?s={hqcode}">{newsLen}</a>'.format(hqcode=x['hqCode'],
+                                                                              newsLen=x['NewsLen']),
+        axis=1)
+    renderHtml(df,'../CMS/source/Quant/wc_us_%s.html' % tradeDate.day,tradeDate.strftime("%Y-%m-%d"))
+    return df['股票代码'].to_list()
 
 if __name__ == '__main__':
-    xueqiuConfig={'vika': 'xueqiu2',"xueqiu":{'idx':'ZH2334621'}}
-    tradeDate = latestTradeDate()
-    genTradeVideo(tradeDate,xueqiuConfig)
     # text = "『超越量化』轧(ga2)空策略今日精选:今日排名第一的股票是，AMC，筛选股票池为，全市场空头持仓比例排名前一百的股票，筛选条件为：回踩五日线大涨,日涨幅为过去二十日最大，五日线低于二十日线，按日涨幅和近一周涨幅的差距从大到小排列。"
-    # symbols=sys.argv[1:]
-    # for symbol in symbols:
-    #     genStockVideo(symbol.upper(),tradeDate)
+    tradeDate = latestTradeDate()
+    symbols=wencai('美股市场，名字不含ETF，交易市场不是NYSE Arca，成交额>1000万，向上跳空缺口，涨幅>2%,振幅>2%，最新涨跌幅/月涨跌幅正序')['股票代码']
+    for symbol in symbols:
+        genStockVideo(symbol.upper(),tradeDate)
+    xueqiuConfig={'vika': 'xueqiu2',"xueqiu":{'idx':'ZH2334621'}}
+    genTradeVideo(tradeDate,xueqiuConfig)
+    videolist=[VideoFileClip(FOLDER+x+'.mp4') for x in symbols]
+    videolist.append(VideoFileClip(FOLDER+'Trade.mp4'))
+    # Merge video
+    final_clip = concatenate_videoclips(videolist)
+    # Save Merged video file
+    final_clip.write_videofile("Front_inside_final.mp4")
+
