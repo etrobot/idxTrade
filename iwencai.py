@@ -80,7 +80,7 @@ if __name__ == "__main__":
     xueqiuPp= xueqiuP.getPosition()['idx']
     position = xueqiuPp['holding']
     cash=xueqiuPp['cash']
-    last=xueqiuPp['last']
+    latest=xueqiuPp['latest']
     stockHeld=[x['stock_symbol'] for x in position]
 
     # buy filter
@@ -136,8 +136,8 @@ if __name__ == "__main__":
         sortedHoldings = sorted(
             [[x['quote']['symbol'],x['quote']['symbol'] not in wdf['股票代码'].values[:10],float(x['quote']['percent'])] for x in quotes],
             key=lambda x: (x[1],x[2]))
-        if last['error_status'] ==0:
-            for stock in last['rebalancing_histories']:
+        if latest['error_status'] ==0:
+            for stock in latest['rebalancing_histories']:
                 if sortedHoldings[-1][0]==stock['stock_symbol'] and stock['target_weight']>0:
                     wait4close=True
         for p in position:

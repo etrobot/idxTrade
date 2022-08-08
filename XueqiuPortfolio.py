@@ -16,6 +16,7 @@ def xqStockInfo(mkt, code:str, s, h):  # 雪球股票信息
         'market': mkt,
     }
     r = s.get("https://xueqiu.com/stock/p/search.json", headers=h, params=data)
+    print(code,r.text)
     stocks = json.loads(r.text)
     stocks = stocks['stocks']
     stock = None
@@ -121,6 +122,7 @@ class xueqiuPortfolio():
             resp = self.session.get(self.p_url + portfolio_code, headers=self.headers).text.replace('null','0')
             portfolio_info = json.loads(re.search(r'(?<=SNB.cubeInfo = ).*(?=;\n)', resp).group())
             asset_balance = float(portfolio_info['net_value'])
+            print(portfolio_info)
             position = portfolio_info['view_rebalancing']
             cash = asset_balance * float(position['cash'])  # 可用资金
             market = asset_balance - cash
@@ -136,7 +138,8 @@ class xueqiuPortfolio():
             self.position[mode]['cash']=int(cash)
             self.position[mode]['last']=portfolio_info['last_success_rebalancing']['holdings']
             self.position[mode]['update']=datetime.fromtimestamp(position['updated_at']/1000).date()
-            self.position[mode]['last']=portfolio_info['sell_rebalancing']
+            self.position[mode]['latest']=portfolio_info['sell_rebalancing']
+            self.position[mode]['last']=portfolio_info['last_success_rebalancing']
             self.position[mode]['monthly_gain']=portfolio_info['monthly_gain']
             self.position[mode]['total_gain'] = portfolio_info['total_gain']
         return self.position
