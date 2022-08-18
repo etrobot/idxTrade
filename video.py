@@ -143,7 +143,7 @@ def getSinaNews(symbol:str):
     print(url)
     resp=requests.get(url=url, headers={"user-agent": "Mozilla"})
     resp.encoding = 'GB18030'
-    html = etree.HTML(resp.text.replace(' | ','|'))
+    html = etree.HTML(resp.text.replace(' | ','|').replace('.US',''))
     df=pd.DataFrame()
     df['title'] = html.xpath('//ul[@class="xb_list"]//a/text()')
     df['url'] = html.xpath('//ul[@class="xb_list"]//a/@href')
