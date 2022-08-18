@@ -353,10 +353,10 @@ def wencai(sentence:str,tradeDate:pd.DataFrame):
         genVideo('http://127.0.0.1:5500/strategy.html', readText,'strategy')
     symbols=df['hqCode'].to_list()
     print(symbols)
-    symbols.reverse()
     return symbols
 
 def combineFinal(symbols:list,tradeDate:pd.DataFrame):
+    symbols.reverse()
     for symbol in symbols:
         if os.path.isfile(FOLDER+symbol+'.mp4'):
             continue
@@ -370,7 +370,7 @@ def combineFinal(symbols:list,tradeDate:pd.DataFrame):
 def run(xConfig:dict,symbols=[]):
     tradeDate = latestTradeDate()
     if len(symbols)==0:
-        symbols=wencai(xConfig['strategy'],tradeDate)[-3:]
+        symbols=wencai(xConfig['strategy'],tradeDate)[:3]
         trade(xConfig,symbols)
         genTradeVideo(tradeDate,xConfig)
     combineFinal(symbols,tradeDate)
