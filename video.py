@@ -151,6 +151,7 @@ def getSinaNews(symbol:str):
     df['dateText'] =dateTxt
     df['date']=[datetime.strptime(x.split('|')[1],"%Y年%m月%d日 %H:%S")  for x in dateTxt]
     df=df[~df['title'].str.contains("美股", na=False)]
+    df = df[~df['dateText'].str.contains("全景网动态|环球市场播报", na=False)]
     df = df[df['date']>datetime.now()-timedelta(days=180)]
     # df = df[df['url'].str.contains("2022", na=False)]
     return df[['title','dateText']]
@@ -313,7 +314,7 @@ def wencai(sentence:str,tradeDate:pd.DataFrame):
     df=crawl_data_from_wencai(sentence)
     df=df.loc[~df['hqCode'].isin(blacklist)]
     print(df.columns)
-    df = df[['股票代码', '股票简称','美股@最新价', '美股@成交额', '美股@振幅', '美股@最新涨跌幅', 'hqCode']][:30]
+    df = df[['股票代码', '股票简称','美股@最新价', '美股@成交额', '美股@区间振幅', '美股@最新涨跌幅', 'hqCode']][:50]
     # df['美股@振幅'] = pd.to_numeric(df['美股@振幅'], errors='coerce')
     # df['美股@最新涨跌幅'] = pd.to_numeric(df['美股@最新涨跌幅'], errors='coerce')
     dfNewsLen = []
@@ -326,21 +327,21 @@ def wencai(sentence:str,tradeDate:pd.DataFrame):
             continue
         dfNewsLen.append(len(nws))
     df['NewsLen'] = dfNewsLen
-    df = df.loc[df['NewsLen'] > 0]
-    df = df.sort_values('NewsLen', ascending=False)
-    df['股票代码'] = df.apply(
+    df = df.loc[df['NewsLen'] > 2]
+    dfH5 = df.sort_values('NewsLen', ascending=False)
+    dfH5['股票代码'] = dfH5.apply(
         lambda x: '<a href="https://finance.yahoo.com/quote/{hqcode}/news/">{symbol}</a>'.format(hqcode=x['hqCode'],
                                                                                         symbol=x['股票代码']), axis=1)
-    df['股票简称'] = df.apply(
+    dfH5['股票简称'] = dfH5.apply(
         lambda x: '<a href="https://xueqiu.com/S/{hqcode}">{name}</a>'.format(hqcode=x['hqCode'],
                                                                                                  name=x['股票简称']),
         axis=1)
-    df['NewsLen'] = df.apply(
+    dfH5['NewsLen'] = dfH5.apply(
         lambda x: '<a href="http://biz.finance.sina.com.cn/usstock/usstock_news.php?pageIndex=1&symbol={hqcode}&type=1">{newsLen}</a>'.format(hqcode=x['hqCode'],
                                                                               newsLen=x['NewsLen']),
         axis=1)
-    renderHtml(df,'../CMS/source/Quant/wc_us_%s.html' % tradeDate.day,tradeDate.strftime("%Y-%m-%d"))
-    readText='策略思路讲解请查看往期视频，今日策略条件为：'+sentence+'。策略选出前三个股分别是：'
+    renderHtml(dfH5,'../CMS/source/Quant/wc_us_%s.html' % tradeDate.day,tradeDate.strftime("%Y-%m-%d"))
+    readText='策略思路讲解请查看往期视频，今日策略条件为：'+sentence+'。策略选出三个股票是：'
     if not os.path.isfile('strategy.mp3'):
         text2voice(readText,'strategy')
     if not os.path.isfile('strategy.mp4'):
@@ -352,6 +353,7 @@ def wencai(sentence:str,tradeDate:pd.DataFrame):
         genVideo('http://127.0.0.1:5500/strategy.html', readText,'strategy')
     symbols=df['hqCode'].to_list()
     print(symbols)
+    symbols.reverse()
     return symbols
 
 def combineFinal(symbols:list,tradeDate:pd.DataFrame):
@@ -365,17 +367,15 @@ def combineFinal(symbols:list,tradeDate:pd.DataFrame):
     final_clip = concatenate_videoclips(videolist, method='compose')
     final_clip.write_videofile(FOLDER+tradeDate.strftime('%m%d')+'_'+'_'.join(symbols)+".mp4")
 
-def run():
-    xueqiuConfig={'vika': 'xueqiu2',"xueqiu":{'idx':'ZH2334621'}}
+def run(xConfig:dict,symbols=[]):
     tradeDate = latestTradeDate()
-    symbols=wencai('美股市场，非ETF且交易市场不含NYSE Arca，成交额>1000万&涨幅>5%&振幅>3%&向上跳空高开>3%，最新涨跌幅-近10日涨跌幅正序',tradeDate)[-3:]
-    symbols.reverse()
-    trade(xueqiuConfig,symbols)
-    genTradeVideo(tradeDate,xueqiuConfig)
-    # symbols=['EXPR','HRTX','WTI']
+    if len(symbols)==0:
+        symbols=wencai(xConfig['strategy'],tradeDate)[-3:]
+        trade(xConfig,symbols)
+        genTradeVideo(tradeDate,xConfig)
     combineFinal(symbols,tradeDate)
 
 
 if __name__ == '__main__':
-    # text = "『超越量化』轧(ga2)空策略今日精选:今日排名第一的股票是，AMC，筛选股票池为，全市场空头持仓比例排名前一百的股票，筛选条件为：回踩五日线大涨,日涨幅为过去二十日最大，五日线低于二十日线，按日涨幅和近一周涨幅的差距从大到小排列。"
-    run()
+    with open('Template/config.json') as fr:
+        run(json.loads(fr.read()),sys.argv[1:])
