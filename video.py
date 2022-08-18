@@ -151,7 +151,7 @@ def getSinaNews(symbol:str):
     df['dateText'] =dateTxt
     df['date']=[datetime.strptime(x.split('|')[1],"%Y年%m月%d日 %H:%S")  for x in dateTxt]
     df=df[~df['title'].str.contains("美股", na=False)]
-    df = df[~df['dateText'].str.contains("全景网动态|环球市场播报", na=False)]
+    df = df[~df['dateText'].str.contains("全景网动态|环球市场播报|环球网快看", na=False)]
     df = df[df['date']>datetime.now()-timedelta(days=180)]
     # df = df[df['url'].str.contains("2022", na=False)]
     return df[['title','dateText']]
