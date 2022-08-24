@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="wencai">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="video sinanews remove .US">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iwencai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwencai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Template/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/Template/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/video.py" beforeDir="false" afterPath="$PROJECT_DIR$/video.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +80,14 @@
     <option name="UPDATE_TYPE" value="MERGE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/limit/reason.csv" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/iwencai.py" root0="FORCE_HIGHLIGHTING" />
@@ -115,6 +124,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="145" />
@@ -183,52 +195,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="http.proxy" />
     <property name="vcs.patch.to.clipboard" value="true" />
   </component>
-  <component name="RunManager" selected="Python.iwencai">
-    <configuration name="debts" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="idxTrade" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/debts.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="etf" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="idxTrade" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/etf.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.video">
     <configuration name="idxTrade" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -313,6 +283,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="video" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/video.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="xq_backup_lite" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -334,22 +325,43 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="yahooStockNews" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/yahooStockNews.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.test" />
       <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.idxTrade" />
       <item itemvalue="Python.iwencai" />
-      <item itemvalue="Python.debts" />
-      <item itemvalue="Python.etf" />
       <item itemvalue="Python.limitHistory" />
+      <item itemvalue="Python.video" />
+      <item itemvalue="Python.yahooStockNews" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.video" />
         <item itemvalue="Python.iwencai" />
+        <item itemvalue="Python.yahooStockNews" />
         <item itemvalue="Python.idxTrade" />
         <item itemvalue="Python.limitHistory" />
-        <item itemvalue="Python.debts" />
-        <item itemvalue="Python.etf" />
       </list>
     </recent_temporary>
   </component>
@@ -364,62 +376,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00191" summary="update">
-      <created>1630307683142</created>
-      <option name="number" value="00191" />
-      <option name="presentableId" value="LOCAL-00191" />
-      <option name="project" value="LOCAL" />
-      <updated>1630307683142</updated>
-    </task>
-    <task id="LOCAL-00192" summary="update">
-      <created>1630394860893</created>
-      <option name="number" value="00192" />
-      <option name="presentableId" value="LOCAL-00192" />
-      <option name="project" value="LOCAL" />
-      <updated>1630394860899</updated>
-    </task>
-    <task id="LOCAL-00193" summary="wencai">
-      <created>1630482742562</created>
-      <option name="number" value="00193" />
-      <option name="presentableId" value="LOCAL-00193" />
-      <option name="project" value="LOCAL" />
-      <updated>1630482742567</updated>
-    </task>
-    <task id="LOCAL-00194" summary="update">
-      <created>1630819319932</created>
-      <option name="number" value="00194" />
-      <option name="presentableId" value="LOCAL-00194" />
-      <option name="project" value="LOCAL" />
-      <updated>1630819319933</updated>
-    </task>
-    <task id="LOCAL-00195" summary="update">
-      <created>1631680624904</created>
-      <option name="number" value="00195" />
-      <option name="presentableId" value="LOCAL-00195" />
-      <option name="project" value="LOCAL" />
-      <updated>1631680624905</updated>
-    </task>
-    <task id="LOCAL-00196" summary="update">
-      <created>1631799063267</created>
-      <option name="number" value="00196" />
-      <option name="presentableId" value="LOCAL-00196" />
-      <option name="project" value="LOCAL" />
-      <updated>1631799063274</updated>
-    </task>
-    <task id="LOCAL-00197" summary="update">
-      <created>1631862274423</created>
-      <option name="number" value="00197" />
-      <option name="presentableId" value="LOCAL-00197" />
-      <option name="project" value="LOCAL" />
-      <updated>1631862274429</updated>
-    </task>
-    <task id="LOCAL-00198" summary="update">
-      <created>1632470064181</created>
-      <option name="number" value="00198" />
-      <option name="presentableId" value="LOCAL-00198" />
-      <option name="project" value="LOCAL" />
-      <updated>1632470064197</updated>
     </task>
     <task id="LOCAL-00199" summary="update">
       <created>1632477466394</created>
@@ -708,7 +664,63 @@
       <option name="project" value="LOCAL" />
       <updated>1658814606512</updated>
     </task>
-    <option name="localTasksCounter" value="240" />
+    <task id="LOCAL-00240" summary="wencai">
+      <created>1659068874726</created>
+      <option name="number" value="00240" />
+      <option name="presentableId" value="LOCAL-00240" />
+      <option name="project" value="LOCAL" />
+      <updated>1659068874727</updated>
+    </task>
+    <task id="LOCAL-00241" summary="wencai">
+      <created>1659794482923</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1659794482928</updated>
+    </task>
+    <task id="LOCAL-00242" summary="video concatenate and browser scale">
+      <created>1659963246742</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1659963246742</updated>
+    </task>
+    <task id="LOCAL-00243" summary="video concatenate and browser scale">
+      <created>1660038051290</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1660038051290</updated>
+    </task>
+    <task id="LOCAL-00244" summary="video translate">
+      <created>1660038436246</created>
+      <option name="number" value="00244" />
+      <option name="presentableId" value="LOCAL-00244" />
+      <option name="project" value="LOCAL" />
+      <updated>1660038436246</updated>
+    </task>
+    <task id="LOCAL-00245" summary="video sysarg config.json">
+      <created>1660822314726</created>
+      <option name="number" value="00245" />
+      <option name="presentableId" value="LOCAL-00245" />
+      <option name="project" value="LOCAL" />
+      <updated>1660822314726</updated>
+    </task>
+    <task id="LOCAL-00246" summary="video add sinanews filter word">
+      <created>1660823068266</created>
+      <option name="number" value="00246" />
+      <option name="presentableId" value="LOCAL-00246" />
+      <option name="project" value="LOCAL" />
+      <updated>1660823068266</updated>
+    </task>
+    <task id="LOCAL-00247" summary="video sinanews remove .US">
+      <created>1660823731435</created>
+      <option name="number" value="00247" />
+      <option name="presentableId" value="LOCAL-00247" />
+      <option name="project" value="LOCAL" />
+      <updated>1660823731435</updated>
+    </task>
+    <option name="localTasksCounter" value="248" />
     <servers />
   </component>
   <component name="TodoView">
@@ -787,11 +799,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="bg color" />
-    <MESSAGE value="try catch" />
-    <MESSAGE value="update style" />
-    <MESSAGE value="fix bug" />
-    <MESSAGE value="update Anchor" />
     <MESSAGE value="update longhu" />
     <MESSAGE value="update fund" />
     <MESSAGE value="update tests" />
@@ -812,7 +819,12 @@
     <MESSAGE value="limit History" />
     <MESSAGE value="vika" />
     <MESSAGE value="wencai" />
-    <option name="LAST_COMMIT_MESSAGE" value="wencai" />
+    <MESSAGE value="video concatenate and browser scale" />
+    <MESSAGE value="video translate" />
+    <MESSAGE value="video sysarg config.json" />
+    <MESSAGE value="video add sinanews filter word" />
+    <MESSAGE value="video sinanews remove .US" />
+    <option name="LAST_COMMIT_MESSAGE" value="video sinanews remove .US" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv" />
