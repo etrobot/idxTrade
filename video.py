@@ -230,7 +230,7 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
     genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade')
 
 def wencai(sentence:str,tradeDate:pd.DataFrame):
-    blacklist=['KIM','ACAI','AMBG','CCYC','CHZQ','CNJG','CSJT','ECXJ','EZOO','HAFG','HJGP','WETG']
+    blacklist=[x.split('.')[1] for x in ak.stock_us_pink_spot_em()['代码'].tolist()]
     df=crawl_data_from_wencai(sentence)
     print(df)
     df=df.loc[~df['hqCode'].isin(blacklist)]
