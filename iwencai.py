@@ -84,25 +84,21 @@ if __name__ == "__main__":
     stockHeld=[x['stock_symbol'] for x in position]
 
     # buy filter
-    wencaiDf = pd.DataFrame()
-    for k, q in conf['wencai'].items():
-        t.sleep(10*(int(list(conf['wencai'].keys()).index(k)!=0)))
-        df = crawl_data_from_wencai(q)
-        # df.to_csv('test.csv',encoding='GBK')
-        # print(df.columns)
-        df['code']=df['股票代码'].str[:6]
-        df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
-        df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-        df['factor']= pd.to_numeric(df["5日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
-        # df['factor']= df['融资余额增速']
-        df['date'] = idx.index[-1]
-        df['type'] = k[1:]
-        if os.path.isfile('limit/limits.csv'):
-            limit = pd.read_csv('limit/limits.csv')
-            limit = limit[['symbol', 'reason_type']]
-            limit.columns = ['股票代码', '概念']
-            df = df.merge(limit).dropna(subset=['股票简称'])
-        wencaiDf = wencaiDf.append(df)
+    df = crawl_data_from_wencai(conf['wencai']['cn'])
+    # df.to_csv('test.csv',encoding='GBK')
+    # print(df.columns)
+    df['code']=df['股票代码'].str[:6]
+    df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
+    df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
+    df['factor']= pd.to_numeric(df["5日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
+    # df['factor']= df['融资余额增速']
+    df['date'] = idx.index[-1]
+    if os.path.isfile('limit/limits.csv'):
+        limit = pd.read_csv('limit/limits.csv')
+        limit = limit[['symbol', 'reason_type']]
+        limit.columns = ['股票代码', '概念']
+        df = df.merge(limit).dropna(subset=['股票简称'])
+    wencaiDf = df
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
 
@@ -115,7 +111,7 @@ if __name__ == "__main__":
         # else:
         #     wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
     if len(sys.argv) == 2 and datetime.now().hour>=14:
-        df2file = wdf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date', 'type']].append(pd.read_csv('wencai.csv'))
+        df2file = wdf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date']].append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         df2file['股票简称'] = df2file.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
             stock_code=x['股票代码'], stock_name=x['股票简称']), axis=1)

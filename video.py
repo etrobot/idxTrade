@@ -1,21 +1,16 @@
 # coding=utf-8
-# from idxTrade import *
-import shlex
 import sys,configparser,os,json,re
 from datetime import *
-import requests,demjson
+from time import mktime
+import requests,demjson,uuid
 from lxml import etree
 import pandas as pd
 import akshare as ak
+from yahoo_fin import news as yNews
+
 
 import asyncio
 from pyppeteer import launch
-
-from urllib.request import urlopen
-from urllib.request import Request
-from urllib.error import URLError
-from urllib.parse import urlencode
-from urllib.parse import quote_plus
 
 import cv2
 from tqdm import tqdm
@@ -24,8 +19,7 @@ from moviepy.editor import VideoFileClip, AudioFileClip,concatenate_videoclips
 from XueqiuPortfolio import *
 from iwencai import crawl_data_from_wencai
 from QuotaUtilities import renderHtml
-from translate import *
-import mutagen
+from mutagen.mp3 import MP3
 import azure.cognitiveservices.speech as speechsdk
 
 FOLDER='video/'
@@ -36,8 +30,9 @@ conf = configparser.ConfigParser()
 conf.read('config.ini')
 
 def text2voice(text:str,audioFile='result'):
-    filename=FOLDER + audioFile + '.wav'
+    filename=FOLDER + audioFile + '.mp3'
     speech_config = speechsdk.SpeechConfig(subscription="b761438d396d48c585fa680d5d3575b1", region="eastasia")
+    speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3)
     audio_config = speechsdk.audio.AudioOutputConfig(filename=filename)
 
     # The language of the voice that speaks.
@@ -51,6 +46,40 @@ def text2voice(text:str,audioFile='result'):
         stream = speechsdk.AudioDataStream(result)
         stream.save_to_wav_file(filename)
     return filename
+
+def translate(text):
+    # Add your key and endpoint
+    key = "34bd1b865d9b43b58733dbe713892a98"
+    endpoint = "https://api.cognitive.microsofttranslator.com"
+
+    # Add your location, also known as region. The default is global.
+    # This is required if using a Cognitive Services resource.
+    location = "eastasia"
+
+    path = '/translate'
+    constructed_url = endpoint + path
+
+    params = {
+        'api-version': '3.0',
+        'from': 'en',
+        'to': ['zh-Hans']
+    }
+
+    headers = {
+        'Ocp-Apim-Subscription-Key': key,
+        'Ocp-Apim-Subscription-Region': location,
+        'Content-type': 'application/json',
+        'X-ClientTraceId': str(uuid.uuid4())
+    }
+
+    # You can pass more than one object in body.
+    body = [{
+        'text': text
+    }]
+
+    request = requests.post(constructed_url, params=params, headers=headers, json=body)
+    response = request.json()
+    return response[0]['translations'][0]['text']
 
 def is_contain_chinese(check_str):
     for ch in check_str:
@@ -70,10 +99,17 @@ def getSinaNews(symbol:str):
     dateTxt= html.xpath('//ul[@class="xb_list"]//span[@class="xb_list_r"]/text()')
     df['dateText'] =dateTxt
     df['date']=[datetime.strptime(x.split('|')[1],"%Y年%m月%d日 %H:%S")  for x in dateTxt]
+    df = df[df['date'] > datetime.now() - timedelta(days=180)]
     df=df[~df['title'].str.contains("美股|Nan", na=False)]
     df = df[~df['dateText'].str.contains("全景网动态|环球市场播报|环球网快看", na=False)]
-    df = df[df['date']>datetime.now()-timedelta(days=180)]
     # df = df[df['url'].str.contains("2022", na=False)]
+    return df[['title','dateText']]
+
+def getYahooNews(symbol:str):
+    nws=yNews.get_yf_rss(symbol)
+    print(symbol,len(nws),nws[0]['published'],nws[0]['title'])
+    df=pd.DataFrame([{'title':x['title'],'dateText':'雅虎财经|%s'%datetime.utcfromtimestamp(mktime(x['published_parsed'])).strftime("%Y年%m月%d日"),'date':datetime.utcfromtimestamp(mktime(x['published_parsed']))} for x in yNews.get_yf_rss(symbol)])
+    df = df[df['date']>datetime.now()-timedelta(days=180)]
     return df[['title','dateText']]
 
 # 合成视频
@@ -93,13 +129,13 @@ def get_video(count:int,symbol:str,videoFile=FOLDER + 'video.mp4'):
 # 加入音频
 def get_audio(symbol:str,videoFile=FOLDER+'video.mp4'):
     video = VideoFileClip(videoFile)
-    videos = video.set_audio(AudioFileClip(FOLDER+symbol+'.wav'))  # 音频文件
+    videos = video.set_audio(AudioFileClip(FOLDER+symbol+'.mp3'))  # 音频文件
     videos.write_videofile(FOLDER+symbol+'.mp4')  # 保存合成视频
 
 
 # 计算每个音频的时间（秒）
 def get_time_count(audioFile='result'):
-    audio = mutagen.File(FOLDER+audioFile+".wav")
+    audio = MP3(FOLDER+audioFile+".mp3")
     time_count = int(audio.info.length)
     return time_count
 
@@ -160,14 +196,12 @@ def latestTradeDate():
 
 def genStockVideo(symbol:str,tradeDate:datetime):
     tradeDateTxt = tradeDate.strftime('%Y/%m/%d')
-    newsDf = getSinaNews(symbol)
+    newsDf = getYahooNews(symbol)
     companyInfo = futuComInfo(symbol)
     latestNews=newsDf.iloc[0]['title']
     if not is_contain_chinese(latestNews):
-        translateInstance=BaiduTranslateSpider()
-        latestNews=translateInstance.attack_bd(latestNews)
-    readText = '，'.join([companyInfo, '最新一条新闻',latestNews , '来源', newsDf.iloc[0]['dateText']])+'。'
-    print(readText)
+        latestNews=translate(latestNews)
+    readText = '，'.join([companyInfo, '最新一条新闻:'+latestNews , '来源:'+ newsDf.iloc[0]['dateText']])+'。'
     newsTable = newsDf[:6].to_html(index=False).replace('<table', '<table class="table"')
     with open("Template/quoteTemp.xhtml", "r") as fin:
         with open(FOLDER + "quote.html", "w") as fout:
@@ -223,30 +257,33 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
     with open("Template/portfolioTemp.xhtml", "r") as fin:
         with open(FOLDER + "portfolio.html", "w") as fout:
             fout.write(
-                fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(xqPp['monthly_gain'],xqPp['total_gain'])).replace('{{rebalancing}}',latestDf).replace(
+                fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(str(xqPp['monthly_gain']).replace('-','负'),str(xqPp['total_gain']).replace('-','负'))).replace('{{rebalancing}}',latestDf).replace(
                     '{{position}}', holdingDf))
-    readText='策略组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain'])+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['last']['holdings'])+'。调仓计划为卖出日涨幅最高个股并买入策略排名第一个股：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调到百分之'+str(x['target_weight']) for x in xqPp['latest']['rebalancing_histories'])+'，预计开盘时成交。'
-    print(readText)
+    readText='策略组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain'])+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['last']['holdings'])+'。仓位调整计划为卖出日涨幅最高个股并买入策略排名第一个股：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调到百分之'+str(x['target_weight']) for x in xqPp['latest']['rebalancing_histories'])+'，预计开盘时成交。'
     genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade')
 
-def wencai(sentence:str,tradeDate:pd.DataFrame):
+def wencai(sentence:str,tradeDate:pd.DataFrame,yahoo=True):
     blacklist=[x.split('.')[1] for x in ak.stock_us_pink_spot_em()['代码'].tolist()]
     df=crawl_data_from_wencai(sentence)
-    print(df)
     df=df.loc[~df['hqCode'].isin(blacklist)]
     print(df.columns)
     df = df[['股票代码', '股票简称','美股@最新价', '美股@成交额', '美股@最新涨跌幅', 'hqCode']][:50]
     # df['美股@振幅'] = pd.to_numeric(df['美股@振幅'], errors='coerce')
     # df['美股@最新涨跌幅'] = pd.to_numeric(df['美股@最新涨跌幅'], errors='coerce')
     dfNewsLen = []
-    noNews = getSinaNews('ZZZZZZZ')
-    for symbol in df['hqCode']:
-        t.sleep(1)
-        nws=getSinaNews(symbol)
-        if nws['title'].values.all()==noNews['title'].values.all():
-            dfNewsLen.append(0)
-            continue
-        dfNewsLen.append(len(nws))
+    if yahoo:
+        for symbol in df['hqCode']:
+            nws = getYahooNews(symbol)
+            dfNewsLen.append(len(nws))
+    else:
+        noNews = getSinaNews('ZZZZZZZ')
+        for symbol in df['hqCode']:
+            t.sleep(1)
+            nws=getSinaNews(symbol)
+            if nws['title'].values.all()==noNews['title'].values.all():
+                dfNewsLen.append(0)
+                continue
+            dfNewsLen.append(len(nws))
     df['NewsLen'] = dfNewsLen
     df = df.loc[df['NewsLen'] > 2]
     dfH5 = df.sort_values('NewsLen', ascending=False)
@@ -263,7 +300,7 @@ def wencai(sentence:str,tradeDate:pd.DataFrame):
         axis=1)
     renderHtml(dfH5,'../CMS/source/Quant/wc_us_%s.html' % tradeDate.day,tradeDate.strftime("%Y-%m-%d"))
     readText='策略思路讲解请查看往期视频，今日策略条件为：'+sentence+'。策略选出三个股票是：'
-    if not os.path.isfile('strategy.wav'):
+    if not os.path.isfile('strategy.mp3'):
         text2voice(readText,'strategy')
     if not os.path.isfile('strategy.mp4'):
         with open("Template/strategyTemp.xhtml", "r") as fin:
@@ -291,7 +328,7 @@ def run(xConfig:dict,symbols=[]):
     tradeDate = latestTradeDate()
     if len(symbols)==0:
         symbols=wencai(xConfig['strategy'],tradeDate)[:3]
-        trade(xConfig,symbols)
+        # trade(xConfig,symbols)
         genTradeVideo(tradeDate,xConfig)
     symbols.reverse()
     combineFinal(symbols,tradeDate)

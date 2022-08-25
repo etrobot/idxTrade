@@ -4,7 +4,10 @@
     <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="video sinanews remove .US">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Template/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/Template/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Template/strategyTemp.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/Template/strategyTemp.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iwencai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwencai.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/video.py" beforeDir="false" afterPath="$PROJECT_DIR$/video.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yahooStockNews.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
