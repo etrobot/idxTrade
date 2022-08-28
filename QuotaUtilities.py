@@ -219,7 +219,7 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
         df=df.append(dfDaily,sort=False)
     # if startDate is not None:
     #     df=df[df.index>=getTimestamp(startDate)]
-    df.drop_duplicates(subset='timestamp', keep='first', inplace=False)
+    df.drop_duplicates(subset='timestamp', keep='first', inplace=True)
     df.set_index(['timestamp'], inplace=True)
     df.index = pd.to_datetime(df.index,unit='ms',utc=True).tz_convert('Asia/Shanghai')
     df.index.name='date'
