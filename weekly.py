@@ -6,6 +6,7 @@ QUOTEPATH='Quotation/'
 ASSETPATH='video/'
 
 def invesco(etfCode):
+    print('get '+etfCode+' holdings')
     proxy = {
         'http': 'http://127.0.0.1:8081',  # 访问http需要
         'https': 'https://127.0.0.1:8081',  # 访问https需要
@@ -20,6 +21,8 @@ def invesco(etfCode):
     return df
 
 def ssga(etfCode):
+    print('get '+etfCode+' holdings')
+
     urls={
         'SPY':'https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx',
         'DIA':'https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-dia.xlsx'
@@ -43,10 +46,13 @@ if __name__=='__main__':
     df.drop_duplicates(subset='Ticker', keep='last', inplace=True)
     df.set_index('Ticker',inplace=True)
     df=df.join(all)
+    futuSymbols = pd.read_csv("futuSymbols.csv",index_col='股票简称')[['股票名称']]
+    df=df.join(futuSymbols)
     sector=list(df.groupby('Sector').groups.keys())
     sectorCN=translate(','.join(sector)).split('，')
     sector2CN={sector[x]:sectorCN[x] for x in range(len(sector))}
     df['Sector']=[sector2CN[x] for x in df['Sector']]
+    print(df)
 
     for symbol,item in df.iterrows():
         if symbol=='CASH_USD':
@@ -56,13 +62,23 @@ if __name__=='__main__':
         retry=False
         retry=True
         if os.path.isfile(quofile) and retry:
-            df=pd.read_csv(quofile,index_col='date')
+            qdf=pd.read_csv(quofile,index_col='date')
         else:
-            df=futuKLine(symbol).drop(['date'],axis=1)
-            df.to_csv(quofile,index_label='date')
-        with open(ASSETPATH+symbol+'.json', 'w',encoding='utf-8') as outfile:
+            qdf=futuKLine(symbol).drop(['date'],axis=1)
+            qdf.to_csv(quofile,index_label='date')
+        for days in [60,20,5]:
+            df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days]-100.0,1)
+
+    df.sort_values(by=['20days'],ascending=False,inplace=True)
+    print(df.columns,df)
+
+    idxNum=0
+    for symbol,item in df[:10].iterrows():
+        idxNum+=1
+        with open(ASSETPATH+'%s.json'%idxNum, 'w',encoding='utf-8') as outfile:
             json.dump({
-                'martketValue':item['总市值'],
-                'sector':item['Sector'],
-                'close':df['close'][-60:].tolist()
+                'line1':'[%s]%s'%(symbol,item['股票名称']),
+                'line2':'市值'+str(round(item['总市值']/100000000.0,1)).replace('.0','')+'亿 '+item['Sector'],
+                'line3':' '.join(x+'日+'+str(item[x+'days'])+'%' for x in ['60','20','5']).replace('.0','').replace('+-','-'),
+                'close':pd.read_csv(QUOTEPATH+symbol+'.csv',index_col='date')['close'][-60:].tolist()
             }, outfile,ensure_ascii=False)
