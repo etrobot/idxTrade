@@ -75,6 +75,8 @@ if __name__=='__main__':
     idxNum=0
     for symbol,item in df[:10].iterrows():
         idxNum+=1
+        if not os.path.isfile('Quotation/'+symbol+'.mp3'):
+            futuComInfo(symbol,read=True)
         with open(ASSETPATH+'%s.json'%idxNum, 'w',encoding='utf-8') as outfile:
             json.dump({
                 'line1':'[%s]%s'%(symbol,item['股票名称']),

@@ -30,7 +30,7 @@ conf = configparser.ConfigParser()
 conf.read('config.ini')
 
 def text2voice(text:str,audioFile='result'):
-    filename=FOLDER + audioFile + '.mp3'
+    filename=audioFile + '.mp3'
     speech_config = speechsdk.SpeechConfig(subscription="b761438d396d48c585fa680d5d3575b1", region="eastasia")
     speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3)
     audio_config = speechsdk.audio.AudioOutputConfig(filename=filename)
@@ -139,26 +139,29 @@ def get_time_count(audioFile='result'):
     time_count = int(audio.info.length)
     return time_count
 
-def futuComInfo(symbol:str):
-    url='https://www.futunn.com/stock/%s-US/company-profile'%symbol
+def futuComInfo(symbol:str,read=False):
+    url='https://www.futunn.com/stock/%s-US/company-profile'%symbol.upper()
     html=etree.HTML(requests.get(url=url, headers={"user-agent": "Mozilla"}).text.replace(', ','，').replace('Inc.',''))
     info= html.xpath('//div[@class="value"]/text()')
+    intro=''
     if len(info)>0 and '。' in info[-1]:
         comInfo=info[-1].split('。')[0]
         if info[1]==comInfo[:len(info[1])]:
-            return comInfo
+            intro = comInfo
         else:
-            return info[1] + comInfo
-    return ''
+            intro = info[1] + comInfo
+    if len(intro)>0 and read:
+        text2voice(intro,'Quotation/'+symbol)
+    return intro
 
 def futuKLine(symbol:str):
+    symbol=symbol.upper()
     if os.path.isfile("futuSymbols.csv"):
         futuSymbols = pd.read_csv("futuSymbols.csv")
     else:
         futuSymbols = ak.stock_us_code_table_fu()
         futuSymbols.to_csv("futuSymbols.csv",index=False)
     futuSymbol=futuSymbols[futuSymbols['股票简称'] == symbol].代码
-    print(futuSymbol)
     kline = ak.stock_us_hist_fu(symbol=futuSymbol)
     kline.rename(columns={"日期": "date", "今开": "open", "今收": "close", "最高": "high", "最低": "low", "成交量": "volume",
                           "成交额": "amount"}, inplace=True)
@@ -216,7 +219,7 @@ def genStockVideo(symbol:str,tradeDate:datetime):
 
 def genVideo(targetUrl:str,readText:str,symbol='symbol'):
     asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol))
-    text2voice(readText,symbol)
+    text2voice(readText,FOLDER + symbol)
     get_video(get_time_count(symbol),symbol)
     get_audio(symbol)
 
@@ -301,7 +304,7 @@ def wencai(sentence:str,tradeDate:pd.DataFrame,yahoo=True):
     renderHtml(dfH5,'../CMS/source/Quant/wc_us_%s.html' % tradeDate.day,tradeDate.strftime("%Y-%m-%d"))
     readText='策略思路讲解请查看往期视频，今日策略条件为：'+sentence+'。策略选出三个股票是：'
     if not os.path.isfile('strategy.mp3'):
-        text2voice(readText,'strategy')
+        text2voice(readText,FOLDER + 'strategy')
     if not os.path.isfile('strategy.mp4'):
         with open("Template/strategyTemp.xhtml", "r") as fin:
             with open(FOLDER + "strategy.html", "w") as fout:

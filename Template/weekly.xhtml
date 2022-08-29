@@ -4,104 +4,113 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width,
-                                initial-scale=1">
+                                        initial-scale=1">
         <title>cube</title>
-        <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
-        <style>
-                @media (prefers-color-scheme: dark) {}
-
-                .bgc {
-                        background-color: #25262a;
-                }
-        </style>
+        <link href="bulmaswatch.min.css" rel="stylesheet">
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
         <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+        <style>
+                td {
+                        vertical-align: inherit !important;
+                }
+        </style>
 </head>
 
-<body class="bgc has-text-white-ter" data-new-gr-c-s-check-loaded="14.1073.0" data-gr-ext-installed="">
-        <div class="columns is-gapless is-centered">
-                <div class="column is-three-fifth">
-                        <article class="section">
-                                <h1>2022/08/05 组合月收益5.6% 累计收益11.95%</h1>
-                                <br>
-                                <div id="AAPL" style="height: 20rem;">
-                                </div>
-                                <p></p>
-                        </article>
+<body >
+        <section class="section content">
+
+        <div class="columns is-centered">
+                <div class="column is-half">
+                        <table class="table is-fullwidth has-background-grey-darker ">
+                                <tbody>
+
+                                <tr>
+                                        <td><h3>6</h3></td>
+                                        <td>
+                                                <div id="6" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td><div  class="disc"></div></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>7</h3></td>
+                                        <td>
+                                                <div id="7" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>8</h3></td>
+                                        <td>
+                                                <div id="8" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>9</h3></td>
+                                        <td>
+                                                <div id="9" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>10</h3></td>
+                                        <td>
+                                                <div id="10" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                        </tbody>
+
+                        </table>
                 </div>
-                <div class="column">
-                        <br>
-                        <article class="section">
-                                <table class="table" border="1" class="dataframe">
-                                        <thead>
-                                                <tr style="text-align: right;">
-                                                        <th>股票代码</th>
-                                                        <th>企业名称</th>
-                                                        <th>持仓百分比</th>
-                                                </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>MPC</td>
-                                                        <td>马拉松原油</td>
-                                                        <td>22.39</td>
-                                                </tr>
-                                                <tr>
-                                                        <td>HMHC</td>
-                                                        <td>霍顿米夫林夏</td>
-                                                        <td>21.05</td>
-                                                </tr>
-                                                <tr>
-                                                        <td>MNDT</td>
-                                                        <td>Mandiant</td>
-                                                        <td>21.60</td>
-                                                </tr>
-                                                <tr>
-                                                        <td>CDK</td>
-                                                        <td>CDK Global</td>
-                                                        <td>17.63</td>
-                                                </tr>
-                                                <tr>
-                                                        <td>MOS</td>
-                                                        <td>美国美盛公司</td>
-                                                        <td>15.45</td>
-                                                </tr>
-                                        </tbody>
-                                </table>
-                                <table class="table" border="1" class="dataframe">
-                                        <thead>
-                                                <tr style="text-align: right;">
-                                                        <th>股票代码</th>
-                                                        <th>企业名称</th>
-                                                        <th>调仓前</th>
-                                                        <th>目标仓位</th>
-                                                </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>KBR</td>
-                                                        <td>KBR工程</td>
-                                                        <td>17.9</td>
-                                                        <td>0.00</td>
-                                                </tr>
-                                                <tr>
-                                                        <td>CDK</td>
-                                                        <td>CDK Global</td>
-                                                        <td>0.0</td>
-                                                        <td>16.67</td>
-                                                </tr>
-                                        </tbody>
-                                </table>
-                        </article>
+                <div class="column is-half">
+                        <table class="table is-fullwidth has-background-grey-darker ">
+                                <tbody>
+                                        <td><h3>1</h3></td>
+                                        <td>
+                                                <div id="1" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>2</h3></td>
+                                        <td>
+                                                <div id="2" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>3</h3></td>
+                                        <td>
+                                                <div id="3" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>4</h3></td>
+                                        <td>
+                                                <div id="4" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                                <tr>
+                                        <td><h3>5</h3></td>
+                                        <td>
+                                                <div id="5" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc"></td>
+                                </tr>
+                        </tbody>
+                        </table>
                 </div>
         </div>
 
+        </section>
 
 </body>
 <script>
-        var names = ['AAPL'];
 
-        for (var i = 0; i < names.length; i++) { getJSON(names[i]) }
+        for (var i = 0; i < 10; i++) { getJSON(i + 1) }
 
         function splitData(rawData) {
                 var value = [];
@@ -121,21 +130,18 @@
         function getJSON(id) {
                 $.getJSON(id + ".json",
                         function (result) {
-                                console.log(result)
                                 var cubeData = splitData(result.close);
                                 console.log(cubeData.value)
                                 option = {
+                                        animation: false,
+                                        backgroundColor:"",
                                         xAxis: {
-                                                data:cubeData.date
+                                                show: false,
+                                                data: cubeData.date
                                         },
                                         yAxis: {
-                                                type: 'value',
-                                                axisLabel: {
-                                                        formatter: '{value} W'
-                                                },
-                                                axisPointer: {
-                                                        snap: true
-                                                }
+                                                show: false,
+                                                scale: true
                                         },
                                         visualMap: {
                                                 show: false,
@@ -143,24 +149,27 @@
                                                 pieces: [
                                                         {
                                                                 lte: 40,
-                                                                color: 'red'
+                                                                color: cubeData.date[cubeData.date.length - 1] / cubeData.date[0] - 1 > 0 ? '#880000' : '#008e5f'
                                                         },
                                                         {
                                                                 gt: 40,
-                                                                lte:60,
-                                                                color: 'green'
+                                                                lte: 60,
+                                                                color: cubeData.date[cubeData.date.length - 1] / cubeData.date[0] - 1 > 0 ? 'red' : 'green'
                                                         }
                                                 ]
                                         },
                                         series: [
                                                 {
-                                                        name: 'Electricity',
                                                         type: 'line',
-                                                        data:cubeData.value,
+                                                        data: cubeData.value,
+                                                        symbol: 'none'
                                                 }
+
                                         ]
                                 };
-                                echarts.init(document.getElementById(id), "dark").setOption(option)
+                                let ecdom=document.getElementById(id)
+                                echarts.init(ecdom, "dark").setOption(option);
+                                ecdom.parentNode.parentNode.getElementsByClassName("disc")[0].innerHTML='<div class="has-text-white">'+result.line1+"</div>"+"<div>"+result.line2+"</div>"+"<div>"+result.line3+"</div>"
                         })
         }
 </script>
