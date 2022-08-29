@@ -257,9 +257,9 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
     with open("Template/portfolioTemp.xhtml", "r") as fin:
         with open(FOLDER + "portfolio.html", "w") as fout:
             fout.write(
-                fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(str(xqPp['monthly_gain']).replace('-','负'),str(xqPp['total_gain']).replace('-','负'))).replace('{{rebalancing}}',latestDf).replace(
+                fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(xqPp['monthly_gain'],xqPp['total_gain'])).replace('{{rebalancing}}',latestDf).replace(
                     '{{position}}', holdingDf))
-    readText='策略组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain'])+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['last']['holdings'])+'。仓位调整计划为卖出日涨幅最高个股并买入策略排名第一个股：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调到百分之'+str(x['target_weight']) for x in xqPp['latest']['rebalancing_histories'])+'，预计开盘时成交。'
+    readText='策略组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain']).replace('-','负')+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['last']['holdings'])+'。仓位调整计划为卖出日涨幅最高个股并买入策略排名第一个股：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调到百分之'+str(x['target_weight']) for x in xqPp['latest']['rebalancing_histories'])+'，预计开盘时成交。'
     genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade')
 
 def wencai(sentence:str,tradeDate:pd.DataFrame,yahoo=True):
@@ -328,7 +328,7 @@ def run(xConfig:dict,symbols=[]):
     tradeDate = latestTradeDate()
     if len(symbols)==0:
         symbols=wencai(xConfig['strategy'],tradeDate)[:3]
-        # trade(xConfig,symbols)
+        trade(xConfig,symbols)
         genTradeVideo(tradeDate,xConfig)
     symbols.reverse()
     combineFinal(symbols,tradeDate)
