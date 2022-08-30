@@ -52,7 +52,6 @@ if __name__=='__main__':
     sectorCN=translate(','.join(sector)).split('，')
     sector2CN={sector[x]:sectorCN[x] for x in range(len(sector))}
     df['Sector']=[sector2CN[x] for x in df['Sector']]
-    print(df)
 
     for symbol,item in df.iterrows():
         if symbol=='CASH_USD':
@@ -67,20 +66,21 @@ if __name__=='__main__':
             qdf=futuKLine(symbol).drop(['date'],axis=1)
             qdf.to_csv(quofile,index_label='date')
         for days in [60,20,5]:
-            df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days]-100.0,1)
+            df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days-1]-100.0,1)
+        df.at[symbol,'5daysmoney']=qdf['amount'][-5:].sum()
 
-    df.sort_values(by=['20days'],ascending=False,inplace=True)
-    print(df.columns,df)
-
-    idxNum=0
-    for symbol,item in df[:10].iterrows():
-        idxNum+=1
-        if not os.path.isfile('Quotation/'+symbol+'.mp3'):
-            futuComInfo(symbol,read=True)
-        with open(ASSETPATH+'%s.json'%idxNum, 'w',encoding='utf-8') as outfile:
-            json.dump({
-                'line1':'[%s]%s'%(symbol,item['股票名称']),
-                'line2':'市值'+str(round(item['总市值']/100000000.0,1)).replace('.0','')+'亿 '+item['Sector'],
-                'line3':' '.join(x+'日+'+str(item[x+'days'])+'%' for x in ['60','20','5']).replace('.0','').replace('+-','-'),
+    for condition in ['5days','20days','总市值','5daysmoney']:
+        df.sort_values(by=[condition],ascending=False,inplace=True)
+        sortedArr=[]
+        for symbol,item in df[:10].iterrows():
+            if not os.path.isfile('Quotation/'+symbol+'.mp3'):
+                futuComInfo(symbol,read=True)
+            stock={
+                'line1':'<b>%s </b>%s'%(symbol,item['股票名称']),
+                'line2':'市值'+str(round(item['总市值']/100000000.0,1)).replace('.0','')+'亿 / '+'周成交'+str(round(item['5daysmoney']/100000000.0,1)).replace('.0','')+'亿 / '+item['Sector'],
+                'line3':'&nbsp;&nbsp;&nbsp;&nbsp;'.join(x+'日 +'+str(item[x+'days'])+'%' for x in ['5','20','60']).replace('.0','').replace('+-','-'),
                 'close':pd.read_csv(QUOTEPATH+symbol+'.csv',index_col='date')['close'][-60:].tolist()
-            }, outfile,ensure_ascii=False)
+            }
+            sortedArr.append(stock)
+        with open(ASSETPATH+'week_%s.json'%condition, 'w',encoding='utf-8') as outfile:
+            json.dump(sortedArr, outfile,ensure_ascii=False)

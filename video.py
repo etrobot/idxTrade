@@ -141,12 +141,12 @@ def get_time_count(audioFile='result'):
 
 def futuComInfo(symbol:str,read=False):
     url='https://www.futunn.com/stock/%s-US/company-profile'%symbol.upper()
-    html=etree.HTML(requests.get(url=url, headers={"user-agent": "Mozilla"}).text.replace(', ','，').replace('Inc.',''))
+    html=etree.HTML(requests.get(url=url, headers={"user-agent": "Mozilla"}).text.replace('Inc.','').replace(', ','，').replace('. ','.'))
     info= html.xpath('//div[@class="value"]/text()')
     intro=''
     if len(info)>0 and '。' in info[-1]:
-        comInfo=info[-1].split('。')[0]
-        if info[1]==comInfo[:len(info[1])]:
+        comInfo=info[-1].split('。')[0].strip()
+        if info[1].strip()==comInfo[:len(info[1])]:
             intro = comInfo
         else:
             intro = info[1] + comInfo
