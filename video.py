@@ -116,7 +116,7 @@ def getYahooNews(symbol:str):
 def get_video(count:int,symbol:str,videoFile=FOLDER + 'video.mp4'):
     imageFile = FOLDER + symbol+'.png'
     fps = 1      # 帧率
-    img_size = (1920, 1080)      # 图片尺寸
+    img_size = (2048, 1080)      # 图片尺寸
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     videoWriter = cv2.VideoWriter(videoFile, fourcc, fps, img_size)
     for i in tqdm(range(0, count)):
@@ -179,7 +179,7 @@ def genEchartJson(qdf:pd.DataFrame):
 
 async def browserShot(url:str,symbol:str):
     imageFile = FOLDER + symbol +'.png'
-    width, height = 960, 540
+    width, height = 1024, 540
     browser = await launch(headless=True, args=['--disable-infobars', f'--window-size={width}, {height}'])
     page = await browser.newPage()
     await page.setViewport({
@@ -217,9 +217,10 @@ def genStockVideo(symbol:str,tradeDate:datetime):
     genEchartJson(futuKLine(symbol))
     genVideo('http://127.0.0.1:5500/quote.html',readText,symbol)
 
-def genVideo(targetUrl:str,readText:str,symbol='symbol'):
+def genVideo(targetUrl:str,readText:str,symbol='symbol',read=True):
     asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol))
-    text2voice(readText,FOLDER + symbol)
+    if read:
+        text2voice(readText,FOLDER + symbol)
     get_video(get_time_count(symbol),symbol)
     get_audio(symbol)
 
@@ -265,7 +266,7 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
     readText='策略组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain']).replace('-','负')+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['last']['holdings'])+'。仓位调整计划为卖出日涨幅最高个股并买入策略排名第一个股：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调到百分之'+str(x['target_weight']) for x in xqPp['latest']['rebalancing_histories'])+'，预计开盘时成交。'
     genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade')
 
-def wencai(sentence:str,tradeDate:pd.DataFrame,yahoo=True):
+def wencai(sentence:str,tradeDate:datetime,yahoo=True):
     blacklist=[x.split('.')[1] for x in ak.stock_us_pink_spot_em()['代码'].tolist()]
     df=crawl_data_from_wencai(sentence)
     df=df.loc[~df['hqCode'].isin(blacklist)]
@@ -316,7 +317,7 @@ def wencai(sentence:str,tradeDate:pd.DataFrame,yahoo=True):
     print(symbols)
     return symbols
 
-def combineFinal(symbols:list,tradeDate:pd.DataFrame):
+def combineFinal(symbols:list,tradeDate:datetime):
     for symbol in symbols:
         if os.path.isfile(FOLDER+symbol+'.mp4'):
             continue

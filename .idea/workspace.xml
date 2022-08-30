@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="video sinanews remove .US">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="week html">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Template/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/Template/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Template/strategyTemp.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/Template/strategyTemp.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iwencai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwencai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Template/week_20days.xhtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Template/week_5days.xhtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Template/week_5daysmoney.xhtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Template/week_总市值.xhtml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/video.py" beforeDir="false" afterPath="$PROJECT_DIR$/video.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yahooStockNews.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/weekly.py" beforeDir="false" afterPath="$PROJECT_DIR$/weekly.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,10 +199,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="http.proxy" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="vcs.patch.to.clipboard" value="true" />
   </component>
-  <component name="RunManager" selected="Python.video">
+  <component name="RunManager" selected="Python.weekly">
     <configuration name="idxTrade" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -244,27 +245,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="limitHistory" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="idxTrade" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/limitHistory.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="test" type="PythonConfigurationType" factoryName="Python">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -299,6 +279,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/video.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="weekly" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/weekly.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -354,17 +355,17 @@
       <item itemvalue="Python.xq_backup_lite" />
       <item itemvalue="Python.idxTrade" />
       <item itemvalue="Python.iwencai" />
-      <item itemvalue="Python.limitHistory" />
       <item itemvalue="Python.video" />
       <item itemvalue="Python.yahooStockNews" />
+      <item itemvalue="Python.weekly" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.weekly" />
         <item itemvalue="Python.video" />
         <item itemvalue="Python.iwencai" />
         <item itemvalue="Python.yahooStockNews" />
         <item itemvalue="Python.idxTrade" />
-        <item itemvalue="Python.limitHistory" />
       </list>
     </recent_temporary>
   </component>
@@ -379,41 +380,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00199" summary="update">
-      <created>1632477466394</created>
-      <option name="number" value="00199" />
-      <option name="presentableId" value="LOCAL-00199" />
-      <option name="project" value="LOCAL" />
-      <updated>1632477466394</updated>
-    </task>
-    <task id="LOCAL-00200" summary="update">
-      <created>1632477689906</created>
-      <option name="number" value="00200" />
-      <option name="presentableId" value="LOCAL-00200" />
-      <option name="project" value="LOCAL" />
-      <updated>1632477689906</updated>
-    </task>
-    <task id="LOCAL-00201" summary="update">
-      <created>1632649064585</created>
-      <option name="number" value="00201" />
-      <option name="presentableId" value="LOCAL-00201" />
-      <option name="project" value="LOCAL" />
-      <updated>1632649064590</updated>
-    </task>
-    <task id="LOCAL-00202" summary="update">
-      <created>1632727011527</created>
-      <option name="number" value="00202" />
-      <option name="presentableId" value="LOCAL-00202" />
-      <option name="project" value="LOCAL" />
-      <updated>1632727011529</updated>
-    </task>
-    <task id="LOCAL-00203" summary="update">
-      <created>1632822783337</created>
-      <option name="number" value="00203" />
-      <option name="presentableId" value="LOCAL-00203" />
-      <option name="project" value="LOCAL" />
-      <updated>1632822783342</updated>
     </task>
     <task id="LOCAL-00204" summary="update">
       <created>1632908675534</created>
@@ -723,7 +689,42 @@
       <option name="project" value="LOCAL" />
       <updated>1660823731435</updated>
     </task>
-    <option name="localTasksCounter" value="248" />
+    <task id="LOCAL-00248" summary="video, use yahoo news">
+      <created>1661421174752</created>
+      <option name="number" value="00248" />
+      <option name="presentableId" value="LOCAL-00248" />
+      <option name="project" value="LOCAL" />
+      <updated>1661421174752</updated>
+    </task>
+    <task id="LOCAL-00249" summary="video optm">
+      <created>1661734107816</created>
+      <option name="number" value="00249" />
+      <option name="presentableId" value="LOCAL-00249" />
+      <option name="project" value="LOCAL" />
+      <updated>1661734107816</updated>
+    </task>
+    <task id="LOCAL-00250" summary="week optm">
+      <created>1661781962510</created>
+      <option name="number" value="00250" />
+      <option name="presentableId" value="LOCAL-00250" />
+      <option name="project" value="LOCAL" />
+      <updated>1661781962511</updated>
+    </task>
+    <task id="LOCAL-00251" summary="week html">
+      <created>1661846738694</created>
+      <option name="number" value="00251" />
+      <option name="presentableId" value="LOCAL-00251" />
+      <option name="project" value="LOCAL" />
+      <updated>1661846738694</updated>
+    </task>
+    <task id="LOCAL-00252" summary="week html">
+      <created>1661846766323</created>
+      <option name="number" value="00252" />
+      <option name="presentableId" value="LOCAL-00252" />
+      <option name="project" value="LOCAL" />
+      <updated>1661846766323</updated>
+    </task>
+    <option name="localTasksCounter" value="253" />
     <servers />
   </component>
   <component name="TodoView">
@@ -802,10 +803,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="update longhu" />
-    <MESSAGE value="update fund" />
-    <MESSAGE value="update tests" />
-    <MESSAGE value="update debts" />
     <MESSAGE value="fix" />
     <MESSAGE value="longhu reject ins" />
     <MESSAGE value="change Algo" />
@@ -827,7 +824,11 @@
     <MESSAGE value="video sysarg config.json" />
     <MESSAGE value="video add sinanews filter word" />
     <MESSAGE value="video sinanews remove .US" />
-    <option name="LAST_COMMIT_MESSAGE" value="video sinanews remove .US" />
+    <MESSAGE value="video, use yahoo news" />
+    <MESSAGE value="video optm" />
+    <MESSAGE value="week optm" />
+    <MESSAGE value="week html" />
+    <option name="LAST_COMMIT_MESSAGE" value="week html" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv" />
