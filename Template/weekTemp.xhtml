@@ -124,9 +124,22 @@
 
                                         ]
                                 };
+                                var space='&nbsp;&nbsp;&nbsp'
+                                var line3arr=item.line3.split(space)
+                                var line3 = '';
+                                for (var i = 0; i < line3arr.length; i++) {
+                                        kv=line3arr[i].split(' ')
+                                     if(kv[0]=="5日"){
+                                            if(kv[1].substring(0,1)=="+")line3=line3+'<span class="redTxt">'+line3arr[i]+"&nbsp;</span>";
+                                            else{line3=line3+'<span class="greenTxt">'+line3arr[i]+"</span>"}
+                                        }else{
+                                            line3=line3+line3arr[i]
+                                        }
+                                        if(i<line3arr.length-1)line3+=space;
+                                }
                                 let ecdom=document.getElementById(item.symbol)
                                 echarts.init(ecdom, "dark").setOption(option);
-                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line3+"</div>"
+                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+line3+"</div>"
 
                                 }
                         }

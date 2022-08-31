@@ -34,7 +34,7 @@ def text2voice(text:str,audioFile='result'):
     audio_config = speechsdk.audio.AudioOutputConfig(filename=filename)
 
     # The language of the voice that speaks.
-    speech_config.speech_synthesis_voice_name = 'zh-CN-XiaoyanNeural'
+    speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
     result = speech_synthesizer.speak_text_async(text).get()
@@ -117,7 +117,7 @@ def get_video(count:int,symbol:str,videoFile=FOLDER + 'video.mp4'):
     img_size = (2048, 1080)      # 图片尺寸
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     videoWriter = cv2.VideoWriter(videoFile, fourcc, fps, img_size)
-    for i in tqdm(range(0, count)):
+    for i in tqdm(range(0, count+1)):
         frame = cv2.imread(imageFile)
         frame = cv2.resize(frame, img_size)  # 生成视频   图片尺寸和设定尺寸相同
         videoWriter.write(frame)  # 将图片写进视频里
@@ -183,6 +183,7 @@ async def browserShot(url:str,symbol:str):
     await page.setViewport({
         'width': width, 'height': height,'deviceScaleFactor':2})
     await page.goto(url)
+    await page.waitForSelector('canvas',{ 'timeout': 1000000})
     # await page.evaluate('document.body.style.zoom=1.2')
     await page.screenshot({'path': imageFile, 'fullPage': False})
     await browser.close()

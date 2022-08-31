@@ -2,16 +2,16 @@ import urllib.request,csv,json
 from video import *
 from QuotaUtilities import *
 
+PROXY = {
+    'http': 'http://127.0.0.1:8081',  # 访问http需要
+    'https': 'https://127.0.0.1:8081',  # 访问https需要
+}
 QUOTEPATH='Quotation/'
 ASSETPATH='video/'
 
 def invesco(etfCode):
     print('get '+etfCode+' holdings')
-    proxy = {
-        'http': 'http://127.0.0.1:8081',  # 访问http需要
-        'https': 'https://127.0.0.1:8081',  # 访问https需要
-    }
-    proxy_handler = urllib.request.ProxyHandler(proxy)
+    proxy_handler = urllib.request.ProxyHandler(PROXY)
     opener = urllib.request.build_opener(proxy_handler)
     urllib.request.install_opener(opener)
     url="https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker="+etfCode
@@ -23,11 +23,7 @@ def invesco(etfCode):
 
 def ssga(etfCode):
     print('get '+etfCode+' holdings')
-    proxy = {
-        'http': 'http://127.0.0.1:8081',  # 访问http需要
-        'https': 'https://127.0.0.1:8081',  # 访问https需要
-    }
-    proxy_handler = urllib.request.ProxyHandler(proxy)
+    proxy_handler = urllib.request.ProxyHandler(PROXY)
     opener = urllib.request.build_opener(proxy_handler)
     urllib.request.install_opener(opener)
     urls={
@@ -50,7 +46,7 @@ def weekVideo(readText:str,subTitle='',read=True):
             'symbol':symbol,
             'line1':name,
             'line3': '5日 %s%%&nbsp;&nbsp;&nbsp;20日 %s%%&nbsp;&nbsp;&nbsp;60日 %s%%'%(round(k[-1]*100/k[-6]-100,2),round(k[-1]*100/k[-21]-100,2),round(k[-1]*100/k[-61]-100,2)),
-            'close':k[-180:].tolist()
+            'close':k[-61:].tolist()
         }
         sortedArr.append(stock)
     with open(ASSETPATH+'week.json', 'w',encoding='utf-8') as outfile:
@@ -104,13 +100,13 @@ def run():
     for condition in conditions:
         df.sort_values(by=[condition],ascending=False,inplace=True)
         if condition=='mktValue':
-            readText='当前市值前十大企业为：'+ ','.join(df['股票名称'][:10].tolist())
+            readText='当前美股市值前十大企业为：'+ ','.join(df['股票名称'][:10].tolist()).replace('-A','')
         elif condition=='5daysmoney':
-            readText='本周成交前十大股票为：'+ ','.join(df['股票名称'][:10].tolist())
+            readText='本周美股成交前十大股票为：'+ ','.join(df['股票名称'][:10].tolist())
         else:
             rank=df.index[:3].tolist()
             names=df['股票名称'][:3].tolist()
-            readText='近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
+            readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
         sortedArr=[]
         for symbol,item in df[:10].iterrows():
             stock={
@@ -132,7 +128,7 @@ def run():
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     weekVideo(conf['weekend']['conclusion'],'end')
-    weekVideo(conf['weekend']['begin'],read=False)
+    weekVideo(conf['weekend']['begin'],read=True)
     videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
     videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
     videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))
