@@ -15,6 +15,7 @@
                         line-height: 1.6rem;
                 }
                 .redTxt{color:orange;}
+                .yellowTxt{color:yellow;}
                 .greenTxt{color:aqua;}
         </style>
 </head>
@@ -113,7 +114,19 @@
 </body>
 <script>
 
-        getJSON();
+        get5days();
+
+        function get5days(){
+
+                                $.getJSON("wk_5days.json",
+                                        function (days5) {
+                                                var rank5=[]
+                                                for (var i = 0; i < days5.length; i++) {
+                                                        rank5.push(days5[i].line1)
+                                                }
+                                                getJSON(rank5);
+                                })
+        }
 
         function splitData(rawData) {
                 var value = [];
@@ -129,8 +142,7 @@
                 }
         }
 
-
-        function getJSON() {
+        function getJSON(rank5) {
                 $.getJSON("wk_20days.json",
                         function (result) {
                                 for (var id = 1; id < result.length+1; id++) {
@@ -174,7 +186,7 @@
                                                                                 },
                                                                         }
                                                                 }
-                                                        
+
                                                 }
 
                                         ]
@@ -186,17 +198,16 @@
                                 var line3 = '';
                                 for (var i = 0; i < line3arr.length; i++) {
                                         kv=line3arr[i].split(' ')
-                                        console.log(kv);
                                         if(kv[0]=="20日"){
                                             if(kv[1].substring(0,1)=="+")line3=line3+'<span class="redTxt">'+line3arr[i]+"&nbsp;</span>";
                                             else{line3=line3+'<span class="greenTxt">'+line3arr[i]+"</span>"};
+                                        }else if(kv[0]=="5日" && rank5.includes(item.line1)){
+                                                line3=line3+'<span class="yellowTxt">'+line3arr[i]+"&nbsp;</span>";
                                         }else{
                                             line3=line3+line3arr[i];
                                         }
                                         if(i<line3arr.length-1)line3+=space;
                                 }
-                                console.log(line3)
-
                                 ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line2+"</div>"+"<div>"+line3+"</div>"
                                 }
                         }

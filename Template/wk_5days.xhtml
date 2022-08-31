@@ -16,6 +16,7 @@
                 }
                 .redTxt{color:yellow;}
                 .greenTxt{color:aqua;}
+                .orangeTxt{color:orange;}
         </style>
 </head>
 
@@ -113,7 +114,19 @@
 </body>
 <script>
 
-        getJSON();
+        get20days();
+
+        function get20days(){
+
+                                $.getJSON("wk_20days.json",
+                                        function (days20) {
+                                                var rank20=[]
+                                                for (var i = 0; i < days20.length; i++) {
+                                                        rank20.push(days20[i].line1)
+                                                }
+                                                getJSON(rank20);
+                                })
+        }
 
         function splitData(rawData) {
                 var value = [];
@@ -130,9 +143,10 @@
         }
 
 
-        function getJSON() {
+        function getJSON(rank20) {
                 $.getJSON("wk_5days.json",
                         function (result) {
+                                console.log(rank20)
                                 for (var id = 1; id < result.length+1; id++) {
                                 item=result[id-1]
                                 var cubeData = splitData(item.close);
@@ -174,14 +188,14 @@
                                                                                 },
                                                                         }
                                                                 }
-                                                        
+
                                                 }
 
                                         ]
                                 };
                                 let ecdom=document.getElementById(id)
                                 echarts.init(ecdom, "dark").setOption(option);
-                                var space='&nbsp;&nbsp;&nbsp'
+                                var space='&nbsp;&nbsp;&nbsp;'
                                 var line3arr=item.line3.split(space)
                                 var line3 = '';
                                 for (var i = 0; i < line3arr.length; i++) {
@@ -189,13 +203,13 @@
                                      if(kv[0]=="5日"){
                                             if(kv[1].substring(0,1)=="+")line3=line3+'<span class="redTxt">'+line3arr[i]+"&nbsp;</span>";
                                             else{line3=line3+'<span class="greenTxt">'+line3arr[i]+"</span>"}
+                                        }else if(kv[0]=="20日" && rank20.includes(item.line1)){
+                                                line3=line3+'<span class="orangeTxt">'+line3arr[i]+"&nbsp;</span>";
                                         }else{
                                             line3=line3+line3arr[i]
                                         }
                                         if(i<line3arr.length-1)line3+=space;
                                 }
-                                console.log(line3)
-
                                 ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line2+"</div>"+"<div>"+line3+"</div>"
                                 }
                         }

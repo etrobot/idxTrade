@@ -96,7 +96,7 @@ def run():
             df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days-1]-100.0,1)
         df.at[symbol,'5daysmoney']=qdf['amount'][-5:].sum()
 
-    conditions=['mktValue','5daysmoney','5days','20days']
+    conditions=['mktValue','5daysmoney','20days','5days']
     for condition in conditions:
         df.sort_values(by=[condition],ascending=False,inplace=True)
         if condition=='mktValue':
