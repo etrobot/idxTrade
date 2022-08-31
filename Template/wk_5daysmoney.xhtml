@@ -1,0 +1,202 @@
+<html>
+
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,
+                                        initial-scale=1">
+        <title>周成交</title>
+        <link href="bulmaswatch.min.css" rel="stylesheet">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+        <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+        <style>
+                td {
+                        vertical-align: inherit !important;
+                        line-height: 1.6rem;
+                }
+                .redTxt{color:yellow;}
+                .greenTxt{color:aqua;}
+        </style>
+</head>
+
+<body >
+        <section class="section content">
+        <h4>美股三大指数基金(QQQ+SPY+DIA)，成分股『周成交』前十：</h4>
+        <div class="columns is-centered">
+                <div class="column is-half">
+                        <table class="table is-fullwidth">
+                                <tbody>
+
+                                <tr>
+                                        <td><h4>6</h4></td>
+                                        <td>
+                                                <div id="6" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td><div  class="disc p-1 is-size-7"></div></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>7</h4></td>
+                                        <td>
+                                                <div id="7" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>8</h4></td>
+                                        <td>
+                                                <div id="8" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>9</h4></td>
+                                        <td>
+                                                <div id="9" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>10</h4></td>
+                                        <td>
+                                                <div id="10" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                        </tbody>
+
+                        </table>
+                </div>
+                <div class="column is-half">
+                        <table class="table is-fullwidth ">
+                                <tbody>
+                                        <td><h4>1</h4></td>
+                                        <td>
+                                                <div id="1" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>2</h4></td>
+                                        <td>
+                                                <div id="2" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>3</h4></td>
+                                        <td>
+                                                <div id="3" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>4</h4></td>
+                                        <td>
+                                                <div id="4" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td><h4>5</h4></td>
+                                        <td>
+                                                <div id="5" style="height:70px; width:90px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                        </tbody>
+                        </table>
+                </div>
+        </div>
+
+        </section>
+
+</body>
+<script>
+
+        getJSON();
+
+        function splitData(rawData) {
+                var value = [];
+                var date = [];
+
+                for (var i = rawData.length-20; i < rawData.length; i++) {
+                        value.push(rawData[i]);
+                        date.push(i);
+                }
+                return {
+                        value: value,
+                        date: date,
+                }
+        }
+
+
+        function getJSON() {
+                $.getJSON("wk_5daysmoney.json",
+                        function (result) {
+                                for (var id = 1; id < result.length+1; id++) {
+                                item=result[id-1]
+                                var cubeData = splitData(item.close);
+                                option = {
+                                        animation: false,
+                                        backgroundColor:"",
+                                        xAxis: {
+                                                show: false,
+                                                data: cubeData.date
+                                        },
+                                        yAxis: {
+                                                show: false,
+                                                scale: true
+                                        },
+                                        visualMap: {
+                                                show: false,
+                                                dimension: 0,
+                                                pieces: [
+                                                        {
+                                                                lte: 15,
+                                                                color: cubeData.date[cubeData.date.length - 1]/cubeData.date[0] - 1 > 0 ? 'orange' : 'cornflowerblue'
+                                                        },
+                                                        {
+                                                                gt: 15,
+                                                                lte: 20,
+                                                                color: cubeData.date[cubeData.date.length - 1]/cubeData.date[0] - 1 > 0 ? 'yellow' : 'aqua'
+                                                        }
+                                                ]
+                                        },
+                                        series: [
+                                                {
+                                                        type: 'line',
+                                                        data: cubeData.value,
+                                                        symbol: 'none',
+                                                                itemStyle: {
+                                                                        normal: {
+                                                                                lineStyle: {
+                                                                                        width:1.4,
+                                                                                },
+                                                                        }
+                                                                }
+                                                        
+                                                }
+
+                                        ]
+                                };
+                                let ecdom=document.getElementById(id)
+                                echarts.init(ecdom, "dark").setOption(option);
+                                var space=' / '
+                                var line2arr=item.line2.split(space)
+                                var line2 = '';
+                                for (var i = 0; i < line2arr.length; i++) {
+                                        if(line2arr[i].indexOf("周成交") != -1){
+                                            line2=line2+'<span class="redTxt">'+line2arr[i]+"</span>";
+                                        }else{
+                                            line2=line2+line2arr[i]
+                                        }
+                                        if(i<line2arr.length-1)line2+=space;
+                                }
+                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+line2+"</div>"+"<div>"+item.line3+"</div>"
+                                }
+                        }
+                )
+        }
+</script>
+
+</html>

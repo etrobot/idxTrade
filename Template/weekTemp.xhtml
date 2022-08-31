@@ -1,0 +1,125 @@
+<html>
+
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,
+                                        initial-scale=1">
+        <title>每周复盘</title>
+        <link href="bulmaswatch.min.css" rel="stylesheet">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+        <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+        <style>
+                td {
+                        vertical-align: inherit !important;
+                        line-height: 1.6rem;
+                }
+                .redTxt{color:orange;}
+                .greenTxt{color:aqua;}
+        </style>
+</head>
+
+<body >
+        <section class="section content">
+                <h4 class="time">美股一周复盘：</h4>
+        <div class="columns is-centered">
+                <div class="column is-half">
+                        <table class="table is-fullwidth">
+                                <tbody>
+
+                                <tr>
+                                        <td>
+                                                <div id="DJI" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td><div  class="disc p-1 is-size-7"></div></td>
+                                </tr>
+                                <tr>
+                                        <td>
+                                                <div id="IXIC" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                                <tr>
+                                        <td>
+                                                <div id="INX" style="height:80px; width:120px"></div>
+                                        </td>
+                                        <td class="disc p-1 is-size-7"></td>
+                                </tr>
+                        </tbody>
+
+                        </table>
+                </div>
+                <div class="column is-half">
+                        {{text}}
+                </div>
+        </div>
+
+        </section>
+
+</body>
+<script>
+
+        getJSON();
+
+        function splitData(rawData) {
+                var value = [];
+                var date = [];
+
+                for (var i = 0; i < rawData.length; i++) {
+                        value.push(rawData[i]);
+                        date.push(i);
+                }
+                return {
+                        value: value,
+                        date: date,
+                }
+        }
+
+
+        function getJSON() {
+                $.getJSON("week.json",
+                        function (result) {
+                                for (var id = 1; id < result.length+1; id++) {
+                                item=result[id-1]
+                                var cubeData = splitData(item.close);
+                                console.log(cubeData);
+
+                                option = {
+                                        animation: false,
+                                        backgroundColor:"",
+                                        xAxis: {
+                                                show: false,
+                                                data: cubeData.date
+                                        },
+                                        yAxis: {
+                                                show: false,
+                                                scale: true
+                                        },
+                                        series: [
+                                                {
+                                                        type: 'line',
+                                                        data: cubeData.value,
+                                                        symbol: 'none',
+                                                                itemStyle: {
+                                                                        normal: {
+                                                                                lineStyle: {
+                                                                                        width:1.4,
+                                                                                },
+                                                                        }
+                                                                }
+
+                                                }
+
+                                        ]
+                                };
+                                let ecdom=document.getElementById(item.symbol)
+                                echarts.init(ecdom, "dark").setOption(option);
+                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line3+"</div>"
+
+                                }
+                        }
+                )
+        }
+</script>
+
+</html>

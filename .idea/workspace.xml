@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="week html">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="week index combine">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Template/week_20days.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Template/week_5days.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Template/week_5daysmoney.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Template/week_总市值.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/video.py" beforeDir="false" afterPath="$PROJECT_DIR$/video.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/weekly.py" beforeDir="false" afterPath="$PROJECT_DIR$/weekly.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +196,7 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="vcs.patch.to.clipboard" value="true" />
   </component>
-  <component name="RunManager" selected="Python.weekly">
+  <component name="RunManager" selected="Python.video">
     <configuration name="idxTrade" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -361,8 +355,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.weekly" />
         <item itemvalue="Python.video" />
+        <item itemvalue="Python.weekly" />
         <item itemvalue="Python.iwencai" />
         <item itemvalue="Python.yahooStockNews" />
         <item itemvalue="Python.idxTrade" />
@@ -380,20 +374,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00204" summary="update">
-      <created>1632908675534</created>
-      <option name="number" value="00204" />
-      <option name="presentableId" value="LOCAL-00204" />
-      <option name="project" value="LOCAL" />
-      <updated>1632908675534</updated>
-    </task>
-    <task id="LOCAL-00205" summary="update">
-      <created>1632973065505</created>
-      <option name="number" value="00205" />
-      <option name="presentableId" value="LOCAL-00205" />
-      <option name="project" value="LOCAL" />
-      <updated>1632973065510</updated>
     </task>
     <task id="LOCAL-00206" summary="update">
       <created>1633655548374</created>
@@ -724,7 +704,21 @@
       <option name="project" value="LOCAL" />
       <updated>1661846766323</updated>
     </task>
-    <option name="localTasksCounter" value="253" />
+    <task id="LOCAL-00253" summary="week combine">
+      <created>1661861682601</created>
+      <option name="number" value="00253" />
+      <option name="presentableId" value="LOCAL-00253" />
+      <option name="project" value="LOCAL" />
+      <updated>1661861682602</updated>
+    </task>
+    <task id="LOCAL-00254" summary="week index combine">
+      <created>1661938715445</created>
+      <option name="number" value="00254" />
+      <option name="presentableId" value="LOCAL-00254" />
+      <option name="project" value="LOCAL" />
+      <updated>1661938715445</updated>
+    </task>
+    <option name="localTasksCounter" value="255" />
     <servers />
   </component>
   <component name="TodoView">
@@ -803,8 +797,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="fix" />
-    <MESSAGE value="longhu reject ins" />
     <MESSAGE value="change Algo" />
     <MESSAGE value="echart" />
     <MESSAGE value="idxtrade" />
@@ -828,7 +820,9 @@
     <MESSAGE value="video optm" />
     <MESSAGE value="week optm" />
     <MESSAGE value="week html" />
-    <option name="LAST_COMMIT_MESSAGE" value="week html" />
+    <MESSAGE value="week combine" />
+    <MESSAGE value="week index combine" />
+    <option name="LAST_COMMIT_MESSAGE" value="week index combine" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv" />
