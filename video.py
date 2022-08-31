@@ -26,8 +26,6 @@ FOLDER='video/'
 MAXHOLDING=4
 
 IS_PY3 = sys.version_info.major == 3
-conf = configparser.ConfigParser()
-conf.read('config.ini')
 
 def text2voice(text:str,audioFile='result'):
     filename=audioFile + '.mp3'

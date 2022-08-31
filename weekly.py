@@ -1,6 +1,6 @@
 import urllib.request,csv,json
 from video import *
-import numpy as np
+from QuotaUtilities import *
 
 QUOTEPATH='Quotation/'
 ASSETPATH='video/'
@@ -23,7 +23,13 @@ def invesco(etfCode):
 
 def ssga(etfCode):
     print('get '+etfCode+' holdings')
-
+    proxy = {
+        'http': 'http://127.0.0.1:8081',  # 访问http需要
+        'https': 'https://127.0.0.1:8081',  # 访问https需要
+    }
+    proxy_handler = urllib.request.ProxyHandler(proxy)
+    opener = urllib.request.build_opener(proxy_handler)
+    urllib.request.install_opener(opener)
     urls={
         'SPY':'https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx',
         'DIA':'https://www.ssga.com/us/en/intermediary/etfs/library-content/products/fund-data/etfs/us/holdings-daily-us-en-dia.xlsx'
@@ -32,6 +38,30 @@ def ssga(etfCode):
     df=pd.read_excel(file_name, skiprows = [0, 1, 2, 3])
     urllib.request.urlcleanup()
     return df
+
+def weekVideo(readText:str,subTitle='',read=True):
+    symbols={'IXIC':'纳斯达克','DJI':'道琼斯','INX':'标普500'}
+    xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
+    # symbols = {'DIA':'道琼斯ETF', 'QQQ':'纳斯卡克ETF', 'SPY':'标普500ETF'}
+    sortedArr=[]
+    for symbol,name in symbols.items():
+        k=getK('.'+symbol,pdate=datetime.now()-timedelta(days=180),xq_a_token=xq_a_token)['close']
+        stock={
+            'symbol':symbol,
+            'line1':name,
+            'line3': '5日%s%% 20日%s%% 60日%s%%'%(round(k[-1]*100/k[-6]-100,2),round(k[-1]*100/k[-21]-100,2),round(k[-1]*100/k[-61]-100,2)),
+            'close':k[-180:].tolist()
+        }
+        sortedArr.append(stock)
+    with open(ASSETPATH+'week.json', 'w',encoding='utf-8') as outfile:
+        json.dump(sortedArr, outfile,ensure_ascii=False)
+    with open("Template/weekTemp.xhtml", "r") as fin:
+        with open(ASSETPATH + "week%s.html"%subTitle, "w") as fout:
+            fout.write(fin.read().replace('{{text}}', readText))
+    videopic='http://127.0.0.1:5500/week%s.html'%subTitle
+    print(videopic)
+    genVideo(videopic, readText, 'week'+subTitle,read)
+
 
 def run():
     all = ak.stock_us_spot_em().rename(
@@ -70,12 +100,6 @@ def run():
             df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days-1]-100.0,1)
         df.at[symbol,'5daysmoney']=qdf['amount'][-5:].sum()
 
-    if not os.path.isfile(FOLDER+'week.mp4'):
-        introText='美股三大指数，道琼斯、纳斯达克和标普500是全球股市的风向标，观察对应指数基金成分股的走势可以揭示当前的投资趋势，接下来就让我们从市值、月涨幅、周涨幅和周成交四个维度来观察这些成分股。'
-        text2voice(introText, FOLDER + 'week')
-        get_video(get_time_count('week'), 'week')
-        get_audio('week')
-
     conditions=['mktValue','5daysmoney','5days','20days']
     for condition in conditions:
         df.sort_values(by=[condition],ascending=False,inplace=True)
@@ -98,14 +122,22 @@ def run():
             sortedArr.append(stock)
         with open(ASSETPATH+'wk_%s.json'%condition, 'w',encoding='utf-8') as outfile:
             json.dump(sortedArr, outfile,ensure_ascii=False)
+        with open('Template/wk_%s.xhtml'%condition, "r") as fin:
+            with open(ASSETPATH + 'wk_%s.html'%condition, "w") as fout:
+                fout.write(fin.read())
         videopic='http://127.0.0.1:5500/wk_%s.html'%condition.lower()
         print(videopic)
         genVideo(videopic, readText, 'wk_'+condition)
 
-    videolist = [VideoFileClip(FOLDER + 'wk_'+ x + '.mp4') for x in conditions]
-    videolist.insert(0, VideoFileClip(FOLDER + 'week.mp4'))
+    conf = configparser.ConfigParser()
+    conf.read('config.ini')
+    weekVideo(conf['weekend']['conclusion'],'end')
+    weekVideo(conf['weekend']['begin'])
+    videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
+    videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
+    videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))
     final_clip = concatenate_videoclips(videolist, method='compose')
-    final_clip.write_videofile(FOLDER + datetime.now().strftime('%m%d')+'_week_' + '_'.join(conditions) + ".mp4")
+    final_clip.write_videofile(ASSETPATH + datetime.now().strftime('%m%d')+'_week_' + '_'.join(conditions) + ".mp4")
 
 
 if __name__=='__main__':
