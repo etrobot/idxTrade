@@ -10,19 +10,32 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
         <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
         <style>
+                .fix{
+                        padding-top: 7rem;
+                }
                 td {
                         vertical-align: inherit !important;
-                        line-height: 1.6rem;
+                        line-height: 2rem;
                 }
                 .redTxt{color:orange;}
                 .greenTxt{color:aqua;}
+                .vertical{
+                        padding: 3rem;
+                }
         </style>
 </head>
 
 <body >
-        <section class="section content">
-                <h4 class="time">美股一周复盘：</h4>
+        <section class="section content fix">
         <div class="columns is-centered">
+                <div class="column is-half vertical">
+                        <h1>超越量化：美股一周复盘</h1>
+                        <p id="date"></p>
+                        <br>
+                        <p class="has-text-white">
+                                {{text}}
+                        </p>
+                </div>
                 <div class="column is-half">
                         <table class="table is-fullwidth">
                                 <tbody>
@@ -31,26 +44,23 @@
                                         <td>
                                                 <div id="DJI" style="height:80px; width:120px"></div>
                                         </td>
-                                        <td><div  class="disc p-1 is-size-7"></div></td>
+                                        <td><div  class="disc p-1"></div></td>
                                 </tr>
                                 <tr>
                                         <td>
                                                 <div id="IXIC" style="height:80px; width:120px"></div>
                                         </td>
-                                        <td class="disc p-1 is-size-7"></td>
+                                        <td class="disc p-1"></td>
                                 </tr>
                                 <tr>
                                         <td>
                                                 <div id="INX" style="height:80px; width:120px"></div>
                                         </td>
-                                        <td class="disc p-1 is-size-7"></td>
+                                        <td class="disc p-1"></td>
                                 </tr>
                         </tbody>
 
                         </table>
-                </div>
-                <div class="column is-half">
-                        {{text}}
                 </div>
         </div>
 
@@ -77,6 +87,8 @@
 
 
         function getJSON() {
+                jsdate=new Date();
+                document.getElementById('date').innerHTML=(jsdate.getMonth()+1)+'月'+jsdate.getDate()+'日'+' 星期'+'日一二三四五六'.charAt(jsdate.getDay());
                 $.getJSON("week.json",
                         function (result) {
                                 for (var id = 1; id < result.length+1; id++) {
@@ -114,7 +126,7 @@
                                 };
                                 let ecdom=document.getElementById(item.symbol)
                                 echarts.init(ecdom, "dark").setOption(option);
-                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line3+"</div>"
+                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line3+"</div>"
 
                                 }
                         }

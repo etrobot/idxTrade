@@ -49,7 +49,7 @@ def weekVideo(readText:str,subTitle='',read=True):
         stock={
             'symbol':symbol,
             'line1':name,
-            'line3': '5日%s%% 20日%s%% 60日%s%%'%(round(k[-1]*100/k[-6]-100,2),round(k[-1]*100/k[-21]-100,2),round(k[-1]*100/k[-61]-100,2)),
+            'line3': '5日 %s%%&nbsp;&nbsp;&nbsp;20日 %s%%&nbsp;&nbsp;&nbsp;60日 %s%%'%(round(k[-1]*100/k[-6]-100,2),round(k[-1]*100/k[-21]-100,2),round(k[-1]*100/k[-61]-100,2)),
             'close':k[-180:].tolist()
         }
         sortedArr.append(stock)
@@ -77,7 +77,7 @@ def run():
     df.dropna(inplace=True)
     df.drop_duplicates(subset='Ticker', keep='last', inplace=True)
     df.set_index('Ticker',inplace=True)
-    df=df[(df.index != 'GOOG') & (df.index != 'CASH_USD')]
+    df=df[(df.index != 'GOOG') & (df.index != 'CASH_USD')& (df.index != 'CASH_JPY')]
     df=df.join(all)
     futuSymbols = pd.read_csv("futuSymbols.csv",index_col='股票简称')[['股票名称']]
     df=df.join(futuSymbols)
@@ -109,8 +109,8 @@ def run():
             readText='本周成交前十大股票为：'+ ','.join(df['股票名称'][:10].tolist())
         else:
             rank=df.index[:3].tolist()
-            rank.reverse()
-            readText='近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(futuComInfo(x) for x in rank)
+            names=df['股票名称'][:3].tolist()
+            readText='近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
         sortedArr=[]
         for symbol,item in df[:10].iterrows():
             stock={
@@ -132,7 +132,7 @@ def run():
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     weekVideo(conf['weekend']['conclusion'],'end')
-    weekVideo(conf['weekend']['begin'])
+    weekVideo(conf['weekend']['begin'],read=False)
     videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
     videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
     videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))
