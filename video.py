@@ -117,7 +117,7 @@ def get_video(count:int,symbol:str,videoFile=FOLDER + 'video.mp4'):
     img_size = (2048, 1080)      # 图片尺寸
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     videoWriter = cv2.VideoWriter(videoFile, fourcc, fps, img_size)
-    for i in tqdm(range(0, count+1)):
+    for i in tqdm(range(0, count)):
         frame = cv2.imread(imageFile)
         frame = cv2.resize(frame, img_size)  # 生成视频   图片尺寸和设定尺寸相同
         videoWriter.write(frame)  # 将图片写进视频里
@@ -125,7 +125,7 @@ def get_video(count:int,symbol:str,videoFile=FOLDER + 'video.mp4'):
 
 
 # 加入音频
-def get_audio(symbol:str,videoFile=FOLDER+'video.mp4'):
+def add_audio(symbol:str,videoFile=FOLDER+'video.mp4'):
     video = VideoFileClip(videoFile)
     videos = video.set_audio(AudioFileClip(FOLDER+symbol+'.mp3'))  # 音频文件
     videos.write_videofile(FOLDER+symbol+'.mp4')  # 保存合成视频
@@ -175,7 +175,7 @@ def genEchartJson(qdf:pd.DataFrame):
     with open(FOLDER+'videoQuote.json', 'w', encoding='utf-8') as f:
         json.dump(transdf.values.tolist(), f)
 
-async def browserShot(url:str,symbol:str):
+async def browserShot(url:str,symbol:str,canvas=False):
     imageFile = FOLDER + symbol +'.png'
     width, height = 1024, 540
     browser = await launch(headless=True, args=['--disable-infobars', f'--window-size={width}, {height}'])
@@ -183,7 +183,8 @@ async def browserShot(url:str,symbol:str):
     await page.setViewport({
         'width': width, 'height': height,'deviceScaleFactor':2})
     await page.goto(url)
-    await page.waitForSelector('canvas',{ 'timeout': 1000000})
+    if canvas:
+        await page.waitForSelector('canvas',{ 'timeout': 1000000})
     # await page.evaluate('document.body.style.zoom=1.2')
     await page.screenshot({'path': imageFile, 'fullPage': False})
     await browser.close()
@@ -216,12 +217,15 @@ def genStockVideo(symbol:str,tradeDate:datetime):
     genEchartJson(futuKLine(symbol))
     genVideo('http://127.0.0.1:5500/quote.html',readText,symbol)
 
-def genVideo(targetUrl:str,readText:str,symbol='symbol',read=True):
-    asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol))
+def genVideo(targetUrl:str,readText:str,symbol='symbol',read=True,canvas=True):
+    asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol,canvas))
     if read:
         text2voice(readText,FOLDER + symbol)
-    get_video(get_time_count(symbol),symbol)
-    get_audio(symbol)
+        get_video(get_time_count(symbol), symbol,)
+        add_audio(symbol)
+    else:
+        get_video(20, symbol)
+
 
 def trade(xueqiuCfg:dict,symbols=()):
     if len(symbols) ==0:
@@ -263,7 +267,7 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
                 fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(xqPp['monthly_gain'],xqPp['total_gain'])).replace('{{rebalancing}}',latestDf).replace(
                     '{{position}}', holdingDf))
     readText='策略组合月收益为百分之'+str(xqPp['monthly_gain'])+'，累计收益百分之'+str(xqPp['total_gain']).replace('-','负')+'，当前持仓股票共'+str(len(holding))+'个，'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'占百分之'+str(x['weight']) for x in xqPp['last']['holdings'])+'。仓位调整计划为卖出日涨幅最高个股并买入策略排名第一个股：'+'，'.join(' '.join(x['stock_symbol'])+' '+x['stock_name']+'从百分之'+str(x['prev_target_weight'])+'调到百分之'+str(x['target_weight']) for x in xqPp['latest']['rebalancing_histories'])+'，预计开盘时成交。'
-    genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade')
+    genVideo('http://127.0.0.1:5500/portfolio.html',readText,'Trade',canvas=False)
 
 def wencai(sentence:str,tradeDate:datetime,yahoo=True):
     blacklist=[x.split('.')[1] for x in ak.stock_us_pink_spot_em()['代码'].tolist()]
@@ -311,7 +315,7 @@ def wencai(sentence:str,tradeDate:datetime,yahoo=True):
                 fout.write(
                     fin.read().replace('{{mktInfo}}',  tradeDate.strftime("%Y-%m-%d")).replace(
                         '{{strategy}}', '\n'.join('<p class="notification is-dark">%s</p>'%x for x in sentence.split('，'))))
-        genVideo('http://127.0.0.1:5500/strategy.html', readText,'strategy')
+        genVideo('http://127.0.0.1:5500/strategy.html', readText,'strategy',canvas=False)
     symbols=df['hqCode'].to_list()
     print(symbols)
     return symbols

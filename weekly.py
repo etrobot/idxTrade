@@ -8,6 +8,7 @@ PROXY = {
 }
 QUOTEPATH='Quotation/'
 ASSETPATH='video/'
+IFREAD=True
 
 def invesco(etfCode):
     print('get '+etfCode+' holdings')
@@ -56,7 +57,7 @@ def weekVideo(readText:str,subTitle='',read=True):
             fout.write(fin.read().replace('{{text}}', readText))
     videopic='http://127.0.0.1:5500/week%s.html'%subTitle
     print(videopic)
-    genVideo(videopic, readText, 'week'+subTitle,read)
+    genVideo(videopic, readText, 'week'+subTitle,read,canvas=True)
 
 
 def run():
@@ -73,7 +74,8 @@ def run():
     df.dropna(inplace=True)
     df.drop_duplicates(subset='Ticker', keep='last', inplace=True)
     df.set_index('Ticker',inplace=True)
-    df=df[(df.index != 'GOOG') & (df.index != 'CASH_USD')& (df.index != 'CASH_JPY')]
+    df=df[~df.index.str.contains('_')]
+    df=df[(df.index != 'GOOG')]
     df=df.join(all)
     futuSymbols = pd.read_csv("futuSymbols.csv",index_col='股票简称')[['股票名称']]
     df=df.join(futuSymbols)
@@ -99,14 +101,6 @@ def run():
     conditions=['mktValue','5daysmoney','20days','5days']
     for condition in conditions:
         df.sort_values(by=[condition],ascending=False,inplace=True)
-        if condition=='mktValue':
-            readText='当前美股市值前十大企业为：'+ ','.join(df['股票名称'][:10].tolist()).replace('-A','')
-        elif condition=='5daysmoney':
-            readText='本周美股成交前十大股票为：'+ ','.join(df['股票名称'][:10].tolist())
-        else:
-            rank=df.index[:3].tolist()
-            names=df['股票名称'][:3].tolist()
-            readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
         sortedArr=[]
         for symbol,item in df[:10].iterrows():
             stock={
@@ -118,17 +112,27 @@ def run():
             sortedArr.append(stock)
         with open(ASSETPATH+'wk_%s.json'%condition, 'w',encoding='utf-8') as outfile:
             json.dump(sortedArr, outfile,ensure_ascii=False)
+
+    for condition in conditions:
+        if condition=='mktValue':
+            readText='当前美股市值前十大企业为：'+ ','.join(df['股票名称'][:10].tolist()).replace('-A','')
+        elif condition=='5daysmoney':
+            readText='本周美股成交前十大股票为：'+ ','.join(df['股票名称'][:10].tolist())
+        else:
+            rank=df.index[:3].tolist()
+            names=df['股票名称'][:3].tolist()
+            readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
         with open('Template/wk_%s.xhtml'%condition, "r") as fin:
             with open(ASSETPATH + 'wk_%s.html'%condition, "w") as fout:
                 fout.write(fin.read())
         videopic='http://127.0.0.1:5500/wk_%s.html'%condition.lower()
         print(videopic)
-        genVideo(videopic, readText, 'wk_'+condition)
+        genVideo(videopic, readText, 'wk_'+condition,IFREAD)
 
     conf = configparser.ConfigParser()
     conf.read('config.ini')
-    weekVideo(conf['weekend']['conclusion'],'end')
-    weekVideo(conf['weekend']['begin'],read=True)
+    weekVideo(conf['weekend']['conclusion'],'end',IFREAD)
+    weekVideo(conf['weekend']['begin'],read=IFREAD)
     videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
     videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
     videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))
