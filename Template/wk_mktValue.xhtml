@@ -14,13 +14,22 @@
                         vertical-align: inherit !important;
                         line-height: 1.3rem;
                 }
+                .yellowTxt {
+                        color: yellow;
+                }
 
-                .redTxt {
+                .orangeTxt {
                         color: orange;
+                }
+                .brownTxt {
+                        color: chocolate;
                 }
 
                 .greenTxt {
-                        color: aqua;
+                        color: cadetblue;
+                }
+                .blueTxt{
+                        color:cornflowerblue;
                 }
         </style>
 </head>
@@ -180,13 +189,13 @@
                                                         dimension: 0,
                                                         pieces: [
                                                                 {
-                                                                        lte: 15,
+                                                                        lte: 40,
                                                                         color: cubeData.value[cubeData.value.length - 1] / cubeData.value[0] - 1 > 0 ? 'chocolate' : 'cornflowerblue'
                                                                 },
                                                                 {
-                                                                        gt: 15,
-                                                                        lte: 20,
-                                                                        color: cubeData.value[cubeData.value.length - 1] / cubeData.value[0] - 1 > 0 ? 'orange' : 'aqua'
+                                                                        gt: 40,
+                                                                        lte: 60,
+                                                                        color: cubeData.value[cubeData.value.length - 1] / cubeData.value[cubeData.value.length - 21] - 1 > 0 ? 'orange' : 'cadetblue'
                                                                 }
                                                         ]
                                                 },
@@ -213,13 +222,29 @@
                                         var line2 = '';
                                         for (var i = 0; i < line2arr.length; i++) {
                                                 if (line2arr[i].indexOf("市值") != -1) {
-                                                        line2 = line2 + '<span class="redTxt">' + line2arr[i] + "</span>";
+                                                        line2 = line2 + '<span class="has-text-white">' + line2arr[i] + "</span>";
                                                 } else {
                                                         line2 = line2 + line2arr[i]
                                                 }
                                                 if(i<line2arr.length-1)line2+=space;
                                         }
-                                        ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML = '<div class="has-text-white">' + item.line1 + "</div>" + "<div>" + line2 + "</div>" + "<div>" + item.line3 + "</div>"
+                                        var space='&nbsp;&nbsp;&nbsp;'
+                                        var line3arr=item.line3.split(space)
+                                        var line3 = '';
+                                        for (var i = 0; i < line3arr.length; i++) {
+                                                kv=line3arr[i].split(' ')
+                                                if(kv[0]=="60日"){
+                                                    if(kv[1].substring(0,1)=="+")line3=line3+'<span class="brownTxt">'+line3arr[i]+"&nbsp;</span>";
+                                                    else{line3=line3+'<span class="blueTxt">'+line3arr[i]+"</span>"};
+                                                }else if(kv[0]=="20日"){
+                                                        if(kv[1].substring(0,1)=="+")line3=line3+'<span class="orangeTxt">'+line3arr[i]+"&nbsp;</span>";
+                                                    else{line3=line3+'<span class="greenTxt">'+line3arr[i]+"</span>"};
+                                                }else{
+                                                        line3=line3+line3arr[i];
+                                                }
+                                                if(i<line3arr.length-1)line3+=space;
+                                        }
+                                        ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML = '<div class="has-text-white">' + item.line1 + "</div>" + "<div>" + line2 + "</div>" + "<div>" + line3 + "</div>"
                                 }
                         }
                 )
