@@ -98,11 +98,13 @@ def run():
             df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days-1]-100.0,1)
         df.at[symbol,'5daysmoney']=qdf['amount'][-5:].sum()
 
-    conditions=['mktValue','5daysmoney','20days','5days']
+    conditions=['mktValue','5daysmoney','60days','20days','5days']
+    condf={}
     for condition in conditions:
-        df.sort_values(by=[condition],ascending=False,inplace=True)
+        tempdf= df.sort_values(by=[condition],ascending=False).copy()
+        condf[condition]=tempdf
         sortedArr=[]
-        for symbol,item in df[:10].iterrows():
+        for symbol,item in tempdf[:10].iterrows():
             stock={
                 'line1':'<b>%s </b>%s'%(symbol,item['股票名称']),
                 'line2':'市值'+str(round(item['mktValue']/100000000.0,1)).replace('.0','')+'亿 / '+'周成交'+str(round(item['5daysmoney']/100000000.0,1)).replace('.0','')+'亿 / '+item['Sector'],
@@ -115,12 +117,12 @@ def run():
 
     for condition in conditions:
         if condition=='mktValue':
-            readText='当前美股市值前十大企业为：'+ ','.join(df['股票名称'][:10].tolist()).replace('-A','')
+            readText='当前美股市值前十大企业为：'+ ','.join(condf[condition]['股票名称'][:10].tolist()).replace('-A','')
         elif condition=='5daysmoney':
-            readText='本周美股成交前十大股票为：'+ ','.join(df['股票名称'][:10].tolist())
+            readText='本周美股成交前十大股票为：'+ ','.join(condf[condition]['股票名称'][:10].tolist()).replace('-A','')
         else:
-            rank=df.index[:3].tolist()
-            names=df['股票名称'][:3].tolist()
+            rank=condf[condition].index[:3].tolist()
+            names=condf[condition]['股票名称'][:3].tolist()
             readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
         with open('Template/wk_%s.xhtml'%condition, "r") as fin:
             with open(ASSETPATH + 'wk_%s.html'%condition, "w") as fout:

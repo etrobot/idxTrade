@@ -28,8 +28,10 @@ MAXHOLDING=4
 IS_PY3 = sys.version_info.major == 3
 
 def text2voice(text:str,audioFile='result'):
+    conf = configparser.ConfigParser()
+    conf.read('config.ini')
     filename=audioFile + '.mp3'
-    speech_config = speechsdk.SpeechConfig(subscription="b761438d396d48c585fa680d5d3575b1", region="eastasia")
+    speech_config = speechsdk.SpeechConfig(subscription=conf['azure']['tts'], region="eastasia")
     speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3)
     audio_config = speechsdk.audio.AudioOutputConfig(filename=filename)
 
@@ -47,7 +49,9 @@ def text2voice(text:str,audioFile='result'):
 
 def translate(text):
     # Add your key and endpoint
-    key = "34bd1b865d9b43b58733dbe713892a98"
+    conf = configparser.ConfigParser()
+    conf.read('config.ini')
+    key = conf['azure']['translate']
     endpoint = "https://api.cognitive.microsofttranslator.com"
 
     # Add your location, also known as region. The default is global.

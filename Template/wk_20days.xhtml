@@ -165,12 +165,12 @@
                                                 pieces: [
                                                         {
                                                                 lte: 40,
-                                                                color: cubeData.date[cubeData.date.length - 1] / cubeData.date[0] - 1 > 0 ? 'chocolate' : 'cornflowerblue'
+                                                                color: cubeData.value[cubeData.value.length - 1] / cubeData.value[0] - 1 > 0 ? 'chocolate' : 'cornflowerblue'
                                                         },
                                                         {
                                                                 gt: 40,
                                                                 lte: 60,
-                                                                color: cubeData.date[cubeData.date.length - 1] / cubeData.date[0] - 1 > 0 ? 'orange' : 'aqua'
+                                                                color: cubeData.value[cubeData.value.length - 1] / cubeData.value[cubeData.value.length - 2] - 1 > 0 ? 'orange' : 'aqua'
                                                         }
                                                 ]
                                         },
