@@ -7,46 +7,46 @@
                                 initial-scale=1">
         <title>cube</title>
         <link href="bulmaswatch.min.css" rel="stylesheet">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.common.min.js"></script>
         <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
-        <style>
-                #race {
-                        height:25rem;
-                        text-align:center
-                }
-        </style>
 </head>
 
 <body class="bgc has-text-white-ter">
         <article class="section content">
                 <br>
-                <div id="race" >
-                        <h1>动态走势对比</h1>
+                <div id="race" style="height: 25rem;">
                 </div>
                 <p></p>
         </article>
 
 </body>
 <script>
+getJSON();
+
 function getJSON() {
         $.getJSON("race.json",
                 function (result) {
-                        var chartDom = document.getElementById('race');
-                        var myChart = echarts.init(chartDom,"dark");
                         var option;
                         let legend=[]
-                        let data = [];
+                        let data=[]
                         for(j=0;j<result.data.length;j++){
+                                seriesData=[]
+                                for(i=0;i<result.date.length;i++){
+                                        seriesData.push({
+                                                name:result.data[j].oriData[i],
+                                                value: [result.date[i],result.data[j].data[i]]
+                                        });
+                                }
                                 legend.push(result.data[j].name)
                                 data.push(
-                                        {       endLabel: {
+                                        {       
+                                                endLabel: {
                                                         // color:(params)=>params.color,
                                                         show: true,
                                                         formatter: function (params) {
-                                                                return params.seriesName+':'+params.name;
+                                                                return params.seriesName;
                                                         }
                                                 },
-                                                offset:[0,10*j],
                                                 name: result.data[j].name,
                                                 type: 'line',
                                                 itemStyle: {
@@ -57,21 +57,19 @@ function getJSON() {
                                                                         }
                                                                 },
                                                 showSymbol: false,
-                                                data:[]
+                                                data:seriesData
                                         }
                                 );
                         }
-                        let date = [];
-
                         option = {
-                                animation:false,
+                                animationDuration: 60000,
                                 backgroundColor:'transparent',
                                 legend: {
                                                 data:legend,
                                                 left: 'center',
                                         },
                                 xAxis: {
-                                        type: 'category',
+                                        type: 'time',
                                         splitLine: {
                                                 show: true
                                         }
@@ -80,54 +78,18 @@ function getJSON() {
                                         type: 'value',
                                         scale: true,
                                         // interval:20,
-                                        axisLabel: {
-                                                formatter: '{value} %'
-                                        },
+                                        axisLabel: {  
+                                                formatter: '{value} %'  
+                                        }, 
                                         boundaryGap: [0, '100%'],
                                         splitLine: {
                                                 show: true
                                         }
                                 },
-                                dataZoom: [
-                                        {
-                                        show: false,
-                                        realtime: true,
-                                        start: 30,
-                                        end: 100
-                                        }
-                                ],
                                 series: data
                         };
-                        i = 0;
-                        zoomstart=0;
-                        var intervalId =setInterval(function () {
-                                for(j=0;j<result.data.length;j++){
-                                        // if(i>100)data[j].data.shift();
-                                        data[j].data.push({
-                                                name:result.data[j].oriData[i],
-                                                value: [result.date[i],result.data[j].data[i]]
-                                        });
-                                }
-                                i += 1
-                                myChart.setOption({
-                                        dataZoom: [
-                                                {
-                                                show: false,
-                                                realtime: true,
-                                                start: zoomstart,
-                                                end: 100
-                                                }
-                                        ],
-                                        series:data
-                                });
-                                if(i>100 && zoomstart>0)zoomstart-=0.1;
-                                if(i==result.data[0].data.length)clearInterval(intervalId);
-                        }, 10);
-                        option && myChart.setOption(option);
+                        echarts.init(document.getElementById('race'),"dark").setOption(option)
                 })
-}
-document.onkeydown = function (event) {
-        getJSON();
 }
 </script>
 

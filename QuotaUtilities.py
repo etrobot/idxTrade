@@ -221,7 +221,7 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
     #     df=df[df.index>=getTimestamp(startDate)]
     df.drop_duplicates(subset='timestamp', keep='first', inplace=True)
     df.set_index(['timestamp'], inplace=True)
-    df.index = pd.to_datetime(df.index,unit='ms',utc=True).tz_convert('Asia/Shanghai')
+    df.index = pd.to_datetime(df.index,unit='ms',utc=True).tz_convert('Asia/Shanghai').date
     df.index.name='date'
     df.sort_index(inplace=True)
     df['percent']=df['percent'].div(100).round(4)
