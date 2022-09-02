@@ -120,7 +120,7 @@ function getJSON() {
                                         ],
                                         series:data
                                 });
-                                if(i>100 && zoomstart>0)zoomstart-=0.1;
+                                if(i>100 && zoomstart>0)zoomstart-=1;
                                 if(i==result.data[0].data.length)clearInterval(intervalId);
                         }, 10);
                         option && myChart.setOption(option);
