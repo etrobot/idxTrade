@@ -11,6 +11,7 @@
         <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
         <style>
                 td {
+                        padding-right: 0 !important;
                         vertical-align: inherit !important;
                         line-height: 1.6rem;
                 }
@@ -110,6 +111,17 @@
         </div>
 
         </section>
+        <section class="section content">
+                <div class="columns">
+                        <div class="column is-half">
+                <table>
+                        <tbody id="stocks">
+
+                        </tbody>
+                </table>
+        </div>
+        </div>
+        </section>
 
 </body>
 <script>
@@ -146,8 +158,14 @@
         function getJSON(rank20) {
                 $.getJSON("wk_5days.json",
                         function (result) {
+                                let tdom = document.getElementById('stocks')
+                                for(var i = 11; i < 51; i++){
+                                        tdom.innerHTML+='<tr><td><h4>'+i+'</h4></td><td><div id="'+i+'" style="height:70px; width:90px"></div> </td><td class="disc p-1 is-size-7"></td></tr>'
+                                }
                                 console.log(rank20)
                                 for (var id = 1; id < result.length+1; id++) {
+                                let ecdom = document.getElementById(id)
+                                if(ecdom==null)continue;
                                 item=result[id-1]
                                 var cubeData = splitData(item.close);
                                 option = {
@@ -193,7 +211,6 @@
 
                                         ]
                                 };
-                                let ecdom=document.getElementById(id)
                                 echarts.init(ecdom, "dark").setOption(option);
                                 var space='&nbsp;&nbsp;&nbsp;'
                                 var line3arr=item.line3.split(space)
@@ -210,7 +227,7 @@
                                         }
                                         if(i<line3arr.length-1)line3+=space;
                                 }
-                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white">'+item.line1+"</div>"+"<div>"+item.line2+"</div>"+"<div>"+line3+"</div>"
+                                ecdom.parentNode.parentNode.getElementsByClassName("disc p-1 is-size-7")[0].innerHTML='<div class="has-text-white"><a href="https://xueqiu.com/S/'+item.line1.split(' ')[0].split('>')[1]+'" target=“_blank“>'+item.line1+"</a></div>"+"<div>"+item.line2+"</div>"+"<div>"+line3+"</div>"
                                 }
                         }
                 )

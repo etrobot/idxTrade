@@ -58,6 +58,7 @@ def weekVideo(readText:str,subTitle='',read=True):
     videopic='http://127.0.0.1:5500/week%s.html'%subTitle
     print(videopic)
     genVideo(videopic, readText, 'week'+subTitle,read,canvas=True)
+    article['week%s'%subTitle]=readText
 
 
 def run():
@@ -87,8 +88,7 @@ def run():
     for symbol,item in df.iterrows():
         print(symbol)
         quofile=QUOTEPATH+symbol+'.csv'
-        retry=False
-        retry=True
+        retry=IFREAD
         if os.path.isfile(quofile) and retry:
             qdf=pd.read_csv(quofile,index_col='date')
         else:
@@ -96,19 +96,21 @@ def run():
             qdf.to_csv(quofile,index_label='date')
         for days in [60,20,5]:
             df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days-1]-100.0,1)
+        df.at[symbol, '20daysAmp'] = round(max(qdf['close'][-21:]) * 100.0 / min(qdf['close'][-21:]) - 100.0, 1)
         df.at[symbol,'5daysmoney']=qdf['amount'][-5:].sum()
 
     conditions=['mktValue','5daysmoney','60days','20days','5days']
     condf={}
+    space='&nbsp;&nbsp;&nbsp;'
     for condition in conditions:
         tempdf= df.sort_values(by=[condition],ascending=False).copy()
         condf[condition]=tempdf
         sortedArr=[]
-        for symbol,item in tempdf[:10].iterrows():
+        for symbol,item in tempdf[:50].iterrows():
             stock={
                 'line1':'<b>%s </b>%s'%(symbol,item['股票名称']),
                 'line2':'市值'+str(round(item['mktValue']/100000000.0,1)).replace('.0','')+'亿 / '+'周成交'+str(round(item['5daysmoney']/100000000.0,1)).replace('.0','')+'亿 / '+item['Sector'],
-                'line3':'&nbsp;&nbsp;&nbsp;'.join(x+'日 +'+str(item[x+'days'])+'%' for x in ['5','20','60']).replace('.0','').replace('+-','-'),
+                'line3':space.join(x+'日 +'+str(item[x+'days'])+'%' for x in ['5','20','60']).replace(space+'60日','振%s%%'%item['20daysAmp']+space+'60日').replace('0%','%').replace('+-','-'),
                 'close':pd.read_csv(QUOTEPATH+symbol+'.csv',index_col='date')['close'][-60:].tolist()
             }
             sortedArr.append(stock)
@@ -122,14 +124,15 @@ def run():
             readText='本周美股成交前十大股票为：'+ ','.join(condf[condition]['股票名称'][:10].tolist()).replace('-A','')
         else:
             rank=condf[condition].index[:3].tolist()
-            names=condf[condition]['股票名称'][:3].tolist()
-            readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+','.join(names)+'；'+','.join(futuComInfo(x) for x in rank)
+            names=','.join('%s(%s)'%(x,v['股票名称']) for x,v in condf[condition][:3].iterrows())
+            readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+names+'；'+','.join(futuComInfo(x) for x in rank)
         with open('Template/wk_%s.xhtml'%condition, "r") as fin:
             with open(ASSETPATH + 'wk_%s.html'%condition, "w") as fout:
                 fout.write(fin.read())
         videopic='http://127.0.0.1:5500/wk_%s.html'%condition.lower()
         print(videopic)
         genVideo(videopic, readText, 'wk_'+condition,IFREAD)
+        article[condition]=readText
 
     conf = configparser.ConfigParser()
     conf.read('config.ini')
@@ -143,4 +146,6 @@ def run():
 
 
 if __name__=='__main__':
+    article={}
     run()
+    print('\n'.join(article[x].split(';')[0] for x in ['week','mktValue','5daysmoney','60days','20days','5days','weekend']))
