@@ -11,14 +11,14 @@
         <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
         <style>
                 #race {
-                        height:25rem;
+                        height:30rem;
                         text-align:center
                 }
         </style>
 </head>
 
 <body class="bgc has-text-white-ter">
-        <article class="section content">
+        <article class="content">
                 <br>
                 <div id="race" >
                         <h1>动态走势对比</h1>
@@ -43,7 +43,7 @@ function getJSON() {
                                                         // color:(params)=>params.color,
                                                         show: true,
                                                         formatter: function (params) {
-                                                                return params.seriesName+':'+params.name;
+                                                                return params.seriesName.split(' ')[0]+params.value[1]+'%';
                                                         }
                                                 },
                                                 offset:[0,10*j],

@@ -3,11 +3,9 @@ from QuotaUtilities import *
 
 ASSETPATH='video/'
 
-def raceVideo(symbols:dict,baseSymbol='.IXIC',length=462):
+def raceVideo(symbols:dict,baseSymbol='.IXIC',beforeStartDate=datetime(2018,12,31).date()):
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
-    dates=[]
     sortedArr=[]
-    # startDate=datetime.now()-timedelta(days=300)
     qdf=xueqiuK(baseSymbol,cookie=xq_a_token)[['close','percent']]
     for symbol,name in symbols.items():
         if symbol==baseSymbol:
@@ -16,6 +14,7 @@ def raceVideo(symbols:dict,baseSymbol='.IXIC',length=462):
         qdf=qdf.join(k,how='left',rsuffix='_%s'%symbol).fillna(method='ffill')
     qdf.rename(columns={'close':'close_'+baseSymbol,'percent':'percent_'+baseSymbol},inplace=True)
     qdf=qdf.dropna()
+    qdf=qdf[qdf.index>=beforeStartDate]
     length=len(qdf.index)
     dates = [x.strftime("%Y-%m-%d") for x in qdf.index[-length:]]
     for symbol, name in symbols.items():
@@ -24,7 +23,7 @@ def raceVideo(symbols:dict,baseSymbol='.IXIC',length=462):
         for i in range(1,len(qdf)):
             pct.append(pct[-1]*(1+qdf['percent_'+symbol][i]))
         stock={
-            'name':name,
+            'name':'%s %s'%(name,symbol),
             'oriData':k[-length:].tolist(),
             'data':[round(x*100-100,2) for x in pct]
         }
@@ -37,7 +36,7 @@ def raceVideo(symbols:dict,baseSymbol='.IXIC',length=462):
 
 if __name__=='__main__':
     raceVideo(symbols={
-        '.DJI':'道琼斯',
-        'SH000001':'上证指数',
-        'HKHSI':'恒生指数'
-    },baseSymbol='.DJI')
+        'SZ300750':'宁德时代',
+        'TSLA':'特斯拉',
+        '01211':'比亚迪股份'
+    },baseSymbol='TSLA',beforeStartDate=datetime(2018,12,31).date())

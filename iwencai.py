@@ -124,9 +124,10 @@ if __name__ == "__main__":
 
     # sell filter
     wait4close=False
-    limits = []
+    limits = getLimit(idx.index[-1],mode='x')
+    twicePortion = len(limits[limits['是否连续涨停']==1])/len(limits)
+    limits = limits['代码'].tolist()
     if len(position)>=MAXHOLDING:
-        limits=getLimit(idx.index[-1])['代码'].tolist()
         kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(stockHeld)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
         sortedHoldings = sorted(
@@ -155,4 +156,4 @@ if __name__ == "__main__":
         pd.options.display.max_rows = 0
         pd.options.display.width = 0
         pd.options.display.colheader_justify = 'left'
-        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','概念']])
+        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','概念']],twicePortion)

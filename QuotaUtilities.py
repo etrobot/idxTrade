@@ -110,14 +110,16 @@ def getLimit(pdate:date=None,fname=None,mode=None):
                     t2 = list(eval(t1))
                     t2.reverse()
                     for i in range(len(t2)):
-                        if t2[i][0].startswith('6'):
-                            t2[i][0]='SH'+t2[i][0]
+                        st=0
+                        if mode is not None:
+                            st=1
+                        if t2[i][st].startswith('6'):
+                            t2[i][st]='SH'+t2[i][st]
                         else:
-                            t2[i][0] = 'SZ' + t2[i][0]
+                            t2[i][st] = 'SZ' + t2[i][st]
                     df = pd.DataFrame(t2, columns=zdt_indexx)
-                    df.to_csv('md/limit'+pdate.strftime("%Y%m%d")+'.csv')
-                    if mode is None:
-                        return df[~df['名称'].str.contains('\*|退')]
+                    # df.to_csv('md/limit'+pdate.strftime("%Y%m%d")+'.csv')
+                    return df[~df['名称'].str.contains('\*|退')]
                         # return df[~df['代码'].astype(str).str.startswith('SH688')]
                         # return df[~df['代码'].astype(str).str.startswith('SH688') & ~df['代码'].astype(str).str.startswith('SZ3')]
                 except Exception as e:
@@ -172,7 +174,8 @@ def fillDates(dates,dataDf:pd.DataFrame):
 
 def mlog(*args):
     for v in args:
-        logging.debug(v)
+        print(v)
+        # logging.debug(v)
 
 def getTimestamp(dateString):
     d=[int(x) for x in dateString.split('-')]
