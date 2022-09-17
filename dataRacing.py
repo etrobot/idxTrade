@@ -36,7 +36,7 @@ def raceVideo(symbols:dict,baseSymbol='.IXIC',beforeStartDate=datetime(2018,12,3
 
 if __name__=='__main__':
     raceVideo(symbols={
-        'SZ300750':'宁德时代',
-        'TSLA':'特斯拉',
-        '01211':'比亚迪股份'
-    },baseSymbol='TSLA',beforeStartDate=datetime(2018,12,31).date())
+        'SZ000568':'老窖',
+        'SH600809':'汾酒',
+        'SZ002304':'洋河'
+    },baseSymbol='SH600519',beforeStartDate=datetime(2017,12,29).date())

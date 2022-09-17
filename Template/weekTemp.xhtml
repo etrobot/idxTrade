@@ -27,16 +27,7 @@
 
 <body >
         <section class="section content fix">
-        <div class="columns is-centered">
-                <div class="column is-half vertical">
-                        <h1>超越量化：美股一周复盘</h1>
-                        <p id="date"></p>
-                        <br>
-                        <p class="has-text-white">
-                                {{text}}
-                        </p>
-                </div>
-                <div class="column is-half">
+                                <div class="column is-half">
                         <table class="table is-fullwidth">
                                 <tbody>
 
@@ -61,6 +52,16 @@
                         </tbody>
 
                         </table>
+                </div>
+
+        <div class="columns is-centered">
+                <div class="column is-half vertical">
+                        <h1 id="title">超越量化：美股一周复盘</h1>
+                        <p id="date"></p>
+                        <br>
+                        <p class="has-text-white">
+                                {{text}}
+                        </p>
                 </div>
         </div>
 
@@ -88,7 +89,7 @@
 
         function getJSON() {
                 jsdate=new Date();
-                document.getElementById('date').innerHTML=(jsdate.getMonth()+1)+'月'+jsdate.getDate()+'日'+' 星期'+'日一二三四五六'.charAt(jsdate.getDay());
+                document.getElementById('date').innerHTML=jsdate.getFullYear()+'年'+(jsdate.getMonth()+1)+'月第'+_getMonthWeek(jsdate)+'周';
                 $.getJSON("week.json",
                         function (result) {
                                 for (var id = 1; id < result.length+1; id++) {
@@ -145,6 +146,19 @@
                         }
                 )
         }
+
+        function _getMonthWeek(theDate){
+            let currentDay = new Date(theDate);
+            console.info(currentDay); // 2019-05-07T07:36:00.883Z
+
+            // 获取该日期所在周的周六，如2019.5月的周六有4号、11号、18号、25号、31号
+            let theSaturday = currentDay.getDate() + (6 - currentDay.getDay());
+            console.info(theSaturday); // 11
+
+            return Math.ceil(theSaturday / 7);
+        }
+
+
 </script>
 
 </html>

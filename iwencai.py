@@ -110,23 +110,27 @@ if __name__ == "__main__":
         #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
         # else:
         #     wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
+
+    # if len(wdfX700)>0:
+    #     w=wdfX700.iloc[0]
+    # sell filter
+    wait4close=False
+    limits = getLimit(idx.index[-1])
+    twicePortion = round(len(limits[limits['代码'].isin(getLimit(idx.index[-1],mode='x')['代码'].tolist())])/len(limits)*100,2)
     if len(sys.argv) == 2 and datetime.now().hour>=14:
         df2file = wdf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date']].append(pd.read_csv('wencai.csv'))
         df2file.to_csv('wencai.csv', index=False)
         df2file['股票简称'] = df2file.apply(lambda x: '<a href="https://xueqiu.com/S/{stock_code}">{stock_name}</a>'.format(
             stock_code=x['股票代码'], stock_name=x['股票简称']), axis=1)
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
-        renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '问财')
-    w=wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
-    # if len(wdfX700)>0:
-    #     w=wdfX700.iloc[0]
+        renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '%s%%'%twicePortion)
+    limits = limits['代码'].tolist()
+    if twicePortion < 25:
+        wdf = wdf[~wdf['股票代码'].isin(limits)]
+    w = wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
+
     print(w['股票简称'], w['股票代码'], w['最新涨跌幅'],w['a股市值(不含限售股)'],'亿',w['概念'])
 
-    # sell filter
-    wait4close=False
-    limits = getLimit(idx.index[-1],mode='x')
-    twicePortion = len(limits[limits['是否连续涨停']==1])/len(limits)
-    limits = limits['代码'].tolist()
     if len(position)>=MAXHOLDING:
         kurl = 'https://xueqiu.com/service/v5/stock/batch/quote?symbol=' + ','.join(stockHeld)
         quotes = json.loads(requests.get(url=kurl, headers={"user-agent": "Mozilla"}).text)['data']['items']
@@ -146,8 +150,6 @@ if __name__ == "__main__":
 
     # trade
     if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and len(sys.argv) < 3:
-        if len(limits)==0:
-            limits=getLimit(idx.index[-1])['代码'].tolist()
         position.append(xueqiuP.newPostition('cn', w['股票代码'], min(100/MAXHOLDING, cash)))
         if w['股票代码'] in limits or wait4close:
             t.sleep(180)
@@ -156,4 +158,4 @@ if __name__ == "__main__":
         pd.options.display.max_rows = 0
         pd.options.display.width = 0
         pd.options.display.colheader_justify = 'left'
-        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','概念']],twicePortion)
+        print(wencaiDf[['股票简称', '股票代码', '最新涨跌幅', 'a股市值(不含限售股)', 'factor', 'date','概念']],'\n',twicePortion)
