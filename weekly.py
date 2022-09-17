@@ -1,6 +1,8 @@
 import urllib.request,csv,json
 from video import *
 from QuotaUtilities import *
+from pytz import timezone
+from moviepy.editor import CompositeVideoClip
 
 PROXY = {
     'http': 'http://127.0.0.1:8081',  # 访问http需要
@@ -8,7 +10,7 @@ PROXY = {
 }
 QUOTEPATH='Quotation/'
 ASSETPATH='video/'
-IFREAD=True
+IFREAD=False
 
 def invesco(etfCode):
     print('get '+etfCode+' holdings')
@@ -58,8 +60,13 @@ def weekVideo(readText:str,subTitle='',read=True):
     videopic='http://127.0.0.1:5500/week%s.html'%subTitle
     print(videopic)
     genVideo(videopic, readText, 'week'+subTitle,read,canvas=True)
+    if os.path.isfile('video/week.mp4') and os.path.isfile('video/introGirl.mp4') and len(subTitle)==0:
+        clip1 = VideoFileClip('video/week.mp4')
+        size = (222, 397)
+        clip2 = VideoFileClip('video/introGirl.mp4').resize(size).set_position(
+            ('right','bottom'))
+        CompositeVideoClip([clip1, clip2]).write_videofile('video/week.mp4')
     article['week%s'%subTitle]=readText
-
 
 def run():
     all = ak.stock_us_spot_em().rename(
@@ -88,7 +95,7 @@ def run():
     for symbol,item in df.iterrows():
         print(symbol)
         quofile=QUOTEPATH+symbol+'.csv'
-        retry=IFREAD
+        retry=not IFREAD
         if os.path.isfile(quofile) and retry:
             qdf=pd.read_csv(quofile,index_col='date')
         else:
@@ -136,8 +143,8 @@ def run():
 
     conf = configparser.ConfigParser()
     conf.read('config.ini')
-    weekVideo(conf['weekend']['conclusion'],'end',IFREAD)
-    weekVideo(conf['weekend']['begin'],read=IFREAD)
+    weekVideo(conf['weekend']['conclusion'],'end',read=IFREAD)
+    weekVideo(conf['weekend']['begin'].replace('{{time}}',datetime.now(timezone('EST')).strftime('%y年%m月%d日')))
     videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
     videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
     videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))
