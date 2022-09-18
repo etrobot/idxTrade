@@ -105,11 +105,14 @@ def run():
             df.at[symbol,str(days)+'days']=round(qdf['close'][-1]*100.0/qdf['close'][-days-1]-100.0,1)
         df.at[symbol, '20daysAmp'] = round(max(qdf['close'][-21:]) * 100.0 / min(qdf['close'][-21:]) - 100.0, 1)
         df.at[symbol,'5daysmoney']=qdf['amount'][-5:].sum()
-
+        df.at[symbol,'20daysLastweek']=round(qdf['close'][-6]*100.0/qdf['close'][-27]-100.0,1)
+    lasWk={}
     conditions=['mktValue','5daysmoney','60days','20days','5days']
     condf={}
     space='&nbsp;&nbsp;&nbsp;'
     for condition in conditions:
+        if '%sLastweek'%condition in df.columns:
+            lasWk[condition] = df.sort_values(by=['%sLastweek'%condition], ascending=False).index.tolist()
         tempdf= df.sort_values(by=[condition],ascending=False).copy()
         condf[condition]=tempdf
         sortedArr=[]
@@ -120,6 +123,8 @@ def run():
                 'line3':space.join(x+'日 +'+str(item[x+'days'])+'%' for x in ['5','20','60']).replace(space+'60日','振%s%%'%item['20daysAmp']+space+'60日').replace('0%','%').replace('+-','-'),
                 'close':pd.read_csv(QUOTEPATH+symbol+'.csv',index_col='date')['close'][-60:].tolist()
             }
+            if '%sLastweek' % condition in df.columns:
+                stock['line1'] =  stock['line1']+' 上周No.%s'%(lasWk[condition].index(symbol)+1)
             sortedArr.append(stock)
         with open(ASSETPATH+'wk_%s.json'%condition, 'w',encoding='utf-8') as outfile:
             json.dump(sortedArr, outfile,ensure_ascii=False)

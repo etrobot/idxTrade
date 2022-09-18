@@ -36,7 +36,6 @@ def raceVideo(symbols:dict,baseSymbol='.IXIC',beforeStartDate=datetime(2018,12,3
 
 if __name__=='__main__':
     raceVideo(symbols={
-        'SZ000568':'老窖',
-        'SH600809':'汾酒',
-        'SZ002304':'洋河'
-    },baseSymbol='SH600519',beforeStartDate=datetime(2017,12,29).date())
+        'UUP':'美元指数',
+        'SPY':'标普ETF',
+    },baseSymbol='SZ000568',beforeStartDate=datetime(2021,12,29).date())
