@@ -109,6 +109,8 @@ def getSinaNews(symbol:str):
 
 def getYahooNews(symbol:str):
     nws=yNews.get_yf_rss(symbol)
+    if len(nws)==0:
+        return pd.DataFrame(columns=['title','dateText'])
     print(symbol,len(nws),nws[0]['published'],nws[0]['title'])
     df=pd.DataFrame([{'title':x['title'],'dateText':'雅虎财经|%s'%datetime.utcfromtimestamp(mktime(x['published_parsed'])).strftime("%Y年%m月%d日"),'date':datetime.utcfromtimestamp(mktime(x['published_parsed']))} for x in yNews.get_yf_rss(symbol)])
     df = df[df['date']>datetime.now()-timedelta(days=180)]
@@ -339,7 +341,7 @@ def run(xConfig:dict,symbols=[]):
     tradeDate = latestTradeDate()
     if len(symbols)==0:
         symbols=wencai(xConfig['strategy'],tradeDate)[:3]
-        trade(xConfig,symbols)
+        # trade(xConfig,symbols)
         genTradeVideo(tradeDate,xConfig)
     symbols.reverse()
     combineFinal(symbols,tradeDate)
