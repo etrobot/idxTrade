@@ -52,10 +52,10 @@ def weekVideo(readText:str,subTitle='',read=True):
             'close':k[-61:].tolist()
         }
         sortedArr.append(stock)
-    with open(ASSETPATH+'week.json', 'w',encoding='utf-8') as outfile:
+    with open('html/week.json', 'w',encoding='utf-8') as outfile:
         json.dump(sortedArr, outfile,ensure_ascii=False)
     with open("Template/weekTemp.xhtml", "r") as fin:
-        with open(ASSETPATH + "week%s.html"%subTitle, "w") as fout:
+        with open("html/week%s.html"%subTitle, "w") as fout:
             fout.write(fin.read().replace('{{text}}', readText))
     videopic='http://127.0.0.1:5500/week%s.html'%subTitle
     print(videopic)
@@ -126,7 +126,7 @@ def run():
             if '%sLastweek' % condition in df.columns:
                 stock['line1'] =  stock['line1']+' 上周No.%s'%(lasWk[condition].index(symbol)+1)
             sortedArr.append(stock)
-        with open(ASSETPATH+'wk_%s.json'%condition, 'w',encoding='utf-8') as outfile:
+        with open('html/wk_%s.json'%condition, 'w',encoding='utf-8') as outfile:
             json.dump(sortedArr, outfile,ensure_ascii=False)
 
     for condition in conditions:
@@ -139,7 +139,7 @@ def run():
             names=','.join('%s(%s)'%(x,v['股票名称']) for x,v in condf[condition][:3].iterrows())
             readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+names+'；'+','.join(futuComInfo(x) for x in rank)
         with open('Template/wk_%s.xhtml'%condition, "r") as fin:
-            with open(ASSETPATH + 'wk_%s.html'%condition, "w") as fout:
+            with open('html/wk_%s.html'%condition, "w") as fout:
                 fout.write(fin.read())
         videopic='http://127.0.0.1:5500/wk_%s.html'%condition.lower()
         print(videopic)
@@ -148,8 +148,8 @@ def run():
 
     conf = configparser.ConfigParser()
     conf.read('config.ini')
-    weekVideo(conf['weekend']['conclusion'],'end',read=IFREAD)
-    weekVideo(conf['weekend']['begin'].replace('{{time}}',datetime.now(timezone('EST')).strftime('%y年%m月%d日')))
+    weekVideo(conf['weekend']['conclusion'],'end',read=True)
+    weekVideo(conf['weekend']['begin'].replace('{{time}}',datetime.now(timezone('EST')).strftime('%y年%m月%d日')),read=IFREAD)
     videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
     videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
     videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))

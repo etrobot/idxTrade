@@ -178,7 +178,7 @@ def genEchartJson(qdf:pd.DataFrame):
     qdf['date']=qdf.index.strftime('%m-%d').tolist()
     transdf = qdf[['date', 'open', 'close', 'low', 'high', 'volume']].copy()
     transdf.T
-    with open(FOLDER+'videoQuote.json', 'w', encoding='utf-8') as f:
+    with open('html/videoQuote.json', 'w', encoding='utf-8') as f:
         json.dump(transdf.values.tolist(), f)
 
 async def browserShot(url:str,symbol:str,canvas=False):
@@ -213,7 +213,7 @@ def genStockVideo(symbol:str,tradeDate:datetime):
     readText = '，'.join([companyInfo, '最新一条新闻:'+latestNews , '来源:'+ newsDf.iloc[0]['dateText']])+'。'
     newsTable = newsDf[:6].to_html(index=False).replace('<table', '<table class="table"')
     with open("Template/quoteTemp.xhtml", "r") as fin:
-        with open(FOLDER + "quote.html", "w") as fout:
+        with open("html/quote.html", "w") as fout:
             fout.write(
                 fin.read().replace('{{title}}', symbol + ' ' + tradeDateTxt).replace('{{news}}', newsTable).replace(
                     '{{companyInfo}}', companyInfo))
@@ -265,10 +265,10 @@ def genTradeVideo(tradeDate:datetime,xueqiuCfg:dict):
     holding=pd.DataFrame(xqPp['last']['holdings'])[['stock_symbol','stock_name','weight']]
     holdingDf=holding.rename(columns={'stock_symbol':'股票代码','stock_name':'企业名称','weight':'持仓百分比'}).to_html(index=False).replace('<table','<table class="table"')
     data=xueqiuP.getCube()
-    with open(FOLDER+'cube.json', 'w') as outfile:
+    with open('html/cube.json', 'w') as outfile:
         json.dump(data, outfile)
     with open("Template/portfolioTemp.xhtml", "r") as fin:
-        with open(FOLDER + "portfolio.html", "w") as fout:
+        with open("html/portfolio.html", "w") as fout:
             fout.write(
                 fin.read().replace('{{title}}', tradeDateTxt+' 组合月收益%s%% 累计收益%s%%'%(xqPp['monthly_gain'],xqPp['total_gain'])).replace('{{rebalancing}}',latestDf).replace(
                     '{{position}}', holdingDf))
@@ -317,7 +317,7 @@ def wencai(sentence:str,tradeDate:datetime,yahoo=True):
         text2voice(readText,FOLDER + 'strategy')
     if not os.path.isfile('strategy.mp4'):
         with open("Template/strategyTemp.xhtml", "r") as fin:
-            with open(FOLDER + "strategy.html", "w") as fout:
+            with open("html/strategy.html", "w") as fout:
                 fout.write(
                     fin.read().replace('{{mktInfo}}',  tradeDate.strftime("%Y-%m-%d")).replace(
                         '{{strategy}}', '\n'.join('<p class="notification is-dark">%s</p>'%x for x in sentence.split('，'))))
