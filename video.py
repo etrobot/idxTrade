@@ -224,7 +224,8 @@ def genStockVideo(symbol:str,tradeDate:datetime):
     genVideo('http://127.0.0.1:5500/quote.html',readText,symbol)
 
 def genVideo(targetUrl:str,readText:str,symbol='symbol',read=True,canvas=True):
-    asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol,canvas))
+    if targetUrl.endswith('.html'):
+        asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol,canvas))
     if read:
         text2voice(readText,FOLDER + symbol)
         get_video(get_time_count(symbol), symbol,)
