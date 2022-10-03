@@ -228,7 +228,7 @@ def genVideo(targetUrl:str,readText:str,symbol='symbol',read=True,canvas=True):
         asyncio.get_event_loop().run_until_complete(browserShot(targetUrl,symbol,canvas))
     if read:
         text2voice(readText,FOLDER + symbol)
-        get_video(get_time_count(symbol), symbol,)
+        get_video(get_time_count(symbol), symbol)
         add_audio(symbol)
     else:
         get_video(20, symbol)

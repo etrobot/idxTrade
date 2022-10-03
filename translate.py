@@ -109,7 +109,7 @@ def fetch_token():
     """  TOKEN end """
 
 
-def text2voice(text:str,audioFile='result'):
+def baiduTTS(text:str,audioFile='result'):
     # 发音人选择, 基础音库：0为度小美，1为度小宇，3为度逍遥，4为度丫丫，
     # 精品音库：5为度小娇，103为度米朵，106为度博文，110为度小童，111为度小萌，默认为度小美
     PER = 0

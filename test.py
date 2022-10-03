@@ -1,7 +1,8 @@
 import random,hashlib
 from QuotaUtilities import *
 # from xq_backup_lite import *
-import lxml
+from video import *
+from translate import *
 
 def _create_random_tmp(salt_count, seed):
     """
@@ -90,8 +91,8 @@ def tencentQuotaAbu(mkt,symbol):
 
 if __name__=='__main__':
     # print(list({'abc':'cccc'}).values()[0])
-    xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
-    print(xq_a_token)
+    # xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
+    # print(xq_a_token)
     # usHot(xq_a_token)
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
     # checkTradingDay()
@@ -149,3 +150,8 @@ if __name__=='__main__':
     # print(xueqiuConcerned('hk',xq_a_token)['symbol'])
     # heldBy('SZ002463',pdate)
     # getCsvK()
+    symbol='test'
+    readText="熊市策略汇总：1、趋势为王，做空大盘；2、火中取栗，短线搏反弹；3、价值信仰，越跌越买;4、割肉离场，来日再战"
+    baiduTTS(readText,'test')
+    get_video(get_time_count(symbol), symbol)
+    add_audio(symbol)
