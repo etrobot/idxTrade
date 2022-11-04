@@ -136,7 +136,7 @@ def run():
             readText='本周美股成交前十大股票为：'+ ','.join(condf[condition]['股票名称'][:10].tolist()).replace('-A','')
         else:
             rank=condf[condition].index[:3].tolist()
-            names=','.join('%s(%s)'%(x,v['股票名称']) for x,v in condf[condition][:3].iterrows())
+            names=','.join('%s(%s)'%('.'.join(x),v['股票名称']) for x,v in condf[condition][:3].iterrows())
             readText='美股近%s个交易日涨幅最高前三个股是:'%condition[:len(condition)-4]+names+'；'+','.join(futuComInfo(x) for x in rank)
         with open('Template/wk_%s.xhtml'%condition, "r") as fin:
             with open('html/wk_%s.html'%condition, "w") as fout:
