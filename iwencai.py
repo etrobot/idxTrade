@@ -90,7 +90,7 @@ if __name__ == "__main__":
     df['code']=df['股票代码'].str[:6]
     df['股票代码'] = df['股票代码'].str[7:] + df['股票代码'].str[:6]
     df['a股市值(不含限售股)']= np.round(pd.to_numeric(df['a股市值(不含限售股)'], errors='coerce')/1000000000)*10
-    df['factor']= pd.to_numeric(df["5日均线"], errors='coerce')/pd.to_numeric(df['跌停价'], errors='coerce')*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
+    df['factor']= pd.to_numeric(df["5日均线"], errors='coerce')/(pd.to_numeric(df['跌停价'], errors='coerce')+pd.to_numeric(df['涨停价'], errors='coerce'))*(100+pd.to_numeric(df['最新涨跌幅'], errors='coerce'))
     # df['factor']= df['融资余额增速']
     df['date'] = idx.index[-1]
     if os.path.isfile('limit/limits.csv'):
@@ -125,7 +125,7 @@ if __name__ == "__main__":
         df2file.drop(labels=['股票代码'],axis=1,inplace=True)
         renderHtml(df2file, '../CMS/source/Quant/iwencai.html', '%s%%'%twicePortion)
     limits = limits['代码'].tolist()
-    if twicePortion < 25:
+    if round(twicePortion) < 20:
         wdf = wdf[~wdf['股票代码'].isin(limits)]
     w = wdf[~wdf['股票代码'].isin(stockHeld)].iloc[0]
 

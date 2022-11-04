@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="week index combine">
+    <list default="true" id="99f832de-b0c6-4b06-a05a-96a826e1d877" name="Default Changelist" comment="video update">
+      <change afterPath="$PROJECT_DIR$/Matrix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/videoCombinator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iwencai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwencai.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,8 +199,8 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="vcs.patch.to.clipboard" value="true" />
   </component>
-  <component name="RunManager" selected="Python.video">
-    <configuration name="idxTrade" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.Matrix">
+    <configuration name="Matrix" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -209,8 +212,8 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/idxTrade.py" />
-      <option name="PARAMETERS" value="cn 0" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Matrix.py" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -281,6 +284,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="videoCombinator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="idxTrade" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/videoCombinator.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="weekly" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="idxTrade" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -323,43 +347,22 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="yahooStockNews" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="idxTrade" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/yahooStockNews.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.test" />
       <item itemvalue="Python.xq_backup_lite" />
-      <item itemvalue="Python.idxTrade" />
       <item itemvalue="Python.iwencai" />
       <item itemvalue="Python.video" />
-      <item itemvalue="Python.yahooStockNews" />
       <item itemvalue="Python.weekly" />
+      <item itemvalue="Python.videoCombinator" />
+      <item itemvalue="Python.Matrix" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Matrix" />
+        <item itemvalue="Python.iwencai" />
+        <item itemvalue="Python.videoCombinator" />
         <item itemvalue="Python.video" />
         <item itemvalue="Python.weekly" />
-        <item itemvalue="Python.iwencai" />
-        <item itemvalue="Python.yahooStockNews" />
-        <item itemvalue="Python.idxTrade" />
       </list>
     </recent_temporary>
   </component>
@@ -374,83 +377,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1602652973173</updated>
-    </task>
-    <task id="LOCAL-00206" summary="update">
-      <created>1633655548374</created>
-      <option name="number" value="00206" />
-      <option name="presentableId" value="LOCAL-00206" />
-      <option name="project" value="LOCAL" />
-      <updated>1633655548374</updated>
-    </task>
-    <task id="LOCAL-00207" summary="update">
-      <created>1634026684075</created>
-      <option name="number" value="00207" />
-      <option name="presentableId" value="LOCAL-00207" />
-      <option name="project" value="LOCAL" />
-      <updated>1634026684076</updated>
-    </task>
-    <task id="LOCAL-00208" summary="update">
-      <created>1634034795808</created>
-      <option name="number" value="00208" />
-      <option name="presentableId" value="LOCAL-00208" />
-      <option name="project" value="LOCAL" />
-      <updated>1634034795808</updated>
-    </task>
-    <task id="LOCAL-00209" summary="update">
-      <created>1634105083774</created>
-      <option name="number" value="00209" />
-      <option name="presentableId" value="LOCAL-00209" />
-      <option name="project" value="LOCAL" />
-      <updated>1634105083774</updated>
-    </task>
-    <task id="LOCAL-00210" summary="update">
-      <created>1634182850042</created>
-      <option name="number" value="00210" />
-      <option name="presentableId" value="LOCAL-00210" />
-      <option name="project" value="LOCAL" />
-      <updated>1634182850042</updated>
-    </task>
-    <task id="LOCAL-00211" summary="update">
-      <created>1634280201062</created>
-      <option name="number" value="00211" />
-      <option name="presentableId" value="LOCAL-00211" />
-      <option name="project" value="LOCAL" />
-      <updated>1634280201063</updated>
-    </task>
-    <task id="LOCAL-00212" summary="update">
-      <created>1634280232625</created>
-      <option name="number" value="00212" />
-      <option name="presentableId" value="LOCAL-00212" />
-      <option name="project" value="LOCAL" />
-      <updated>1634280232625</updated>
-    </task>
-    <task id="LOCAL-00213" summary="remove Fund">
-      <created>1634806637046</created>
-      <option name="number" value="00213" />
-      <option name="presentableId" value="LOCAL-00213" />
-      <option name="project" value="LOCAL" />
-      <updated>1634806637046</updated>
-    </task>
-    <task id="LOCAL-00214" summary="update">
-      <created>1634872347505</created>
-      <option name="number" value="00214" />
-      <option name="presentableId" value="LOCAL-00214" />
-      <option name="project" value="LOCAL" />
-      <updated>1634872347505</updated>
-    </task>
-    <task id="LOCAL-00215" summary="update">
-      <created>1634980104432</created>
-      <option name="number" value="00215" />
-      <option name="presentableId" value="LOCAL-00215" />
-      <option name="project" value="LOCAL" />
-      <updated>1634980104434</updated>
-    </task>
-    <task id="LOCAL-00216" summary="update">
-      <created>1636009165828</created>
-      <option name="number" value="00216" />
-      <option name="presentableId" value="LOCAL-00216" />
-      <option name="project" value="LOCAL" />
-      <updated>1636009165830</updated>
     </task>
     <task id="LOCAL-00217" summary="update">
       <created>1639053497317</created>
@@ -718,7 +644,84 @@
       <option name="project" value="LOCAL" />
       <updated>1661938715445</updated>
     </task>
-    <option name="localTasksCounter" value="255" />
+    <task id="LOCAL-00255" summary="video template">
+      <created>1661940123768</created>
+      <option name="number" value="00255" />
+      <option name="presentableId" value="LOCAL-00255" />
+      <option name="project" value="LOCAL" />
+      <updated>1661940123768</updated>
+    </task>
+    <task id="LOCAL-00256" summary="video optimzation">
+      <created>1661942762165</created>
+      <option name="number" value="00256" />
+      <option name="presentableId" value="LOCAL-00256" />
+      <option name="project" value="LOCAL" />
+      <updated>1661942762165</updated>
+    </task>
+    <task id="LOCAL-00257" summary="race video">
+      <created>1662036584986</created>
+      <option name="number" value="00257" />
+      <option name="presentableId" value="LOCAL-00257" />
+      <option name="project" value="LOCAL" />
+      <updated>1662036584986</updated>
+    </task>
+    <task id="LOCAL-00258" summary="race optim and add buidin version">
+      <created>1662097024383</created>
+      <option name="number" value="00258" />
+      <option name="presentableId" value="LOCAL-00258" />
+      <option name="project" value="LOCAL" />
+      <updated>1662097024383</updated>
+    </task>
+    <task id="LOCAL-00259" summary="race optim">
+      <created>1662098668759</created>
+      <option name="number" value="00259" />
+      <option name="presentableId" value="LOCAL-00259" />
+      <option name="project" value="LOCAL" />
+      <updated>1662098668759</updated>
+    </task>
+    <task id="LOCAL-00260" summary="week fix color bug">
+      <created>1662110060617</created>
+      <option name="number" value="00260" />
+      <option name="presentableId" value="LOCAL-00260" />
+      <option name="project" value="LOCAL" />
+      <updated>1662110060617</updated>
+    </task>
+    <task id="LOCAL-00261" summary="week color optim, add 60 days">
+      <created>1662112133344</created>
+      <option name="number" value="00261" />
+      <option name="presentableId" value="LOCAL-00261" />
+      <option name="project" value="LOCAL" />
+      <updated>1662112133344</updated>
+    </task>
+    <task id="LOCAL-00262" summary="datarace update">
+      <created>1662442820973</created>
+      <option name="number" value="00262" />
+      <option name="presentableId" value="LOCAL-00262" />
+      <option name="project" value="LOCAL" />
+      <updated>1662442820973</updated>
+    </task>
+    <task id="LOCAL-00263" summary="datarace update">
+      <created>1663385180363</created>
+      <option name="number" value="00263" />
+      <option name="presentableId" value="LOCAL-00263" />
+      <option name="project" value="LOCAL" />
+      <updated>1663385180363</updated>
+    </task>
+    <task id="LOCAL-00264" summary="video update">
+      <created>1664040939907</created>
+      <option name="number" value="00264" />
+      <option name="presentableId" value="LOCAL-00264" />
+      <option name="project" value="LOCAL" />
+      <updated>1664040939907</updated>
+    </task>
+    <task id="LOCAL-00265" summary="video update">
+      <created>1664718946748</created>
+      <option name="number" value="00265" />
+      <option name="presentableId" value="LOCAL-00265" />
+      <option name="project" value="LOCAL" />
+      <updated>1664718946748</updated>
+    </task>
+    <option name="localTasksCounter" value="266" />
     <servers />
   </component>
   <component name="TodoView">
@@ -797,15 +800,6 @@
       <path value="$PROJECT_DIR$/html" />
       <path value="$PROJECT_DIR$/upknow" />
     </ignored-roots>
-    <MESSAGE value="change Algo" />
-    <MESSAGE value="echart" />
-    <MESSAGE value="idxtrade" />
-    <MESSAGE value="factorBuilder" />
-    <MESSAGE value="debts" />
-    <MESSAGE value="update trading algo" />
-    <MESSAGE value="etf" />
-    <MESSAGE value="bash remove gitee" />
-    <MESSAGE value="remove Fund" />
     <MESSAGE value="update" />
     <MESSAGE value="drop ushot" />
     <MESSAGE value="limit History" />
@@ -822,7 +816,16 @@
     <MESSAGE value="week html" />
     <MESSAGE value="week combine" />
     <MESSAGE value="week index combine" />
-    <option name="LAST_COMMIT_MESSAGE" value="week index combine" />
+    <MESSAGE value="video template" />
+    <MESSAGE value="video optimzation" />
+    <MESSAGE value="race video" />
+    <MESSAGE value="race optim and add buidin version" />
+    <MESSAGE value="race optim" />
+    <MESSAGE value="week fix color bug" />
+    <MESSAGE value="week color optim, add 60 days" />
+    <MESSAGE value="datarace update" />
+    <MESSAGE value="video update" />
+    <option name="LAST_COMMIT_MESSAGE" value="video update" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/md/cn20210305_Bak.csv" />
