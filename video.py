@@ -342,7 +342,7 @@ def run(xConfig:dict,symbols=[]):
     tradeDate = latestTradeDate()
     if len(symbols)==0:
         symbols=wencai(xConfig['strategy'],tradeDate)[:3]
-        # trade(xConfig,symbols)
+        trade(xConfig,symbols)
         genTradeVideo(tradeDate,xConfig)
     symbols.reverse()
     combineFinal(symbols,tradeDate)

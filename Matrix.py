@@ -121,7 +121,7 @@ if __name__ == "__main__":
                 None,
                 None
             ],
-            "name": "近一月连续上涨天数",
+            "name": "近一月上涨天数",
             "children": data
         }]
     with open('html/continueRising.json', 'w',encoding='utf-8') as outfile:

@@ -1,7 +1,7 @@
 from video import  *
 from QuotaUtilities import *
 
-ASSETPATH='video/'
+ASSETPATH='html/'
 
 def raceVideo(symbols:dict,baseSymbol='.IXIC',beforeStartDate=datetime(2018,12,31).date()):
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'

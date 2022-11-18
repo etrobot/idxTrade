@@ -70,7 +70,7 @@ def conceptSorted(num:int):
     return concept.loc[concept['limit_up_num']>num].index.tolist()
 
 if __name__ == "__main__":
-    idx=eastmoneyK('SZ000001')
+    idx=cmsK('SH000001')
     cptSorted = conceptSorted(int(sys.argv[-1]))
     MAXHOLDING=4
     xueqiuCfg={'vika': 'xueqiu1',"xueqiu":{'idx':'ZH2492692'}}
