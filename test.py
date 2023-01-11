@@ -1,4 +1,7 @@
 import random,hashlib
+
+import pandas as pd
+
 from QuotaUtilities import *
 # from xq_backup_lite import *
 from video import *
@@ -123,7 +126,7 @@ if __name__=='__main__':
     # toBuy.sort_values(by='_U', ascending=True, inplace=True)
     # k='sh000001'
     # print(k.upper()[:2] in ['SH','SZ'] and k.upper()[2:].isdigit() and len(k)==8)
-    # print(getLimit(getK('SH000001', date(2021,1,22)).index[-2])['代码'].tolist())
+    # print(getLimit(getK('SH000001', date(2021,1,22)).index[-2])['symbol'].tolist())
     # for f in os.listdir('../CMS/source/Fund'):
     #     if '.html' in f:
     #         symbol=f[:-5]
@@ -143,15 +146,32 @@ if __name__=='__main__':
     # getFundHoldingHK(datetime(2021,2,22))
     # updateFund(pdate)
     # debts = ak.bond_cov_comparison()
-    # debts.set_index('正股代码', inplace=True)
+    # debts.set_index('正股symbol', inplace=True)
     # print(debts.columns)
     # thsIndustry('cn',datetime(2021,3,19))
     # updateAllImg('cn',datetime(2021,4,30), ['_J','_U'], xq_a_token)
     # print(xueqiuConcerned('hk',xq_a_token)['symbol'])
     # heldBy('SZ002463',pdate)
     # getCsvK()
-    symbol='test'
-    readText="熊市策略汇总：1、趋势为王，做空大盘；2、火中取栗，短线搏反弹；3、价值信仰，越跌越买;4、割肉离场，来日再战"
-    baiduTTS(readText,'test')
-    get_video(get_time_count(symbol), symbol)
-    add_audio(symbol)
+    import akshare as ak
+
+    stock_hk_spot_df = ak.stock_hk_spot()
+    print(stock_hk_spot_df.columns,stock_hk_spot_df)
+    allhk=pd.DataFrame()
+    csvData=[]
+    for k,v in stock_hk_spot_df.iterrows():
+        if k>0 and k%99==0:
+            t.sleep(60)
+        url = 'https://stock.finance.sina.com.cn/hkstock/info/%s.html' % v['symbol']
+        rtext=requests.get(url=url, headers={"user-agent": "Mozilla"}).text
+        html = etree.HTML(rtext)
+        df=pd.read_html(rtext,index_col=0)[0].transpose()
+        # print(df.columns,df)
+        allhk=allhk.append(df)
+        place = html.xpath('//tr[11]/td[2]/text()')
+        if len(place)>0:
+            print(v['symbol'],v['name'],place[0])
+            csvData.append([v['symbol'],v['name'],place[0]])
+    csvDf=pd.DataFrame(data=csvData)
+    csvDf.to_csv('video/hkRegAdd.csv')
+    allhk.to_csv('video/hkStock.csv')
