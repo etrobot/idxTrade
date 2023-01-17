@@ -5,8 +5,8 @@ from pytz import timezone
 from moviepy.editor import CompositeVideoClip
 
 PROXY = {
-    'http': 'http://127.0.0.1:8081',  # 访问http需要
-    'https': 'https://127.0.0.1:8081',  # 访问https需要
+    'http': 'http://127.0.0.1:7890',  # 访问http需要
+    'https': 'https://127.0.0.1:7890',  # 访问https需要
 }
 QUOTEPATH='Quotation/'
 ASSETPATH='video/'
@@ -149,7 +149,7 @@ def run():
     conf = configparser.ConfigParser()
     conf.read('config.ini')
     weekVideo(conf['weekend']['conclusion'],'end',read=True)
-    weekVideo(conf['weekend']['begin'].replace('{{time}}',datetime.now(timezone('EST')).strftime('%y年%m月%d日')),read=IFREAD)
+    weekVideo(conf['weekend']['begin'].replace('{{time}}',datetime.now(timezone('EST')).strftime('%y年%m月%d日')),read=True)
     videolist = [VideoFileClip(ASSETPATH + 'wk_'+ x + '.mp4') for x in conditions]
     videolist.insert(0, VideoFileClip(ASSETPATH + 'week.mp4'))
     videolist.append(VideoFileClip(ASSETPATH + 'weekend.mp4'))
