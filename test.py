@@ -6,6 +6,7 @@ from QuotaUtilities import *
 # from xq_backup_lite import *
 from video import *
 from translate import *
+from Turning import xueqiuMonthK
 
 def _create_random_tmp(salt_count, seed):
     """
@@ -94,7 +95,7 @@ def tencentQuotaAbu(mkt,symbol):
 
 if __name__=='__main__':
     # print(list({'abc':'cccc'}).values()[0])
-    # xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
+    xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
     # print(xq_a_token)
     # usHot(xq_a_token)
     # print(xueqiuK('.ixic',startDate='2020',cookie=xq_a_token))
@@ -153,25 +154,26 @@ if __name__=='__main__':
     # print(xueqiuConcerned('hk',xq_a_token)['symbol'])
     # heldBy('SZ002463',pdate)
     # getCsvK()
-    import akshare as ak
-
-    stock_hk_spot_df = ak.stock_hk_spot()
-    print(stock_hk_spot_df.columns,stock_hk_spot_df)
-    allhk=pd.DataFrame()
-    csvData=[]
-    for k,v in stock_hk_spot_df.iterrows():
-        if k>0 and k%99==0:
-            t.sleep(60)
-        url = 'https://stock.finance.sina.com.cn/hkstock/info/%s.html' % v['symbol']
-        rtext=requests.get(url=url, headers={"user-agent": "Mozilla"}).text
-        html = etree.HTML(rtext)
-        df=pd.read_html(rtext,index_col=0)[0].transpose()
-        # print(df.columns,df)
-        allhk=allhk.append(df)
-        place = html.xpath('//tr[11]/td[2]/text()')
-        if len(place)>0:
-            print(v['symbol'],v['name'],place[0])
-            csvData.append([v['symbol'],v['name'],place[0]])
-    csvDf=pd.DataFrame(data=csvData)
-    csvDf.to_csv('video/hkRegAdd.csv')
-    allhk.to_csv('video/hkStock.csv')
+    # import akshare as ak
+    #
+    # stock_hk_spot_df = ak.stock_hk_spot()
+    # print(stock_hk_spot_df.columns,stock_hk_spot_df)
+    # allhk=pd.DataFrame()
+    # csvData=[]
+    # for k,v in stock_hk_spot_df.iterrows():
+    #     if k>0 and k%99==0:
+    #         t.sleep(60)
+    #     url = 'https://stock.finance.sina.com.cn/hkstock/info/%s.html' % v['symbol']
+    #     rtext=requests.get(url=url, headers={"user-agent": "Mozilla"}).text
+    #     html = etree.HTML(rtext)
+    #     df=pd.read_html(rtext,index_col=0)[0].transpose()
+    #     # print(df.columns,df)
+    #     allhk=allhk.append(df)
+    #     place = html.xpath('//tr[11]/td[2]/text()')
+    #     if len(place)>0:
+    #         print(v['symbol'],v['name'],place[0])
+    #         csvData.append([v['symbol'],v['name'],place[0]])
+    # csvDf=pd.DataFrame(data=csvData)
+    # csvDf.to_csv('video/hkRegAdd.csv')
+    # allhk.to_csv('video/hkStock.csv')
+    print(xueqiuMonthK('GEHC',cookie=xq_a_token))

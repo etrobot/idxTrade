@@ -1,9 +1,11 @@
 from weekly import *
 from pyecharts import options as opts
 from pyecharts.charts import HeatMap
+from pyecharts.commons.utils import JsCode
+
 
 def xueqiuMonthK(symbol='.IXIC',cookie=''):
-    url="https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=%s&begin=1673858264477&period=month&type=before&count=-284&indicator=kline,pe,pb,ps,pcf,market_capital,agt,ggt,balance"%symbol
+    url="https://stock.xueqiu.com/v5/stock/chart/kline.json?symbol=%s&begin=%s&period=month&type=before&count=-284&indicator=kline,pe,pb,ps,pcf,market_capital,agt,ggt,balance"%(symbol,int((datetime.now()-timedelta(hours=8)).timestamp()*1000))
     idxyear=json.loads(getUrl(url,cookie))['data']
     df= pd.DataFrame(data=idxyear['item'],columns=idxyear['column'])
     df.set_index(['timestamp'], inplace=True)
@@ -39,7 +41,7 @@ def getSymbols(filename='html/turning.csv'):
 
 def getK(filename='html/turning.csv'):
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
-    symbols=pd.read_csv('turning.csv',index_col='Ticker')
+    symbols=pd.read_csv(filename,index_col='Ticker')
     kDf=pd.DataFrame()
     for symbol, item in symbols.iterrows():
         print(symbol)
@@ -59,9 +61,20 @@ def heatmap(filename='html/turning.csv'):
     gdf = df.pivot_table('percent', 'date', 'Sector')
     gdf=gdf.reindex(columns=['信息技术', '公用事业', '医疗保健', '房地产', '材料', '能源', '通讯服务', '金融',
        '非必需消费品','工业', '必需消费品'])
+    gdf_s=df.pivot_table(index=['date'], columns=['Sector'], values='symbol', aggfunc=np.sum)
+    gdf_s = gdf_s.reindex(columns=['信息技术', '公用事业', '医疗保健', '房地产', '材料', '能源', '通讯服务', '金融',
+                               '非必需消费品', '工业', '必需消费品'])
+    gdf_n = df.pivot_table(index=['date'], columns=['Sector'], values='name', aggfunc=np.sum)
+    gdf_n = gdf_n.reindex(columns=['信息技术', '公用事业', '医疗保健', '房地产', '材料', '能源', '通讯服务', '金融',
+                                   '非必需消费品', '工业', '必需消费品'])
     gdf=gdf.transpose()
+    gdf_s = gdf_s.transpose()
+    gdf_n = gdf_n.transpose()
     print(gdf.columns)
     gdfList = gdf.values.tolist()
+    gdfSList = gdf_s.values.tolist()
+    gdfNList = gdf_n.values.tolist()
+
     # print(gdf.index, len(gdf), len(gdf.columns), len(gdfList), len(gdfList[0]))
     rangeNum = max(abs(df['percent'].min()), df['percent'].max())
     # gdf.to_csv('html/TurningBySectorAndDate.csv')
@@ -71,7 +84,8 @@ def heatmap(filename='html/turning.csv'):
             .add_yaxis(
             "涨跌幅",
             gdf.index.tolist(),
-            [[i, j, gdfList[j][i]] for i in range(len(gdf.columns)) for j in range(len(gdfList))],
+            [{"value":[i, j, gdfList[j][i]],"name":gdfNList[j][i],"symbol":gdfSList[j][i]} for i in range(len(gdf.columns)) for j in range(len(gdfList))],
+            tooltip_opts=opts.TooltipOpts(formatter=JsCode("""function(params) {return params.data.name+'<br>'+params.data.symbol+'<br>'+(params.data.value[2]>0?'+'+params.data.value[2]:params.data.value[2])+'%';}""")),
             label_opts=opts.LabelOpts(is_show=True, position="inside"),
         )
             .set_series_opts(zlevel=-1)
