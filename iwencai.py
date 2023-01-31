@@ -71,7 +71,6 @@ def conceptSorted(num:int):
 
 if __name__ == "__main__":
     idx=cmsK('SH000001')
-    cptSorted = conceptSorted(int(sys.argv[-1]))
     MAXHOLDING=5
     xueqiuCfg={'vika': 'xueqiu1',"xueqiu":{'idx':'ZH2492692'}}
     conf = configparser.ConfigParser()
@@ -102,18 +101,6 @@ if __name__ == "__main__":
     wencaiDf.sort_values(by=['factor'],ascending=False,inplace=True)
     wdf = wencaiDf.drop_duplicates(subset='股票代码', keep='first')[:10]
 
-    # wdfX700=wdf.loc[wdf['code'].isin(ak.index_stock_hist(index="sh000907")['stock_code'])]
-    # wdf = wdf.loc[wdf['a股市值(不含限售股)'].between(min(wdf['a股市值(不含限售股)']),max(wdf['a股市值(不含限售股)']), inclusive='neither')]
-    # if len(cptSorted) > 0 :
-    #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
-        # if int(sys.argv[-1])>5:
-        #     wdf = wdf.loc[wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
-        # else:
-        #     wdf = wdf.loc[~wdf['所属概念'].str.contains('|'.join(cptSorted).replace('(', '\(').replace(')', '\)'), na=False)]
-
-    # if len(wdfX700)>0:
-    #     w=wdfX700.iloc[0]
-    # sell filter
     wait4close=False
     limits = getLimit(idx.index[-1])
     twicePortion = round(len(limits[limits['代码'].isin(getLimit(idx.index[-1],mode='x')['代码'].tolist())])/len(limits)*100,2)
@@ -149,7 +136,7 @@ if __name__ == "__main__":
                 break
 
     # trade
-    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and len(sys.argv) < 3:
+    if sum(int(x['weight']>0) for x in position) <= MAXHOLDING and len(sys.argv) > 1:
         position.append(xueqiuP.newPostition('cn', w['股票代码'], min(100/MAXHOLDING, cash)))
         if w['股票代码'] in limits or wait4close:
             t.sleep(180)

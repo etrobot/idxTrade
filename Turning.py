@@ -1,4 +1,5 @@
 from weekly import *
+from pyecharts.globals import ThemeType
 from pyecharts import options as opts
 from pyecharts.charts import HeatMap
 from pyecharts.commons.utils import JsCode
@@ -79,7 +80,7 @@ def heatmap(filename='html/turning.csv'):
     rangeNum = max(abs(df['percent'].min()), df['percent'].max())
     # gdf.to_csv('html/TurningBySectorAndDate.csv')
     c = (
-        HeatMap()
+        HeatMap(init_opts=opts.InitOpts(theme=ThemeType.DARK))
             .add_xaxis(gdf.columns.date.tolist())
             .add_yaxis(
             "涨跌幅",
@@ -93,14 +94,14 @@ def heatmap(filename='html/turning.csv'):
             legend_opts=opts.LegendOpts(is_show=True),
             xaxis_opts=opts.AxisOpts(
                 axislabel_opts=opts.LabelOpts(rotate=30),
-                splitline_opts=opts.SplitLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(width=1)),
+                splitline_opts=opts.SplitLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(width=1,color="#2d2d2d")),
                 # position="top"
             ),
             yaxis_opts=opts.AxisOpts(
                 position="right",
                 axislabel_opts=opts.LabelOpts(),
                 splitline_opts=opts.SplitLineOpts(is_show=True,
-                                                  linestyle_opts=opts.LineStyleOpts(width=5, color="#fff")),
+                                                  linestyle_opts=opts.LineStyleOpts(width=5, color="#2d2d2d")),
             ),
             visualmap_opts=opts.VisualMapOpts(
                 min_=-rangeNum,
