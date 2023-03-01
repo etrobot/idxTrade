@@ -89,12 +89,12 @@ def getLimit(pdate:date=None,fname=None,mode=None):
         #  iscon: 8, conztnums: 9, lastforce: 10, todayforce: 11, isstop: 12, lasttradedate: 13, lastcloseprice: 14,
         #  openprice: 15, openlimit: 16}
 
-    mlog(zdt_url)
+    # mlog(zdt_url)
     s = requests.Session()
 
     try:
         resp = s.get(zdt_url, headers=header_zdt)
-        mlog(resp.text)
+        # mlog(resp.text)
         if resp.status_code == 404:
             mlog(resp.status_code)
         md_check = re.findall('summary|lasttradedate', resp.text)
@@ -103,7 +103,7 @@ def getLimit(pdate:date=None,fname=None,mode=None):
             if len(resp.text) <= 0:
                 mlog('Content\'s length is 0')
                 exit(0)
-            result = p.findall(resp.text.replace('Infinity','0').replace('\r','').replace('\n','').replace(',,',',"",'))
+            result = p.findall(resp.text.replace('Infinity','0').replace('\r','').replace('\n','').replace(',,',',"",').replace('NaN','0'))
             if result:
                 try:
                     t1 = result[0]

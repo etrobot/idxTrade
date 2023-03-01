@@ -17,7 +17,7 @@ git gc --aggressive --prune=now # remove the old files 2
 #cd ../../upknow || exit
 #gitPush
 #node ../gitee.js
-cd ../CMS || exit
+cd ../../CMS || exit
 hexo clean
 hexo g
 git add .
