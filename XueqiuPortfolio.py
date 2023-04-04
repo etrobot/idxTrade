@@ -149,13 +149,9 @@ class xueqiuPortfolio():
         return {
             "code": stock['code'],
             "name": stock['name'],
-            "enName": stock['enName'],
-            "hasexist": stock['hasexist'],
             "flag": stock['flag'],
-            "type": stock['type'],
             "current": stock['current'],
             "chg": stock['chg'],
-            # "nav": str(stock['nav']),
             "stock_id": stock['stock_id'],
             "ind_id": stock['ind_id'],
             "ind_name": stock['ind_name'],
