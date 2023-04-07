@@ -46,4 +46,4 @@ if __name__=='__main__':
     df.to_csv('test.csv')
     df['counter_id'] = df['counter_id'].apply(
         lambda x: '<a href="https://xueqiu.com/S/{stockCode}">{stockCode}</a>'.format(stockCode=(''.join(x.split('/')[1:])).replace('US','').replace('HK','')))
-    renderHtml(df,'html/industryChain.html','产业链')
+    renderHtml(df,'../CMS/source/Quant/industryChain.html','产业链')
