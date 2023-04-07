@@ -1,4 +1,7 @@
-from QuotaUtilities import *
+import requests,json
+import pandas as pd
+import time as t
+from QuotaUtilities import renderHtml
 
 if __name__=='__main__':
     FILEPATH='html/'
@@ -30,7 +33,7 @@ if __name__=='__main__':
                     idf = idf.sort_values(by=['month_chg'], ascending=False)
                     idf.reset_index(inplace=True)
                     idf['sort']=idf.index
-                    df=df.append(idf)
+                    df = pd.concat([df, idf])
             with open(FILEPATH + v['name']+id['id']+id['name'].replace('/','|')+'.json', 'w', encoding='utf-8') as f:
                 json.dump(indjson, f)
         # break
@@ -40,6 +43,7 @@ if __name__=='__main__':
     df = df.sort_values(by=['Part_pct'], ascending=False)
     df[['year_chg','month_chg','last_day_chg','Part_pct']] = df[['year_chg','month_chg','last_day_chg','Part_pct']].applymap("{0:.2%}".format)
     df=df[['Ind', 'Chain',  'Part', 'Part_pct','market', 'counter_id','name', 'year_chg', 'month_chg','last_day_chg']]
+    df.to_csv('test.csv')
     df['counter_id'] = df['counter_id'].apply(
         lambda x: '<a href="https://xueqiu.com/S/{stockCode}">{stockCode}</a>'.format(stockCode=(''.join(x.split('/')[1:])).replace('US','').replace('HK','')))
-    renderHtml(df,'../CMS/source/Quant/industryChain.html','产业链')
+    renderHtml(df,'html/industryChain.html','产业链')
