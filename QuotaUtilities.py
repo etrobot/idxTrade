@@ -211,6 +211,8 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
     while datetime.utcfromtimestamp(latestDay/1000).date().year>=startYear:
         mlog('latestDay:', latestDay,datetime.utcfromtimestamp(int(latestDay)/1000).date().year)
         quoteDaily=xqQuot(symbol=symbol,period='day',latestDay=latestDay,count=7000,type='before',cookie=cookie)
+        if 'item' not in quoteDaily.keys():
+            return []
         if len(quoteDaily['item'])==0:
             break
         if latestDay==quoteDaily['item'][0][0]:
@@ -222,6 +224,8 @@ def xueqiuK(symbol='QQQ',startDate=None,cookie=''):
         df=df.append(dfDaily,sort=False)
     # if startDate is not None:
     #     df=df[df.index>=getTimestamp(startDate)]
+    if 'timestamp' not in df.columns:
+        return []
     df.drop_duplicates(subset='timestamp', keep='first', inplace=True)
     df.set_index(['timestamp'], inplace=True)
     df.index = pd.to_datetime(df.index,unit='ms',utc=True).tz_convert('Asia/Shanghai').date
