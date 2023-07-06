@@ -394,11 +394,12 @@ def usETFlist():
     big_df.to_csv('usETFsina.csv',encoding='GBK',date_format='%Y-%m-%d')
     return big_df
 
-def tencentK(mkt:str = '',symbol: str = "QQQ",KAll=False) -> pd.DataFrame:
-    symbol=symbol.lower()
+def tencentK(mkt:str = 'us',symbol: str = "QQQ",KAll=False,period='week') -> pd.DataFrame:
+    # symbol=symbol.lower()
     # A股的mkt为''
     if mkt=='us' and '.' not in symbol:
-        symbol = mkt + symbol + '.' + re.findall(re.compile(r'~%s\.(.*?)~' % symbol, re.S),requests.get('http://smartbox.gtimg.cn/s3/?q=%s&t=us' % symbol).text)[0]
+        symbolTxt=requests.get(f"http://smartbox.gtimg.cn/s3/?q={symbol}&t=us").text
+        symbol = mkt + symbolTxt.split("~")[1].upper()
     elif mkt=='hk':
         symbol=mkt+symbol
     """
@@ -425,16 +426,25 @@ def tencentK(mkt:str = '',symbol: str = "QQQ",KAll=False) -> pd.DataFrame:
         range_start = int(start_date.split("-")[0])
     range_end = date.today().year + 1
     url = "http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?"
+    if mkt=='us':
+        url = "https://web.ifzq.gtimg.cn/appstock/app/usfqkline/get?"
     temp_df = pd.DataFrame()
     url_list=[]
-    for year in range(range_start, range_end):
+    if period == 'day':
+        for year in range(range_start, range_end):
+            params = {
+                "_var": f"kline_dayqfq{year}",
+                "param": f"{symbol},day,{year}-01-01,{year + 1}-12-31,1350,qfq",
+                "r": "0.8205512681390605",
+            }
+            url_list.append(url + parse.urlencode(params))
+    else:
         params = {
-            "_var": f"kline_dayqfq{year}",
-            "param": f"{symbol},day,{year}-01-01,{year + 1}-12-31,1350,qfq",
-            "r": "0.8205512681390605",
+            "_var": f"kline_{period}qfq",
+            "param": f"{symbol},{period},,,320,qfq",
+            "r": "0.012820108110342066",
         }
         url_list.append(url + parse.urlencode(params))
-        continue
     # print(url_list)
     with ThreadPoolExecutor(max_workers=10) as executor:  # optimally defined number of threads
         responeses = [executor.submit(getUrl, url) for url in url_list]
@@ -444,11 +454,11 @@ def tencentK(mkt:str = '',symbol: str = "QQQ",KAll=False) -> pd.DataFrame:
         text=res.result()
         try:
             inner_temp_df = pd.DataFrame(
-                demjson.decode(text[text.find("={") + 1:])["data"][symbol]["day"]
+                demjson.decode(text[text.find("={") + 1:])["data"][symbol][period]
             )
         except:
             inner_temp_df = pd.DataFrame(
-                demjson.decode(text[text.find("={") + 1:])["data"][symbol]["qfqday"]
+                demjson.decode(text[text.find("={") + 1:])["data"][symbol]["qfq%s"%period]
             )
         temp_df = temp_df.append(inner_temp_df, ignore_index=True)
 
@@ -475,7 +485,7 @@ def eastmoneyK(code:str, quota_type='k', fuquan='fa', **kwargs):
             k、wk、mk：日线、周线、月线行情
     :param fuquan: 复权
             空值：不复权；fa：前复权；ba：后复权
-    :param iscr: 是否获取开盘前15分钟内的行情
+    :param iscr: 是否获取开盘前15分钟内的行情te
     :return:
     """
     code=code.lower()

@@ -61,7 +61,7 @@ def addPerfomance():
     lenth=60
     for k,v in df.iterrows():
         print(k)
-        quo=getK(k,pdate=datetime.now().date(),xq_a_token=xq_a_token,test=1)
+        quo=getK(k,pdate=datetime.now().date(),xq_a_token=xq_a_token,test=0)
         if len(quo) < 60:
             continue
         quo=quo[-lenth:]
@@ -86,33 +86,39 @@ def writeArts():
             continue
         chain=stock_counts.idxmax()
         stocks='、'.join(df[df['chain']==chain]['name'].tolist())
-        prompt='写一篇研报，从产业链角度分析『%s』概念（相关个股有%s等）在近未来的前景，包含产值预测(只用网上资料)和风险'%(chain,stocks)
-        print(prompt)
-        with open('./cookies.json', 'r') as f:
-            cookies = json.load(f)
-            bingBot = bingChat(cookies=cookies, proxy='http://127.0.0.1:7890')
-            response = asyncio.run(bingBot.ask(prompt=prompt, conversation_style=ConversationStyle.creative,
-                                               wss_link="wss://sydney.bing.com/sydney/ChatHub"))
-            replyTxt: str = response["item"]["messages"][1]["adaptiveCards"][0]["body"][0]["text"]
-            print(replyTxt)
+        bingArticle(chain,stocks)
+        t.sleep(10)
 
-            replyTxt = re.sub(r'\[\^\d+\^\]', '', replyTxt)
-            replyTxt = replyTxt.replace('[', '【').replace(']', '】')
-            lines = replyTxt.split('\n')
-            http_links = []
-            output_lines = []
-            for line in lines:
-                if 'http' in line:
-                    http_links.append(line)
-                elif '？' not in line and '?' not in line:
-                    output_lines.append(line)
-            output = '\n'.join(output_lines) + '\n参考:\n' + '\n'.join(http_links)
-            print(output)
-            t.sleep(10)
+def bingArticle(chain,stocks):
+    prompt = '写一篇研报，从产业链角度分析『%s』概念（相关个股有%s等）在近未来的前景，包含产值预测和风险，涉及数字的部分请用网络资料' % (
+    chain, stocks)
+    print(prompt)
+    with open('./cookies.json', 'r') as f:
+        cookies = json.load(f)
+        bingBot = bingChat(cookies=cookies, proxy='http://127.0.0.1:7890')
+        response = asyncio.run(bingBot.ask(prompt=prompt, conversation_style=ConversationStyle.creative,
+                                           wss_link="wss://sydney.bing.com/sydney/ChatHub"))
+        replyTxt: str = response["item"]["messages"][1]["adaptiveCards"][0]["body"][0]["text"]
+        print(replyTxt)
+
+        replyTxt = re.sub(r'\[\^\d+\^\]', '', replyTxt)
+        replyTxt = replyTxt.replace('[', '【').replace(']', '】')
+        lines = replyTxt.split('\n')
+        http_links = []
+        output_lines = []
+        for line in lines:
+            if 'http' in line:
+                http_links.append(line)
+            elif '？' not in line and '?' not in line:
+                output_lines.append(line)
+        output = '\n'.join(output_lines) + '\n参考:\n' + '\n'.join(http_links)
+        print(output)
+
 
 if __name__=='__main__':
-    # crawl()
+    crawl()
     global xq_a_token
     xq_a_token = 'xq_a_token=' + requests.get("https://xueqiu.com", headers={"user-agent": "Mozilla"}).cookies['xq_a_token'] + ';'
     addPerfomance()
     writeArts()
+    # bingArticle('ChatGPT','MSFT、NVDA')
